@@ -57,7 +57,7 @@ const formSchema = z.object({
     }
     return true;
 }, {
-    message: 'Dose é obrigatória.',
+    message: 'A dose da medicação é obrigatória se você toma alguma.',
     path: ['medicationDose'],
 });
 
