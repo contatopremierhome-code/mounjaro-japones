@@ -16,7 +16,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from '@/components/ui/form';
 import type { UserData } from '@/lib/types';
 import { ArrowLeft } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -46,7 +46,7 @@ const formSchema = z.object({
   weightGoal: z.coerce.number().min(30, 'Meta de peso inválida.').max(300),
   takesMedication: z.enum(['yes', 'no']),
   medicationDose: z.string().optional(),
-  personalDream: z.string().min(3, 'Sonho deve ter pelo menos 3 caracteres.'),
+  personalDream: z.string().optional(),
 }).refine(data => {
     if (data.takesMedication === 'yes') {
         return !!data.medicationDose && data.medicationDose.length > 0;
@@ -83,6 +83,7 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
     const finalData = {
       ...data,
       medicationDose: data.takesMedication === 'yes' ? data.medicationDose || '' : 'N/A',
+      personalDream: data.personalDream || 'Conquistar meus objetivos!',
     }
 
     if (currentStep < steps.length - 1) {
@@ -237,6 +238,9 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
                       <FormControl>
                         <Input placeholder="Ex: Correr uma maratona" {...field} />
                       </FormControl>
+                       <FormDescription>
+                        Opcional, mas ajuda a lembrar seu 'porquê' nesta jornada.
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
