@@ -125,7 +125,7 @@ export function Routine({ routineId }: RoutineProps) {
                                 <span>{exercise.duration}</span>
                             </div>
                         </div>
-                        <div onClick={() => handleToggleExercise(index)} className="cursor-pointer">
+                        <div className="cursor-pointer">
                             {isCompleted ? (
                                 <CheckCircle className="w-8 h-8 text-primary transition-colors"/>
                             ) : (
