@@ -4,6 +4,7 @@ export interface UserData {
   currentWeight: number;
   weightGoal: number;
   programDuration: number;
+  takesMedication: 'yes' | 'no';
   medicationDose: string;
   personalDream: string;
 }

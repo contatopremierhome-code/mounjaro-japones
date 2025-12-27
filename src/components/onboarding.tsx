@@ -19,6 +19,7 @@ import { Progress } from '@/components/ui/progress';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import type { UserData } from '@/lib/types';
 import { ArrowLeft } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const steps = [
   {
@@ -34,7 +35,7 @@ const steps = [
   {
     title: 'Detalhes Finais',
     description: 'Estamos quase lá.',
-    fields: ['medicationDose', 'personalDream'],
+    fields: ['takesMedication', 'medicationDose', 'personalDream'],
   },
 ];
 
@@ -44,9 +45,19 @@ const formSchema = z.object({
   currentWeight: z.coerce.number().min(30, 'Peso inválido.').max(300),
   weightGoal: z.coerce.number().min(30, 'Meta de peso inválida.').max(300),
   programDuration: z.coerce.number().min(1, 'Duração inválida.').max(52),
-  medicationDose: z.string().min(1, 'Dose é obrigatória.'),
+  takesMedication: z.enum(['yes', 'no']),
+  medicationDose: z.string().optional(),
   personalDream: z.string().min(3, 'Sonho deve ter pelo menos 3 caracteres.'),
+}).refine(data => {
+    if (data.takesMedication === 'yes') {
+        return !!data.medicationDose && data.medicationDose.length > 0;
+    }
+    return true;
+}, {
+    message: 'Dose é obrigatória.',
+    path: ['medicationDose'],
 });
+
 
 interface OnboardingProps {
   onOnboardingComplete: (data: UserData) => void;
@@ -62,22 +73,30 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
       currentWeight: undefined,
       weightGoal: undefined,
       programDuration: undefined,
+      takesMedication: 'no',
       medicationDose: '',
       personalDream: '',
     },
   });
 
+  const takesMedicationValue = form.watch('takesMedication');
+
   async function processStep(data: z.infer<typeof formSchema>) {
+    const finalData = {
+      ...data,
+      medicationDose: data.takesMedication === 'yes' ? data.medicationDose || '' : 'N/A',
+    }
+
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      onOnboardingComplete(data);
+      onOnboardingComplete(finalData);
     }
   }
 
   const handleNext = async () => {
-    const fieldsToValidate = steps[currentStep].fields;
-    const isValid = await form.trigger(fieldsToValidate as any);
+    const fieldsToValidate = steps[currentStep].fields as (keyof z.infer<typeof formSchema>)[];
+    const isValid = await form.trigger(fieldsToValidate);
     if (isValid) {
       processStep(form.getValues());
     }
@@ -181,17 +200,49 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
               <>
                 <FormField
                   control={form.control}
-                  name="medicationDose"
+                  name="takesMedication"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Dose da Medicação</FormLabel>
+                    <FormItem className="space-y-3">
+                      <FormLabel>Você toma alguma medicação?</FormLabel>
                       <FormControl>
-                        <Input placeholder="Ex: 10mg" {...field} />
+                        <RadioGroup
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          className="flex items-center space-x-4"
+                        >
+                          <FormItem className="flex items-center space-x-2 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="yes" />
+                            </FormControl>
+                            <FormLabel className="font-normal">Sim</FormLabel>
+                          </FormItem>
+                          <FormItem className="flex items-center space-x-2 space-y-0">
+                            <FormControl>
+                              <RadioGroupItem value="no" />
+                            </FormControl>
+                            <FormLabel className="font-normal">Não</FormLabel>
+                          </FormItem>
+                        </RadioGroup>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                {takesMedicationValue === 'yes' && (
+                  <FormField
+                    control={form.control}
+                    name="medicationDose"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Dose da Medicação</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Ex: 10mg" {...field} value={field.value || ''} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 <FormField
                   control={form.control}
                   name="personalDream"
