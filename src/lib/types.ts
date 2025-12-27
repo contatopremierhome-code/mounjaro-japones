@@ -3,7 +3,6 @@ export interface UserData {
   age: number;
   currentWeight: number;
   weightGoal: number;
-  programDuration: number;
   takesMedication: 'yes' | 'no';
   medicationDose: string;
   personalDream: string;

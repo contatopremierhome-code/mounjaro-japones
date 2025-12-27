@@ -30,7 +30,7 @@ const steps = [
   {
     title: 'Suas Metas',
     description: 'Defina seus objetivos de bem-estar.',
-    fields: ['currentWeight', 'weightGoal', 'programDuration'],
+    fields: ['currentWeight', 'weightGoal'],
   },
   {
     title: 'Detalhes Finais',
@@ -44,7 +44,6 @@ const formSchema = z.object({
   age: z.coerce.number().min(18, 'Você deve ser maior de idade.').max(100),
   currentWeight: z.coerce.number().min(30, 'Peso inválido.').max(300),
   weightGoal: z.coerce.number().min(30, 'Meta de peso inválida.').max(300),
-  programDuration: z.coerce.number().min(1, 'Duração inválida.').max(52),
   takesMedication: z.enum(['yes', 'no']),
   medicationDose: z.string().optional(),
   personalDream: z.string().min(3, 'Sonho deve ter pelo menos 3 caracteres.'),
@@ -72,7 +71,6 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
       age: undefined,
       currentWeight: undefined,
       weightGoal: undefined,
-      programDuration: undefined,
       takesMedication: 'no',
       medicationDose: '',
       personalDream: '',
@@ -90,7 +88,7 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      onOnboardingComplete(finalData);
+      onOnboardingComplete(finalData as UserData);
     }
   }
 
@@ -176,19 +174,6 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
                       <FormLabel>Meta de Peso (kg)</FormLabel>
                       <FormControl>
                         <Input type="number" placeholder="Ex: 65" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="programDuration"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Próximo Ciclo (semanas)</FormLabel>
-                      <FormControl>
-                        <Input type="number" placeholder="Ex: 4" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
