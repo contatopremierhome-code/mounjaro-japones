@@ -79,6 +79,10 @@ export function ProgressCalendar() {
                             finished: 'bg-primary/20 text-primary-foreground rounded-full',
                         }}
                         locale={ptBR}
+                        fromDate={new Date(2010, 0, 1)}
+                        toDate={new Date(2050, 11, 31)}
+                        captionLayout="dropdown-buttons"
+                        className="w-full"
                     />
                 </CardContent>
             </Card>
