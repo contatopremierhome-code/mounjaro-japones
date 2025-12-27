@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { UserData, DailyProgress } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,8 @@ import { Salad, BookOpen, Dumbbell, Check, Repeat } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from './ui/input';
 import { Label } from './ui/label';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 interface DashboardProps {
   user: UserData;
@@ -88,13 +90,20 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     return (weight / (height * height)).toFixed(1);
   };
 
+  const today = new Date();
+  const formattedDate = format(today, "EEEE, d 'de' MMMM 'de' yyyy", {
+    locale: ptBR,
+  });
+
   return (
     <div className="w-full max-w-md mx-auto flex flex-col gap-8 text-center">
-      <header className="space-y-2">
+      <header className="space-y-1">
         <h1 className="text-4xl font-headline font-bold text-primary">
           Olá, {user.name.split(' ')[0]}!
         </h1>
-        <p className="text-muted-foreground">Pronto para conquistar seu dia?</p>
+        <p className="text-sm text-muted-foreground capitalize">
+          {formattedDate}
+        </p>
       </header>
 
       <div className="relative flex items-center justify-center">
