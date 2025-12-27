@@ -35,9 +35,14 @@ export function Recipes() {
         <Button variant="ghost" onClick={() => router.back()} size="icon">
           <ArrowLeft className="h-6 w-6" />
         </Button>
-        <h1 className="text-3xl font-bold font-headline text-primary text-center">
-          Receitas de Chás
-        </h1>
+        <div className="text-center">
+          <h1 className="text-3xl font-bold font-headline text-primary">
+            Receitas de Chás
+          </h1>
+          <p className="text-muted-foreground">
+            10 variações poderosas para impulsionar seu metabolismo.
+          </p>
+        </div>
         <div className="w-10"></div>
       </header>
 
