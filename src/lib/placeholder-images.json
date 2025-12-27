@@ -33,31 +33,31 @@
     {
       "id": "tea-ginger",
       "description": "Uma xícara de chá de gengibre com fatias de limão.",
-      "imageUrl": "https://images.unsplash.com/photo-1549488344-cbb6c34cf08b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnaW5nZXIlMjB0ZWF8ZW58MHx8fHwxNzE5NDI1MTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/74xIrkj.png",
       "imageHint": "ginger tea"
     },
     {
       "id": "tea-chamomile",
       "description": "Uma xícara de chá de camomila com flores ao lado.",
-      "imageUrl": "https://images.unsplash.com/photo-1597332768436-5813f82e7534?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFtb21pbGUlMjB0ZWF8ZW58MHx8fHwxNzE5NDI1MTQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/59q8OUv.png",
       "imageHint": "chamomile tea"
     },
     {
       "id": "tea-herbal",
       "description": "Chá de ervas sendo derramado em uma xícara.",
-      "imageUrl": "https://images.unsplash.com/photo-1574702422072-86a41f6424e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxoZXJiYWwlMjB0ZWF8ZW58MHx8fHwxNzE5NDI1MTYwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/VTI4sjO.png",
       "imageHint": "herbal tea"
     },
     {
       "id": "tea-turmeric",
       "description": "Uma bebida dourada de cúrcuma em um copo.",
-      "imageUrl": "https://images.unsplash.com/photo-1556044237-b44c0490b633?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0dXJtZXJpYyUyMHRlYXxlbnwwfHx8fDE3E5NDI1MTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/rYo8xqU.png",
       "imageHint": "turmeric tea"
     },
     {
       "id": "tea-mate",
       "description": "Uma cuia tradicional de erva-mate.",
-      "imageUrl": "https://images.unsplash.com/photo-1569421888914-874b341f273b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYXRlJTIwdGVhfGVufDB8fHx8MTcxOTQyNTIwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://i.imgur.com/9F1yib8.png",
       "imageHint": "mate tea"
     }
   ]
