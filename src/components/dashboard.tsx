@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getAffirmation } from '@/app/actions';
-import { Check, Repeat, Salad, Dumbbell } from 'lucide-react';
+import { Check, Repeat, Salad, Dumbbell, Lock } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -29,6 +29,7 @@ const actionItems = [
   { id: 'recipes', title: 'Receitas de Chás', path: '/recipes', image: 'https://i.imgur.com/YrTQpoy.png', hint: 'tea recipes' },
   { id: 'movement', title: 'Exercícios Diários', path: '/movement', image: 'https://i.imgur.com/U8nvHEd.png', hint: 'daily exercise' },
   { id: 'progress', title: 'Meu Progresso', path: '/progress', image: 'https://i.imgur.com/BlHfCOr.png', hint: 'progress calendar' },
+  { id: 'coming-soon', title: 'Em Breve', path: null, image: 'https://i.imgur.com/dxgNxK4.png', hint: 'coming soon', icon: Lock },
 ] as const;
 
 
@@ -89,12 +90,16 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
   const router = useRouter();
   const [weightChange, setWeightChange] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
   const { toast } = useToast();
 
-  const handleActionClick = (id: string, path: string) => {
+  const handleActionClick = (id: string, path: string | null) => {
     if (path) {
       router.push(path);
       return;
+    }
+    if (id === 'coming-soon') {
+        setIsComingSoonOpen(true);
     }
   };
   
@@ -176,7 +181,9 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       </Card>
       
       <div className="grid grid-cols-2 gap-4">
-        {actionItems.map((item) => (
+        {actionItems.map((item) => {
+            const ItemIcon = item.id === 'coming-soon' ? item.icon : null;
+            return (
           <Card
             key={item.id}
             onClick={() => handleActionClick(item.id, item.path)}
@@ -197,9 +204,15 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
                 <Check className="w-16 h-16 text-white" />
               </div>
             )}
+            {ItemIcon && (
+                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <ItemIcon className="w-16 h-16 text-white/70" />
+                 </div>
+            )}
             <h3 className="relative text-base font-bold text-white text-center z-10">{item.title}</h3>
           </Card>
-        ))}
+            )
+        })}
       </div>
       
       <AlertDialog>
@@ -232,6 +245,20 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
             <AlertDialogAction onClick={handleFinishDay} disabled={isSubmitting}>
               {isSubmitting ? 'Enviando...' : 'Receber Motivação'}
             </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={isComingSoonOpen} onOpenChange={setIsComingSoonOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Novidades a Caminho!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Fique de olho! Em breve, ainda mais novidades para transformar sua jornada.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setIsComingSoonOpen(false)}>Entendi</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
