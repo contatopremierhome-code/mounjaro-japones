@@ -6,18 +6,18 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, TrafficCone } from 'lucide-react';
 
-type Category = 'verde' | 'amarillo' | 'rojo';
+type Category = 'verde' | 'amarelo' | 'vermelho';
 
 const categories = [
     { id: 'verde', label: 'Verde', xp: '+30 XP', color: 'bg-green-500', borderColor: 'border-green-500', textColor: 'text-green-500' },
-    { id: 'amarillo', label: 'Amarillo', xp: '+10 XP', color: 'bg-yellow-500', borderColor: 'border-yellow-500', textColor: 'text-yellow-500' },
-    { id: 'rojo', label: 'Rojo', xp: '0 XP', color: 'bg-red-500', borderColor: 'border-red-500', textColor: 'text-red-500' },
+    { id: 'amarelo', label: 'Amarelo', xp: '+10 XP', color: 'bg-yellow-500', borderColor: 'border-yellow-500', textColor: 'text-yellow-500' },
+    { id: 'vermelho', label: 'Vermelho', xp: '0 XP', color: 'bg-red-500', borderColor: 'border-red-500', textColor: 'text-red-500' },
 ] as const;
 
 const trafficLightGuide = [
-    { label: 'Verde', description: 'Proteínas magras, vegetales, frutas', color: 'bg-green-500' },
-    { label: 'Amarillo', description: 'Carbohidratos integrales, grasas saludables', color: 'bg-yellow-500' },
-    { label: 'Rojo', description: 'Procesados, azúcares, fritos', color: 'bg-red-500' },
+    { label: 'Verde', description: 'Proteínas magras, vegetais, frutas', color: 'bg-green-500' },
+    { label: 'Amarelo', description: 'Carboidratos integrais, gorduras saudáveis', color: 'bg-yellow-500' },
+    { label: 'Vermelho', description: 'Processados, açúcares, frituras', color: 'bg-red-500' },
 ];
 
 export function Nutrition() {
@@ -44,7 +44,7 @@ export function Nutrition() {
                 </Button>
                 <div className='text-center'>
                     <h1 className="text-3xl font-bold font-headline text-primary">
-                        Registro de Nutrición
+                        Registro de Nutrição
                     </h1>
                 </div>
                 <div className="w-10"></div>
@@ -52,18 +52,18 @@ export function Nutrition() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Registrar Comida</CardTitle>
+                    <CardTitle>Registrar Refeição</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <Textarea
-                        placeholder="Describe tu comida... Ej: Ensalada de quinoa con pollo"
+                        placeholder="Descreva sua refeição... Ex: Salada de quinoa com frango"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         rows={3}
                     />
 
                     <div>
-                        <label className="text-sm font-medium text-muted-foreground mb-2 block">Selecciona la categoría:</label>
+                        <label className="text-sm font-medium text-muted-foreground mb-2 block">Selecione a categoria:</label>
                         <div className="grid grid-cols-3 gap-4">
                             {categories.map((cat) => (
                                 <Card
@@ -79,7 +79,7 @@ export function Nutrition() {
                         </div>
                     </div>
                     <Button onClick={handleRegisterFood} size="lg" className="w-full" disabled={!description || !selectedCategory}>
-                        Registrar Comida
+                        Registrar Refeição
                     </Button>
                 </CardContent>
             </Card>
@@ -88,7 +88,7 @@ export function Nutrition() {
                  <CardHeader>
                     <CardTitle className='flex items-center gap-2 text-lg text-accent'>
                         <TrafficCone className="w-5 h-5" />
-                        Guía del Semáforo
+                        Guia do Semáforo
                     </CardTitle>
                  </CardHeader>
                  <CardContent className="space-y-3">
