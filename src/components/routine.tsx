@@ -42,11 +42,11 @@ const routineData = {
         icon: Moon,
         color: 'text-blue-400',
         exercises: [
-            { name: 'Alongamento pescoço', duration: '30s cada lado', seconds: 60, xp: 5, image: 'https://i.imgur.com/OHg0d5V.gif', hint: 'neck stretch' },
-            { name: 'Postura da criança', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/zW3BqQk.gif', hint: 'childs pose' },
-            { name: 'Torção de coluna deitado', duration: '1 min cada lado', seconds: 120, xp: 10, image: 'https://i.imgur.com/dTeLp4F.gif', hint: 'supine spinal twist' },
-            { name: 'Alongamento borboleta', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/2g3j3rX.gif', hint: 'butterfly stretch' },
-            { name: 'Respiração profunda', duration: '2 mins', seconds: 120, xp: 15, image: 'https://i.imgur.com/d9a4hSg.gif', hint: 'deep breathing' },
+            { name: 'Alongamento pescoço', duration: '30s cada lado', seconds: 60, xp: 5 },
+            { name: 'Postura da criança', duration: '1 min', seconds: 60, xp: 10 },
+            { name: 'Torção de coluna deitado', duration: '1 min cada lado', seconds: 120, xp: 10 },
+            { name: 'Alongamento borboleta', duration: '1 min', seconds: 60, xp: 10 },
+            { name: 'Respiração profunda', duration: '2 mins', seconds: 120, xp: 15 },
         ]
     }
 };
@@ -192,10 +192,12 @@ export function Routine({ routineId }: RoutineProps) {
                         className={`flex items-center p-4 gap-4 transition-all duration-300 cursor-pointer hover:border-primary/50 ${isCompleted ? 'bg-primary/10 border-primary/50' : 'bg-card/50'}`}
                         onClick={() => !isCompleted && handleToggleExercise(index)}
                     >
-                        <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted">
-                             <Image src={exercise.image} alt={exercise.name} fill style={{ objectFit: 'cover' }} data-ai-hint={exercise.hint} unoptimized />
-                             {isCompleted && <div className="absolute inset-0 bg-primary/30 flex items-center justify-center"><CheckCircle className="w-10 h-10 text-white" /></div>}
-                        </div>
+                        {'image' in exercise && exercise.image && (
+                            <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted">
+                                <Image src={exercise.image} alt={exercise.name} fill style={{ objectFit: 'cover' }} data-ai-hint={exercise.hint} unoptimized />
+                                {isCompleted && <div className="absolute inset-0 bg-primary/30 flex items-center justify-center"><CheckCircle className="w-10 h-10 text-white" /></div>}
+                            </div>
+                        )}
                         <div className="flex-1">
                             <h3 className={`font-semibold text-lg ${isCompleted ? 'text-primary' : ''}`}>{exercise.name}</h3>
                             <div className="flex items-center gap-4 text-muted-foreground">
