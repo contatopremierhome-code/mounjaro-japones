@@ -2,11 +2,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, Leaf, Citrus as Lemon, Sparkles, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Leaf, Citrus as Lemon, Sparkles, Lightbulb, Salad, Dumbbell } from 'lucide-react';
 import { TeaBowlIcon } from './icons';
 import { BrainCircuit } from 'lucide-react';
+import type { DailyProgress, ProgressHistory } from '@/lib/types';
+
 
 const ritualItems = [
     { id: 'tea', label: 'Chá Verde', icon: TeaBowlIcon },
@@ -16,11 +18,79 @@ const ritualItems = [
     { id: 'meditation', label: 'Meditação (5 min)', icon: BrainCircuit, xp: 30 },
 ];
 
+interface CircleProgressProps {
+    progress: number;
+    icon: React.ElementType;
+    label: string;
+}
+
+const CircleProgress = ({ progress, icon: Icon, label }: CircleProgressProps) => {
+    const circumference = 2 * Math.PI * 45;
+    const offset = circumference - (progress / 100) * circumference;
+
+    return (
+        <div className="flex flex-col items-center gap-2">
+            <div className="relative w-28 h-28">
+                <svg className="w-full h-full" viewBox="0 0 100 100">
+                    {/* Background circle */}
+                    <circle
+                        className="text-card-foreground/10"
+                        strokeWidth="10"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="45"
+                        cx="50"
+                        cy="50"
+                    />
+                    {/* Progress circle */}
+                    <circle
+                        className="text-primary transition-all duration-500"
+                        strokeWidth="10"
+                        strokeDasharray={circumference}
+                        strokeDashoffset={offset}
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="45"
+                        cx="50"
+                        cy="50"
+                        transform="rotate(-90 50 50)"
+                    />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                     <Icon className="w-8 h-8 text-primary mb-1" />
+                     <span className="text-lg font-bold">{progress}%</span>
+                </div>
+            </div>
+            <span className="font-semibold text-muted-foreground">{label}</span>
+        </div>
+    );
+};
+
+
 export function Ritual() {
     const router = useRouter();
     const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
     const [isActive, setIsActive] = useState(false);
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+    const [dailyProgress, setDailyProgress] = useState<DailyProgress>({
+        ritual: false,
+        nutrition: false,
+        movement: false,
+        dayFinished: false,
+    });
+
+    useEffect(() => {
+        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
+        const today = new Date().toISOString().split('T')[0];
+
+        if (storedProgressHistory) {
+            const history: ProgressHistory = JSON.parse(storedProgressHistory);
+            if (history[today]) {
+                setDailyProgress(history[today]);
+            }
+        }
+    }, []);
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
@@ -31,7 +101,6 @@ export function Ritual() {
             }, 1000);
         } else if (timeLeft === 0) {
             setIsActive(false);
-            // Optionally, trigger a notification or an action when the timer ends
         }
 
         return () => {
@@ -58,8 +127,18 @@ export function Ritual() {
     const allChecked = ritualItems.every(item => checkedItems[item.id]);
 
     const handleFinishRitual = () => {
-        // Here you would typically update the user's progress in the backend/localStorage
-        // For now, it just navigates back
+        const today = new Date().toISOString().split('T')[0];
+        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
+        const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
+        
+        const updatedProgress: DailyProgress = {
+            ...dailyProgress,
+            ritual: true,
+        };
+
+        history[today] = updatedProgress;
+        localStorage.setItem('mounjaro-progress-history', JSON.stringify(history));
+
         router.back();
     }
 
@@ -74,6 +153,19 @@ export function Ritual() {
                 </h1>
                 <div className="w-10"></div>
             </header>
+
+            <Card className='bg-card/50'>
+                <CardHeader>
+                    <CardTitle className="text-xl text-accent">O Círculo de Poder</CardTitle>
+                    <CardDescription>Seu progresso diário nos 3 pilares.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex justify-around items-center">
+                    <CircleProgress progress={dailyProgress.ritual ? 100 : 0} icon={TeaBowlIcon} label="Ritual" />
+                    <CircleProgress progress={dailyProgress.nutrition ? 100 : 0} icon={Salad} label="Nutrição" />
+                    <CircleProgress progress={dailyProgress.movement ? 100 : 0} icon={Dumbbell} label="Movimento" />
+                </CardContent>
+            </Card>
+
 
             <div className="relative flex flex-col items-center justify-center gap-6">
                 <div className="relative w-64 h-64 flex items-center justify-center">
@@ -132,11 +224,11 @@ export function Ritual() {
                  </CardContent>
             </Card>
 
-            {allChecked && (
-                 <Button size="lg" onClick={handleFinishRitual}>
-                    Concluir Ritual e Ganhar +{ritualItems.find(i => i.xp)?.xp} XP
-                </Button>
-            )}
+            
+            <Button size="lg" onClick={handleFinishRitual} disabled={!allChecked}>
+                Concluir Ritual e Ganhar +{ritualItems.reduce((acc, item) => acc + (item.xp || 0), 0)} XP
+            </Button>
+            
 
         </div>
     );

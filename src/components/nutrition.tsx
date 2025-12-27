@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, TrafficCone } from 'lucide-react';
+import type { DailyProgress, ProgressHistory } from '@/lib/types';
+
 
 type Category = 'verde' | 'amarelo' | 'vermelho';
 
@@ -26,13 +28,20 @@ export function Nutrition() {
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
     const handleRegisterFood = () => {
-        // Here you would typically save the data to a backend or state management
-        console.log({
-            description,
-            category: selectedCategory,
-        });
-        // For now, it just navigates back and marks the task as complete
-        // A more complex implementation would update the progress state globally
+        const today = new Date().toISOString().split('T')[0];
+        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
+        const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
+
+        const currentProgress = history[today] || { ritual: false, nutrition: false, movement: false, dayFinished: false };
+
+        const updatedProgress: DailyProgress = {
+            ...currentProgress,
+            nutrition: true,
+        };
+
+        history[today] = updatedProgress;
+        localStorage.setItem('mounjaro-progress-history', JSON.stringify(history));
+
         router.back();
     };
 

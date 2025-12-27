@@ -7,6 +7,8 @@ import { ArrowLeft, Sun, Flame, Moon, Clock, Repeat, CheckCircle, Circle, Play, 
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { X } from 'lucide-react';
+import type { DailyProgress, ProgressHistory } from '@/lib/types';
+
 
 const routineData = {
     morning: {
@@ -163,6 +165,29 @@ export function Routine({ routineId }: RoutineProps) {
         setCompletedExercises(new Set());
     }
 
+    const handleFinishRoutine = () => {
+        if (completedExercises.size === 0) {
+            router.push('/');
+            return;
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
+        const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
+
+        const currentProgress = history[today] || { ritual: false, nutrition: false, movement: false, dayFinished: false };
+
+        const updatedProgress: DailyProgress = {
+            ...currentProgress,
+            movement: true,
+        };
+
+        history[today] = updatedProgress;
+        localStorage.setItem('mounjaro-progress-history', JSON.stringify(history));
+
+        router.push('/');
+    }
+
     const atLeastOneCompleted = completedExercises.size > 0;
     const totalXp = Array.from(completedExercises).reduce((acc, index) => {
         return acc + routine.exercises[index].xp;
@@ -222,8 +247,7 @@ export function Routine({ routineId }: RoutineProps) {
                 <Button 
                     size="lg" 
                     className="w-full" 
-                    onClick={() => router.push('/')}
-                    disabled={!atLeastOneCompleted}
+                    onClick={handleFinishRoutine}
                 >
                     {atLeastOneCompleted ? `Concluir (+${totalXp} XP)` : 'Concluir Treino'}
                 </Button>
