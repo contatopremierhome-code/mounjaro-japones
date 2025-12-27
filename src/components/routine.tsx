@@ -14,11 +14,11 @@ const routineData = {
         icon: Sun,
         color: 'text-yellow-400',
         exercises: [
-            { name: 'Rotação de tornozelo', duration: '30s cada lado', seconds: 60, xp: 5, image: 'https://i.imgur.com/2yA4Xyq.gif', hint: 'ankle rotation' },
-            { name: 'Círculos com os braços', duration: '30s', seconds: 30, xp: 5, image: 'https://i.imgur.com/sS8f4o8.gif', hint: 'arm circles' },
-            { name: 'Alongamento gato-vaca', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/M6i3A4g.gif', hint: 'cat cow stretch' },
-            { name: 'Agachamento isométrico', duration: '30s', seconds: 30, xp: 10, image: 'https://i.imgur.com/L6b5nS6.gif', hint: 'isometric squat' },
-            { name: 'Polichinelos', duration: '45s', seconds: 45, xp: 15, image: 'https://i.imgur.com/uFvVx6v.gif', hint: 'jumping jacks' },
+            { name: 'Rotação de tornozelo', duration: '30s cada lado', seconds: 60, xp: 5, image: 'https://i.imgur.com/yydGpJ9.png', hint: 'ankle rotation' },
+            { name: 'Círculos com os braços', duration: '30s', seconds: 30, xp: 5, image: 'https://i.imgur.com/8fe7RyQ.png', hint: 'arm circles' },
+            { name: 'Alongamento gato-vaca', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/D9Ki8Kj.png', hint: 'cat cow stretch' },
+            { name: 'Agachamento isométrico', duration: '30s', seconds: 30, xp: 10, image: 'https://i.imgur.com/sOifsAC.png', hint: 'isometric squat' },
+            { name: 'Polichinelos', duration: '45s', seconds: 45, xp: 15, image: 'https://i.imgur.com/FNb9pwK.png', hint: 'jumping jacks' },
         ]
     },
     active: {
@@ -237,5 +237,7 @@ export function Routine({ routineId }: RoutineProps) {
         </div>
     );
 }
+
+    
 
     
