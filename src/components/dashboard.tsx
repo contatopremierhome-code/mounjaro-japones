@@ -7,13 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getAffirmation } from '@/app/actions';
-import { Check, Repeat } from 'lucide-react';
+import { Check, Repeat, Salad, Dumbbell } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useRouter } from 'next/navigation';
+import { TeaBowlIcon } from './icons';
 
 interface DashboardProps {
   user: UserData;
@@ -33,9 +34,59 @@ const actionItems = [
 
 type ActionId = 'ritual' | 'nutrition' | 'movement';
 
+
+interface CircleProgressProps {
+    progress: number;
+    icon: React.ElementType;
+    label: string;
+}
+
+const CircleProgress = ({ progress, icon: Icon, label }: CircleProgressProps) => {
+    const circumference = 2 * Math.PI * 45;
+    const offset = circumference - (progress / 100) * circumference;
+
+    return (
+        <div className="flex flex-col items-center gap-2">
+            <div className="relative w-28 h-28">
+                <svg className="w-full h-full" viewBox="0 0 100 100">
+                    {/* Background circle */}
+                    <circle
+                        className="text-card-foreground/10"
+                        strokeWidth="10"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="45"
+                        cx="50"
+                        cy="50"
+                    />
+                    {/* Progress circle */}
+                    <circle
+                        className="text-primary transition-all duration-500"
+                        strokeWidth="10"
+                        strokeDasharray={circumference}
+                        strokeDashoffset={offset}
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="45"
+                        cx="50"
+                        cy="50"
+                        transform="rotate(-90 50 50)"
+                    />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                     <Icon className="w-8 h-8 text-primary mb-1" />
+                     <span className="text-lg font-bold">{progress}%</span>
+                </div>
+            </div>
+            <span className="font-semibold text-muted-foreground">{label}</span>
+        </div>
+    );
+};
+
+
 export function Dashboard({ user, progress, onProgressUpdate, onReset }: DashboardProps) {
   const router = useRouter();
-  const [confirmedAction, setConfirmedAction] = useState<string | null>(null);
   const [weightChange, setWeightChange] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -88,13 +139,6 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     }
   };
 
-  const completedCount = Object.values(progress).filter(val => typeof val === 'boolean' && val).length;
-  const totalTasks = 3; // ritual, nutrition, movement
-  const overallProgress = (Object.entries(progress)
-    .filter(([key, value]) => ['ritual', 'nutrition', 'movement'].includes(key) && value)
-    .length / totalTasks) * 100;
-
-
   const calculateBmi = (weight: number) => {
     // Assuming a default height of 1.7m for BMI calculation
     const height = 1.7;
@@ -118,23 +162,18 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
           {formattedDate}
         </p>
       </header>
-
-      <div className="relative flex items-center justify-center">
-        <div className="absolute w-64 h-64 border-8 border-primary/20 rounded-full"></div>
-        <div 
-           className="absolute w-64 h-64 rounded-full"
-           style={{
-             background: `conic-gradient(hsl(var(--primary)) ${overallProgress}%, transparent 0)`,
-             transition: 'background 0.5s ease-out'
-           }}
-        ></div>
-        <div className="relative w-52 h-52 bg-card rounded-full flex flex-col items-center justify-center shadow-inner">
-          <span className="text-5xl font-bold font-headline text-primary">
-            {Math.round(overallProgress)}%
-          </span>
-          <span className="text-sm text-muted-foreground">Completo</span>
-        </div>
-      </div>
+    
+      <Card className='bg-card/50'>
+          <CardHeader>
+              <CardTitle className="text-xl text-accent">O Círculo de Poder</CardTitle>
+              <CardDescription>Seu progresso diário nos 3 pilares.</CardDescription>
+          </CardHeader>
+          <CardContent className="flex justify-around items-center">
+              <CircleProgress progress={progress.ritual ? 100 : 0} icon={TeaBowlIcon} label="Ritual" />
+              <CircleProgress progress={progress.nutrition ? 100 : 0} icon={Salad} label="Nutrição" />
+              <CircleProgress progress={progress.movement ? 100 : 0} icon={Dumbbell} label="Movimento" />
+          </CardContent>
+      </Card>
       
       <div className="grid grid-cols-2 gap-4">
         {actionItems.map((item) => (
@@ -218,5 +257,3 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     </div>
   );
 }
-
-    
