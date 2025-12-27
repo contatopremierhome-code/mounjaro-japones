@@ -1,127 +1,31 @@
-/**
- * This ruleset enforces a strict user-ownership security model for the Mounjaro
- * Japones application. The core philosophy is data isolation: each user can only
- * ever access their own data, and no data is public or shared between users.
- *
- * Data Structure:
- * All user data is hierarchically organized under a top-level `/users` collection.
- * Each user's profile and their subcollections (like `dailyProgress`) are nested
- * under a document whose ID matches their authentication UID.
- *   - /users/{userId} -> User's profile document
- *   - /users/{userId}/dailyProgress/{progressId} -> User's daily progress logs
- *
- * Key Security Decisions:
- * - Strict Ownership: All rules are based on matching the authenticated user's
- *   UID (`request.auth.uid`) with the `{userId}` wildcard in the document path.
- * - No Public Access: There are no publicly readable collections. A user must be
- *   signed in to access any data.
- * - User Listing Disabled: The top-level `/users` collection cannot be listed
- *   to prevent enumeration of all application users.
- * - Path-Based Security: Authorization is derived directly from the document path,
- *   which is highly performant as it avoids extra database reads (`get()` calls)
- *   in rules. For data integrity, we ensure that internal ID fields (`id`, `userId`)
- *   in the documents match the user ID from the path.
- */
+
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // -------------------------------------------------------------------------
-    // Helper Functions
-    // -------------------------------------------------------------------------
-
-    /**
-     * Checks if the user is authenticated.
-     */
+    // Helper functions
     function isSignedIn() {
       return request.auth != null;
     }
 
-    /**
-     * Checks if the currently authenticated user's UID matches the provided userId.
-     * This is the foundation of the ownership model.
-     */
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    /**
-     * A robust check for update/delete operations, ensuring the user is the owner
-     * AND the document they are trying to modify actually exists.
-     */
-    function isExistingOwner(userId) {
-      return isOwner(userId) && resource != null;
-    }
-
-    /**
-     * On create, validates that the User document's internal 'id' field
-     * correctly matches the user's auth UID from the path. This enforces
-     * relational integrity from the moment of creation.
-     */
-    function isValidUserCreate(userId) {
-      return request.resource.data.id == userId;
-    }
-
-    /**
-     * On update, ensures the User document's internal 'id' field cannot be
-     * changed, preventing the document from being "re-assigned" to another user.
-     */
-    function isImmutableUserId() {
-      return request.resource.data.id == resource.data.id;
-    }
-
-    /**
-     * On create, validates that the DailyProgress document's internal 'userId'
-     * foreign key correctly matches the user's auth UID from the path.
-     */
-    function isValidDailyProgressCreate(userId) {
-      return request.resource.data.userId == userId;
-    }
-
-    /**
-     * On update, ensures the DailyProgress document's 'userId' foreign key
-     * is immutable, preventing it from being re-assigned to another user.
-     */
-    function isImmutableDailyProgressUserId() {
-      return request.resource.data.userId == resource.data.userId;
-    }
-
-    // -------------------------------------------------------------------------
-    // Collection Rules
-    // -------------------------------------------------------------------------
-
-    /**
-     * @description Controls access to a user's own profile document.
-     * @path /users/{userId}
-     * @allow A signed-in user (create) their own profile doc at `/users/USER_123`.
-     * @allow A signed-in user (get, update, delete) their own profile doc at `/users/USER_123`.
-     * @deny An anonymous user trying to read any user document.
-     * @deny User `USER_ABC` trying to read or write `/users/USER_XYZ`.
-     * @deny Any user trying to list all documents in the `/users` collection.
-     * @principle Restricts access to a user's own data tree and enforces self-creation.
-     */
+    // Rules for the 'users' collection
     match /users/{userId} {
-      allow get: if isOwner(userId);
-      allow list: if false; // Prevent listing all users in the application.
-      allow create: if isOwner(userId) && isValidUserCreate(userId);
-      allow update: if isExistingOwner(userId) && isImmutableUserId();
-      allow delete: if isExistingOwner(userId);
-    }
+      // A user can read, update, or delete their own document
+      allow read, update, delete: if isOwner(userId);
 
-    /**
-     * @description Controls access to a user's private daily progress entries.
-     * @path /users/{userId}/dailyProgress/{dailyProgressId}
-     * @allow User `USER_123` (create) a new progress doc at `/users/USER_123/dailyProgress/DAY_1`.
-     * @allow User `USER_123` (get, list, update, delete) their own progress docs.
-     * @deny User `USER_ABC` trying to access anything under `/users/USER_XYZ/dailyProgress`.
-     * @principle Enforces document ownership via the parent path for all operations.
-     */
-    match /users/{userId}/dailyProgress/{dailyProgressId} {
-      allow get: if isOwner(userId);
-      allow list: if isOwner(userId);
-      allow create: if isOwner(userId) && isValidDailyProgressCreate(userId);
-      allow update: if isExistingOwner(userId) && isImmutableDailyProgressUserId();
-      allow delete: if isExistingOwner(userId);
+      // A new user can create their own user document
+      allow create: if isOwner(userId);
+    }
+    
+    // Rules for the 'progress' subcollection
+    match /users/{userId}/progress/{progressId} {
+        // A user can read, write, and list their own progress documents.
+        allow read, write, list: if isOwner(userId);
     }
   }
 }

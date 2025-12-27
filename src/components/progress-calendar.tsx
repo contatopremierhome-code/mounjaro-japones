@@ -1,34 +1,38 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, CheckCircle, Circle, Flame, Salad, Award } from 'lucide-react';
-import type { ProgressHistory, DailyProgress } from '@/lib/types';
+import type { DailyProgress } from '@/lib/types';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { TeaBowlIcon } from './icons';
+import { useUser, useFirestore, useCollection } from '@/firebase';
+import { collection } from 'firebase/firestore';
 
 export function ProgressCalendar() {
     const router = useRouter();
-    const [history, setHistory] = useState<ProgressHistory>({});
+    const { user } = useUser();
+    const firestore = useFirestore();
+
+    const progressCollectionRef = useMemo(() => {
+        if (!user || !firestore) return null;
+        return collection(firestore, 'users', user.uid, 'progress');
+    }, [user, firestore]);
+
+    const { data: history, isLoading } = useCollection<DailyProgress>(progressCollectionRef);
+
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-    useEffect(() => {
-        const storedHistory = localStorage.getItem('mounjaro-progress-history');
-        if (storedHistory) {
-            setHistory(JSON.parse(storedHistory));
-        }
-    }, []);
-
-    const finishedDays = Object.keys(history)
-        .filter(dateStr => history[dateStr]?.dayFinished)
-        .map(dateStr => parseISO(dateStr));
+    const finishedDays = useMemo(() => 
+        history?.filter(p => p.dayFinished).map(p => parseISO(p.id)) || [],
+    [history]);
     
     const selectedDateString = format(selectedDate, 'yyyy-MM-dd');
-    const selectedDayProgress = history[selectedDateString];
+    const selectedDayProgress = history?.find(p => p.id === selectedDateString);
 
     const DayInfo = ({ progress }: { progress: DailyProgress }) => (
         <div className='space-y-3'>
@@ -93,7 +97,9 @@ export function ProgressCalendar() {
                     <CardDescription>Resumo do dia</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {selectedDayProgress ? (
+                    {isLoading ? (
+                        <p>Carregando...</p>
+                    ) : selectedDayProgress ? (
                         <DayInfo progress={selectedDayProgress} />
                     ) : (
                         <p className="text-muted-foreground">Nenhuma atividade registrada para este dia.</p>

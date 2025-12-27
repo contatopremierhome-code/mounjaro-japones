@@ -1,10 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Onboarding } from '@/components/onboarding';
 import { Dashboard } from '@/components/dashboard';
-import type { UserData, DailyProgress, ProgressHistory } from '@/lib/types';
+import { AuthComponent } from '@/components/auth';
+import type { UserData, DailyProgress } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useUser, useDoc, useFirestore } from '@/firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { format } from 'date-fns';
 
 const initialProgress: DailyProgress = {
   ritual: 0,
@@ -14,55 +18,58 @@ const initialProgress: DailyProgress = {
 };
 
 export default function Home() {
-  const [user, setUser] = useState<UserData | null>(null);
-  const [progress, setProgress] = useState<DailyProgress>(initialProgress);
-  const [loading, setLoading] = useState(true);
+  const { user: authUser, isUserLoading } = useUser();
+  const firestore = useFirestore();
+
+  const userDocRef = useMemo(() => {
+    if (!firestore || !authUser?.uid) return null;
+    return doc(firestore, 'users', authUser.uid);
+  }, [firestore, authUser?.uid]);
+
+  const { data: user, isLoading: isUserDocLoading } = useDoc<UserData>(userDocRef);
+
+  const todayStr = format(new Date(), 'yyyy-MM-dd');
+  const progressDocRef = useMemo(() => {
+      if (!firestore || !authUser?.uid) return null;
+      return doc(firestore, 'users', authUser.uid, 'progress', todayStr);
+  }, [firestore, authUser?.uid, todayStr]);
+
+  const { data: progress, isLoading: isProgressLoading } = useDoc<DailyProgress>(progressDocRef);
+
+  const [localProgress, setLocalProgress] = useState<DailyProgress | null>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('mounjaro-user');
-    const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
-    const today = new Date().toISOString().split('T')[0];
-
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (progress) {
+      setLocalProgress(progress);
+    } else if (!isProgressLoading) {
+      setLocalProgress(initialProgress);
     }
+  }, [progress, isProgressLoading]);
 
-    if (storedProgressHistory) {
-      const history: ProgressHistory = JSON.parse(storedProgressHistory);
-      if (history[today]) {
-        setProgress(history[today]);
-      } else {
-        // New day, reset progress
-        setProgress(initialProgress);
-      }
+
+  const handleOnboardingComplete = (data: Omit<UserData, 'onboarded'>) => {
+    if (userDocRef) {
+      const userData: UserData = { ...data, onboarded: true };
+      setDoc(userDocRef, userData, { merge: true });
     }
-    setLoading(false);
-  }, []);
-
-  const handleOnboardingComplete = (data: UserData) => {
-    setUser(data);
-    localStorage.setItem('mounjaro-user', JSON.stringify(data));
   };
 
   const handleProgressUpdate = (newProgress: DailyProgress) => {
-    setProgress(newProgress);
-    const today = new Date().toISOString().split('T')[0];
-    const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
-    const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
-    history[today] = newProgress;
-    localStorage.setItem('mounjaro-progress-history', JSON.stringify(history));
+    if (progressDocRef) {
+      setLocalProgress(newProgress); // Optimistic update
+      setDoc(progressDocRef, newProgress, { merge: true });
+    }
   };
   
-  const handleReset = () => {
-    localStorage.removeItem('mounjaro-user');
-    localStorage.removeItem('mounjaro-progress-history');
-    setUser(null);
-    setProgress(initialProgress);
-    // Also remove from router history
-    window.location.replace('/');
+  const handleReset = async () => {
+    if (userDocRef) {
+      await setDoc(userDocRef, { onboarded: false }, { merge: true });
+    }
   }
+  
+  const isLoading = isUserLoading || isUserDocLoading || isProgressLoading;
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-background p-4">
         <div className="flex flex-col items-center gap-4 w-full max-w-md">
@@ -80,10 +87,18 @@ export default function Home() {
     );
   }
 
+  if (!authUser) {
+    return (
+        <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 sm:p-6">
+            <AuthComponent />
+        </main>
+    );
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 sm:p-6">
-      {user ? (
-        <Dashboard user={user} progress={progress} onProgressUpdate={handleProgressUpdate} onReset={handleReset} />
+      {user?.onboarded && localProgress ? (
+        <Dashboard user={user} progress={localProgress} onProgressUpdate={handleProgressUpdate} onReset={handleReset} />
       ) : (
         <Onboarding onOnboardingComplete={handleOnboardingComplete} />
       )}

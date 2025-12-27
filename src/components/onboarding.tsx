@@ -60,7 +60,7 @@ const formSchema = z.object({
 
 
 interface OnboardingProps {
-  onOnboardingComplete: (data: UserData) => void;
+  onOnboardingComplete: (data: Omit<UserData, 'onboarded'>) => void;
 }
 
 export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
@@ -92,7 +92,7 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      onOnboardingComplete(finalData as UserData);
+      onOnboardingComplete(finalData as Omit<UserData, 'onboarded'>);
     }
   }
 
@@ -255,7 +255,7 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
                     <FormItem>
                       <FormLabel>Qual seu sonho pessoal?</FormLabel>
                       <FormControl>
-                        <Input placeholder="Ex: Correr uma maratona" {...field} />
+                        <Input placeholder="Ex: Correr uma maratona" {...field} value={field.value || ''}/>
                       </FormControl>
                        <FormDescription>
                         Opcional, mas ajuda a lembrar seu 'porquê' nesta jornada.

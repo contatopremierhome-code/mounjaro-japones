@@ -7,6 +7,7 @@ export interface UserData {
   takesMedication: 'yes' | 'no';
   medicationDose: string;
   personalDream: string;
+  onboarded: boolean;
 }
 
 export interface DailyProgress {
@@ -14,8 +15,4 @@ export interface DailyProgress {
   nutrition: number; // 0 to 100
   movement: number; // 0 to 100
   dayFinished: boolean;
-}
-
-export interface ProgressHistory {
-  [date: string]: DailyProgress;
 }

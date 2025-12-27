@@ -5,7 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, TrafficCone } from 'lucide-react';
-import type { DailyProgress, ProgressHistory } from '@/lib/types';
+import type { DailyProgress } from '@/lib/types';
+import { useUser, useFirestore } from '@/firebase';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { format } from 'date-fns';
 
 
 type Category = 'verde' | 'amarelo' | 'vermelho';
@@ -24,25 +27,31 @@ const trafficLightGuide = [
 
 export function Nutrition() {
     const router = useRouter();
+    const { user } = useUser();
+    const firestore = useFirestore();
     const [description, setDescription] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
-    const handleRegisterFood = () => {
-        const today = new Date().toISOString().split('T')[0];
-        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
-        const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
+    const handleRegisterFood = async () => {
+        if (!user || !firestore) return;
 
-        const currentProgress = history[today] || { ritual: 0, nutrition: 0, movement: 0, dayFinished: false };
+        const today = format(new Date(), 'yyyy-MM-dd');
+        const progressDocRef = doc(firestore, 'users', user.uid, 'progress', today);
 
-        const updatedProgress: DailyProgress = {
-            ...currentProgress,
-            nutrition: 100,
-        };
+        try {
+            const docSnap = await getDoc(progressDocRef);
+            const currentProgress = docSnap.exists() ? docSnap.data() as DailyProgress : { ritual: 0, nutrition: 0, movement: 0, dayFinished: false, date: today };
 
-        history[today] = updatedProgress;
-        localStorage.setItem('mounjaro-progress-history', JSON.stringify(history));
+            const updatedProgress: DailyProgress = {
+                ...currentProgress,
+                nutrition: 100,
+            };
 
-        router.back();
+            await setDoc(progressDocRef, updatedProgress, { merge: true });
+            router.back();
+        } catch (error) {
+            console.error("Error updating nutrition progress: ", error);
+        }
     };
 
     return (

@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -7,7 +7,10 @@ import { ArrowLeft, Sun, Flame, Moon, Clock, Repeat, CheckCircle, Circle, Play, 
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
 import { X } from 'lucide-react';
-import type { DailyProgress, ProgressHistory } from '@/lib/types';
+import type { DailyProgress } from '@/lib/types';
+import { useUser, useFirestore, useDoc } from '@/firebase';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { format } from 'date-fns';
 
 
 const routineData = {
@@ -130,26 +133,30 @@ const TimerDialog = ({ exercise, onComplete, onClose }: { exercise: Exercise, on
 
 export function Routine({ routineId }: RoutineProps) {
     const router = useRouter();
+    const { user } = useUser();
+    const firestore = useFirestore();
     const routine = routineData[routineId as RoutineId];
     const [completedExercises, setCompletedExercises] = useState<Set<number>>(new Set());
     const [selectedExerciseIndex, setSelectedExerciseIndex] = useState<number | null>(null);
 
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
+    const progressDocRef = useMemo(() => {
+        if (!user || !firestore) return null;
+        return doc(firestore, 'users', user.uid, 'progress', todayStr);
+    }, [user, firestore, todayStr]);
+
+    const { data: progress } = useDoc<DailyProgress>(progressDocRef);
+
     useEffect(() => {
-        const today = new Date().toISOString().split('T')[0];
-        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
-        if (storedProgressHistory) {
-            const history: ProgressHistory = JSON.parse(storedProgressHistory);
-            const todayProgress = history[today];
-            if (todayProgress && todayProgress.movement > 0 && routine) {
-                const numCompleted = Math.round((todayProgress.movement / 100) * routine.exercises.length);
-                const initialCompleted = new Set<number>();
-                for (let i = 0; i < numCompleted; i++) {
-                    initialCompleted.add(i);
-                }
-                setCompletedExercises(initialCompleted);
+        if (progress && progress.movement > 0 && routine) {
+            const numCompleted = Math.round((progress.movement / 100) * routine.exercises.length);
+            const initialCompleted = new Set<number>();
+            for (let i = 0; i < numCompleted; i++) {
+                initialCompleted.add(i);
             }
+            setCompletedExercises(initialCompleted);
         }
-    }, [routineId, routine]);
+    }, [progress, routine, routineId]);
 
 
     if (!routine) {
@@ -166,6 +173,26 @@ export function Routine({ routineId }: RoutineProps) {
 
     const handleToggleExercise = (index: number) => {
         setSelectedExerciseIndex(index);
+    };
+
+    const updateProgress = async (numCompleted: number) => {
+        if (!progressDocRef) return;
+        
+        const progressPercentage = Math.round((numCompleted / routine.exercises.length) * 100);
+
+        try {
+            const docSnap = await getDoc(progressDocRef);
+            const currentProgress = docSnap.exists() ? docSnap.data() as DailyProgress : { ritual: 0, nutrition: 0, movement: 0, dayFinished: false, date: todayStr };
+    
+            const updatedProgress: DailyProgress = {
+                ...currentProgress,
+                movement: progressPercentage,
+            };
+    
+            await setDoc(progressDocRef, updatedProgress, { merge: true });
+        } catch (error) {
+            console.error("Error updating movement progress: ", error);
+        }
     };
 
     const handleTimerComplete = () => {
@@ -186,26 +213,8 @@ export function Routine({ routineId }: RoutineProps) {
         updateProgress(0);
     }
 
-    const updateProgress = (numCompleted: number) => {
-        const today = new Date().toISOString().split('T')[0];
-        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
-        const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
-        const currentProgress = history[today] || { ritual: 0, nutrition: 0, movement: 0, dayFinished: false };
-        
-        const progressPercentage = Math.round((numCompleted / routine.exercises.length) * 100);
-
-        const updatedProgress: DailyProgress = {
-            ...currentProgress,
-            movement: progressPercentage,
-        };
-
-        history[today] = updatedProgress;
-        localStorage.setItem('mounjaro-progress-history', JSON.stringify(history));
-    };
-
 
     const handleFinishRoutine = () => {
-        // We already update progress as exercises are completed, so we just go back.
         router.push('/');
     }
     

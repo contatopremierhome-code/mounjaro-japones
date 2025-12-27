@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,7 +7,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Leaf, Citrus as Lemon, Sparkles, Lightbulb } from 'lucide-react';
 import { TeaBowlIcon } from './icons';
 import { BrainCircuit } from 'lucide-react';
-import type { DailyProgress, ProgressHistory } from '@/lib/types';
+import type { DailyProgress } from '@/lib/types';
+import { useUser, useFirestore, useDoc } from '@/firebase';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { format } from 'date-fns';
 
 
 const ritualItems = [
@@ -22,28 +25,30 @@ const totalRitualPoints = ritualItems.length;
 
 export function Ritual() {
     const router = useRouter();
+    const { user } = useUser();
+    const firestore = useFirestore();
     const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
     const [isActive, setIsActive] = useState(false);
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
 
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
+    const progressDocRef = useMemo(() => {
+        if (!user || !firestore) return null;
+        return doc(firestore, 'users', user.uid, 'progress', todayStr);
+    }, [user, firestore, todayStr]);
+
+    const { data: progress, isLoading } = useDoc<DailyProgress>(progressDocRef);
+
     useEffect(() => {
-        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
-        const today = new Date().toISOString().split('T')[0];
-        if (storedProgressHistory) {
-            const history: ProgressHistory = JSON.parse(storedProgressHistory);
-            const todayProgress = history[today];
-            if (todayProgress && todayProgress.ritual > 0) {
-                 // For simplicity, we can assume if progress exists, items were checked.
-                 // A more robust solution would save the checked items state.
-                 const itemsChecked = Math.round((todayProgress.ritual / 100) * totalRitualPoints);
-                 const initialChecked: Record<string, boolean> = {};
-                 for(let i=0; i < itemsChecked; i++) {
-                    initialChecked[ritualItems[i].id] = true;
-                 }
-                 setCheckedItems(initialChecked);
+        if (progress && progress.ritual > 0) {
+            const itemsChecked = Math.round((progress.ritual / 100) * totalRitualPoints);
+            const initialChecked: Record<string, boolean> = {};
+            for(let i=0; i < itemsChecked; i++) {
+               initialChecked[ritualItems[i].id] = true;
             }
+            setCheckedItems(initialChecked);
         }
-    }, []);
+    }, [progress]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
@@ -80,22 +85,23 @@ export function Ritual() {
     const checkedCount = Object.values(checkedItems).filter(Boolean).length;
     const progressPercentage = Math.round((checkedCount / totalRitualPoints) * 100);
 
-    const handleFinishRitual = () => {
-        const today = new Date().toISOString().split('T')[0];
-        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
-        const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
+    const handleFinishRitual = async () => {
+        if (!progressDocRef) return;
         
-        const currentProgress = history[today] || { ritual: 0, nutrition: 0, movement: 0, dayFinished: false };
-        
-        const updatedProgress: DailyProgress = {
-            ...currentProgress,
-            ritual: progressPercentage,
-        };
+        try {
+            const docSnap = await getDoc(progressDocRef);
+            const currentProgress = docSnap.exists() ? docSnap.data() as DailyProgress : { ritual: 0, nutrition: 0, movement: 0, dayFinished: false, date: todayStr };
 
-        history[today] = updatedProgress;
-        localStorage.setItem('mounjaro-progress-history', JSON.stringify(history));
+            const updatedProgress: DailyProgress = {
+                ...currentProgress,
+                ritual: progressPercentage,
+            };
 
-        router.back();
+            await setDoc(progressDocRef, updatedProgress, { merge: true });
+            router.back();
+        } catch (error) {
+            console.error("Error updating ritual progress: ", error);
+        }
     }
 
     const totalXp = ritualItems.reduce((acc, item) => checkedItems[item.id] ? acc + (item.xp || 0) : acc, 0);
@@ -170,7 +176,7 @@ export function Ritual() {
             </Card>
 
             
-            <Button size="lg" onClick={handleFinishRitual} disabled={checkedCount === 0}>
+            <Button size="lg" onClick={handleFinishRitual} disabled={checkedCount === 0 || isLoading}>
                 Concluir Ritual e Ganhar +{totalXp} XP ({progressPercentage}%)
             </Button>
             
