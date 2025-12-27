@@ -171,7 +171,7 @@ export const teaRecipes: Recipe[] = [
         whyItWorks: 'A camomila é conhecida por suas propriedades calmantes, que ajudam a reduzir o estresse (um fator ligado ao ganho de peso). A hortelã auxilia na digestão, prevenindo o inchaço.',
     },
     {
-        id: 'cavalinha',
+        id: 'cavalinha-diuretico',
         title: 'Chá de Cavalinha',
         description: 'Combate o inchaço e fortalece',
         prepTime: '15 minutos',
