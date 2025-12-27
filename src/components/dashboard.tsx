@@ -140,7 +140,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
   };
 
   const calculateBmi = (weight: number, height?: number) => {
-    if (!height) return '--';
+    if (!height || height < 1 || height > 2.3) return '--';
     return (weight / (height * height)).toFixed(1);
   };
 

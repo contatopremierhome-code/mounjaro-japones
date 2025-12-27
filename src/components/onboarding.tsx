@@ -44,7 +44,7 @@ const formSchema = z.object({
   age: z.coerce.number().min(18, 'Você deve ser maior de idade.').max(100),
   currentWeight: z.coerce.number().min(30, 'Peso inválido.').max(300),
   weightGoal: z.coerce.number().min(30, 'Meta de peso inválida.').max(300),
-  height: z.coerce.number().min(1, 'Altura inválida.').max(2.5).optional().or(z.literal('')),
+  height: z.coerce.number().min(1, 'Altura inválida.').max(2.3, 'Altura máxima de 2.30m').optional().or(z.literal('')),
   takesMedication: z.enum(['yes', 'no']),
   medicationDose: z.string().optional(),
   personalDream: z.string().optional(),
