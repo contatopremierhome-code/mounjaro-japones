@@ -44,6 +44,10 @@ const routines = [
 export function Movement() {
     const router = useRouter();
 
+    const handleStartRoutine = (routineId: string) => {
+        router.push(`/movement/${routineId}`);
+    };
+
     return (
         <div className="w-full max-w-4xl mx-auto flex flex-col gap-8">
             <header className="flex items-center relative w-full justify-center">
@@ -81,7 +85,7 @@ export function Movement() {
                            </div>
                         </CardContent>
                         <CardFooter>
-                            <Button className="w-full" variant='outline'>
+                            <Button className="w-full" variant='outline' onClick={() => handleStartRoutine(routine.id)}>
                                 <Dumbbell className="mr-2 h-4 w-4" />
                                 Começar Rotina
                             </Button>
