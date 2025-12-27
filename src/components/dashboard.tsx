@@ -26,7 +26,7 @@ const actionItems = [
   { id: 'ritual', title: 'Ritual do Chá', icon: TeaBowlIcon, path: '/ritual' },
   { id: 'nutrition', title: 'Registrar Comida', icon: Salad, path: '/nutrition' },
   { id: 'recipes', title: 'Receitas de Chás', icon: BookOpen, path: '/recipes' },
-  { id: 'movement', title: 'Exercícios Diários', icon: Dumbbell },
+  { id: 'movement', title: 'Exercícios Diários', icon: Dumbbell, path: '/movement' },
 ] as const;
 
 type ActionId = 'ritual' | 'nutrition' | 'movement';
