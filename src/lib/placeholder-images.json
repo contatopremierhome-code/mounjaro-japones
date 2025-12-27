@@ -23,6 +23,42 @@
       "description": "Uma xícara de chá fumegante em um ambiente escuro.",
       "imageUrl": "https://images.unsplash.com/photo-1547583881-58685cb3210f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxob3QlMjB0ZWF8ZW58MHx8fHwxNzY2NzQ5NjQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "hot tea"
+    },
+    {
+      "id": "tea-hibiscus",
+      "description": "Um copo de chá de hibisco vermelho brilhante com gelo.",
+      "imageUrl": "https://images.unsplash.com/photo-1596700339335-3733b137a858?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxoaWJpc2N1cyUyMHRlYXxlbnwwfHx8fDE3MTk0MjUwODJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hibiscus tea"
+    },
+    {
+      "id": "tea-ginger",
+      "description": "Uma xícara de chá de gengibre com fatias de limão.",
+      "imageUrl": "https://images.unsplash.com/photo-1549488344-cbb6c34cf08b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxnaW5nZXIlMjB0ZWF8ZW58MHx8fHwxNzE5NDI1MTEyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "ginger tea"
+    },
+    {
+      "id": "tea-chamomile",
+      "description": "Uma xícara de chá de camomila com flores ao lado.",
+      "imageUrl": "https://images.unsplash.com/photo-1597332768436-5813f82e7534?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFtb21pbGUlMjB0ZWF8ZW58MHx8fHwxNzE5NDI1MTQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chamomile tea"
+    },
+    {
+      "id": "tea-herbal",
+      "description": "Chá de ervas sendo derramado em uma xícara.",
+      "imageUrl": "https://images.unsplash.com/photo-1574702422072-86a41f6424e8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxoZXJiYWwlMjB0ZWF8ZW58MHx8fHwxNzE5NDI1MTYwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "herbal tea"
+    },
+    {
+      "id": "tea-turmeric",
+      "description": "Uma bebida dourada de cúrcuma em um copo.",
+      "imageUrl": "https://images.unsplash.com/photo-1556044237-b44c0490b633?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx0dXJtZXJpYyUyMHRlYXxlbnwwfHx8fDE3E5NDI1MTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "turmeric tea"
+    },
+    {
+      "id": "tea-mate",
+      "description": "Uma cuia tradicional de erva-mate.",
+      "imageUrl": "https://images.unsplash.com/photo-1569421888914-874b341f273b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYXRlJTIwdGVhfGVufDB8fHx8MTcxOTQyNTIwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mate tea"
     }
   ]
 }
