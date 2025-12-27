@@ -24,7 +24,7 @@ interface DashboardProps {
 
 const actionItems = [
   { id: 'ritual', title: 'Ritual do Chá', icon: TeaBowlIcon, path: '/ritual' },
-  { id: 'nutrition', title: 'Registrar Comida', icon: Salad },
+  { id: 'nutrition', title: 'Registrar Comida', icon: Salad, path: '/nutrition' },
   { id: 'recipes', title: 'Receitas de Chás', icon: BookOpen, path: '/recipes' },
   { id: 'movement', title: 'Exercícios Diários', icon: Dumbbell },
 ] as const;
