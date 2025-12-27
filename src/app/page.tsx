@@ -56,6 +56,8 @@ export default function Home() {
     localStorage.removeItem('mounjaro-progress');
     setUser(null);
     setProgress({ ritual: false, nutrition: false, movement: false });
+    // Also remove from router history
+    window.location.replace('/');
   }
 
   if (loading) {

@@ -13,6 +13,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useRouter } from 'next/navigation';
 
 interface DashboardProps {
   user: UserData;
@@ -24,20 +25,26 @@ interface DashboardProps {
 const actionItems = [
   { id: 'ritual', title: 'Ritual do Chá', icon: TeaBowlIcon },
   { id: 'nutrition', title: 'Registrar Comida', icon: Salad },
-  { id: 'recipes', title: 'Receitas de Chás', icon: BookOpen, isActionable: false },
+  { id: 'recipes', title: 'Receitas de Chás', icon: BookOpen },
   { id: 'movement', title: 'Exercícios Diários', icon: Dumbbell },
 ] as const;
 
 type ActionId = 'ritual' | 'nutrition' | 'movement';
 
 export function Dashboard({ user, progress, onProgressUpdate, onReset }: DashboardProps) {
+  const router = useRouter();
   const [confirmedAction, setConfirmedAction] = useState<string | null>(null);
   const [weightChange, setWeightChange] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleActionClick = (id: ActionId) => {
-    const newProgress = { ...progress, [id]: !progress[id] };
+  const handleActionClick = (id: string) => {
+    if (id === 'recipes') {
+      router.push('/recipes');
+      return;
+    }
+    
+    const newProgress = { ...progress, [id as ActionId]: !progress[id as ActionId] };
     onProgressUpdate(newProgress);
     setConfirmedAction(id);
     setTimeout(() => setConfirmedAction(null), 2000);
@@ -127,7 +134,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
         {actionItems.map((item) => (
           <Card
             key={item.id}
-            onClick={() => item.isActionable === false ? window.alert('Função em breve!') : handleActionClick(item.id as ActionId)}
+            onClick={() => handleActionClick(item.id)}
             className={`aspect-square flex flex-col items-center justify-center p-4 transition-all duration-300 transform hover:scale-105 hover:bg-primary/10 cursor-pointer ${progress[item.id as ActionId] ? 'border-primary shadow-primary/20' : ''}`}
           >
             {confirmedAction === item.id ? (

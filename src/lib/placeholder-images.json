@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "tea-matcha",
+      "description": "Uma pessoa de roupão preparando um chá matcha.",
+      "imageUrl": "https://images.unsplash.com/photo-1575487426366-079595af2247?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYXRjaGElMjB0ZWF8ZW58MHx8fHwxNzY2ODY2MTU2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "matcha tea"
+    },
+    {
+      "id": "tea-ice-summer",
+      "description": "Um copo de chá gelado com limão e hortelã.",
+      "imageUrl": "https://images.unsplash.com/photo-1544418749-94b09b11e93f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxpY2VkJTIwdGVhfGVufDB8fHx8MTc2NjgzOTg4OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "iced tea"
+    },
+    {
+      "id": "tea-chai",
+      "description": "Uma xícara de chá chai com especiarias ao lado.",
+      "imageUrl": "https://images.unsplash.com/photo-1561336526-2914f13ceb36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxjaGFpJTIwdGVhfGVufDB8fHx8MTc2Njg2NjE1Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chai tea"
+    },
+    {
+      "id": "tea-oolong",
+      "description": "Uma xícara de chá fumegante em um ambiente escuro.",
+      "imageUrl": "https://images.unsplash.com/photo-1547583881-58685cb3210f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxob3QlMjB0ZWF8ZW58MHx8fHwxNzY2NzQ5NjQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hot tea"
+    }
+  ]
 }
