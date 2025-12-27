@@ -1,8 +1,9 @@
 'use client';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowLeft, Sun, Flame, Moon, Clock, Repeat, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Sun, Flame, Moon, Clock, Repeat, CheckCircle, Circle } from 'lucide-react';
 import Image from 'next/image';
 
 const routineData = {
@@ -57,6 +58,7 @@ interface RoutineProps {
 export function Routine({ routineId }: RoutineProps) {
     const router = useRouter();
     const routine = routineData[routineId as RoutineId];
+    const [completedExercises, setCompletedExercises] = useState<Set<number>>(new Set());
 
     if (!routine) {
         return (
@@ -69,6 +71,24 @@ export function Routine({ routineId }: RoutineProps) {
     }
     
     const RoutineIcon = routine.icon;
+
+    const handleToggleExercise = (index: number) => {
+        setCompletedExercises(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(index)) {
+                newSet.delete(index);
+            } else {
+                newSet.add(index);
+            }
+            return newSet;
+        });
+    };
+
+    const handleReset = () => {
+        setCompletedExercises(new Set());
+    }
+
+    const allCompleted = completedExercises.size === routine.exercises.length;
 
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-8">
@@ -86,29 +106,47 @@ export function Routine({ routineId }: RoutineProps) {
             </header>
 
             <div className="space-y-4">
-                {routine.exercises.map((exercise, index) => (
-                    <Card key={index} className="flex items-center p-4 gap-4 bg-card/50">
+                {routine.exercises.map((exercise, index) => {
+                    const isCompleted = completedExercises.has(index);
+                    return (
+                    <Card 
+                        key={index} 
+                        className={`flex items-center p-4 gap-4 transition-all duration-300 ${isCompleted ? 'bg-primary/10 border-primary/50' : 'bg-card/50'}`}
+                        onClick={() => handleToggleExercise(index)}
+                    >
                         <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted">
                              <Image src={exercise.image} alt={exercise.name} fill style={{ objectFit: 'cover' }} data-ai-hint={exercise.hint} unoptimized />
+                             {isCompleted && <div className="absolute inset-0 bg-primary/30"></div>}
                         </div>
                         <div className="flex-1">
-                            <h3 className="font-semibold text-lg">{exercise.name}</h3>
+                            <h3 className={`font-semibold text-lg ${isCompleted ? 'text-primary' : ''}`}>{exercise.name}</h3>
                             <div className="flex items-center gap-2 text-muted-foreground">
                                 <Clock className="w-4 h-4" />
                                 <span>{exercise.duration}</span>
                             </div>
                         </div>
-                        <CheckCircle className="w-8 h-8 text-muted-foreground/30 hover:text-primary transition-colors cursor-pointer"/>
+                        <div onClick={() => handleToggleExercise(index)} className="cursor-pointer">
+                            {isCompleted ? (
+                                <CheckCircle className="w-8 h-8 text-primary transition-colors"/>
+                            ) : (
+                                <Circle className="w-8 h-8 text-muted-foreground/30 hover:text-primary transition-colors"/>
+                            )}
+                        </div>
                     </Card>
-                ))}
+                )})}
             </div>
 
             <div className="flex gap-4">
-                <Button variant="outline" size="lg" className="w-full">
+                <Button variant="outline" size="lg" className="w-full" onClick={handleReset}>
                     <Repeat className="mr-2 h-4 w-4" />
                     Começar de Novo
                 </Button>
-                <Button size="lg" className="w-full" onClick={() => router.push('/')}>
+                <Button 
+                    size="lg" 
+                    className="w-full" 
+                    onClick={() => router.push('/')}
+                    disabled={!allCompleted}
+                >
                     Concluir Treino
                 </Button>
             </div>
