@@ -17,6 +17,17 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Clock, Flame, Info, CheckCircle, X } from 'lucide-react';
 import { Separator } from './ui/separator';
 
+const IntensityIndicator = ({ level }: { level: 1 | 2 | 3 }) => (
+    <div className="flex gap-1">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <Flame
+          key={i}
+          className={`h-4 w-4 ${i < level ? 'text-destructive fill-destructive' : 'text-muted-foreground/30'}`}
+        />
+      ))}
+    </div>
+  );
+
 export function Recipes() {
   const router = useRouter();
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
@@ -63,6 +74,11 @@ export function Recipes() {
                 data-ai-hint={recipe.image.imageHint}
               />
                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+               <div className="absolute top-3 right-3 bg-card/80 backdrop-blur-sm rounded-full p-2 flex gap-1">
+                {Array.from({ length: recipe.intensity }).map((_, i) => (
+                    <Flame key={i} className="h-4 w-4 text-destructive fill-destructive" />
+                ))}
+               </div>
             </div>
             <CardContent className="p-4 relative">
               <h2 className="text-xl font-bold text-primary mb-2">{recipe.title}</h2>
@@ -104,12 +120,15 @@ export function Recipes() {
                     </div>
                     <div className="p-6">
                         <DialogTitle className="text-3xl font-headline text-primary mb-2">{selectedRecipe.title}</DialogTitle>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                            <div className="flex items-center gap-1">
-                                <Clock className="h-4 w-4" />
-                                <span>{selectedRecipe.prepTime}</span>
+                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-1">
+                                    <Clock className="h-4 w-4" />
+                                    <span>{selectedRecipe.prepTime}</span>
+                                </div>
+                                <Badge>{selectedRecipe.description}</Badge>
                             </div>
-                            <Badge>{selectedRecipe.description}</Badge>
+                            <IntensityIndicator level={selectedRecipe.intensity} />
                         </div>
                     </div>
                 </DialogHeader>

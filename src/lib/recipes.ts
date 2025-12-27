@@ -7,6 +7,7 @@ export interface Recipe {
   description: string;
   prepTime: string;
   xp: string;
+  intensity: 1 | 2 | 3;
   image: ImagePlaceholder;
   ingredients: string[];
   preparation: string[];
@@ -28,6 +29,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Queima gordura 3x mais rápido',
         prepTime: '5 minutos',
         xp: '+15 XP',
+        intensity: 3,
         image: findImage('tea-matcha'),
         ingredients: [
             '1 colher de chá de matcha em pó de qualidade',
@@ -52,6 +54,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Hidratação + queima contínua em dias quentes',
         prepTime: '5 minutos',
         xp: '+15 XP',
+        intensity: 2,
         image: findImage('tea-ice-summer'),
         ingredients: [
             '1 saquinho de chá verde ou 1 colher de chá de folhas',
@@ -73,6 +76,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Termogênese extrema + controle de glicose',
         prepTime: '10 minutos',
         xp: '+15 XP',
+        intensity: 3,
         image: findImage('tea-chai'),
         ingredients: [
             '1 saquinho de chá preto',
@@ -95,6 +99,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Queima gordura enquanto dorme + digestão noturna',
         prepTime: '5 minutos',
         xp: '+15 XP',
+        intensity: 2,
         image: findImage('tea-oolong'),
         ingredients: [
             '1 colher de chá de chá Oolong de alta qualidade',
@@ -114,6 +119,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Diurético e acelerador de metabolismo',
         prepTime: '7 minutos',
         xp: '+15 XP',
+        intensity: 2,
         image: findImage('tea-hibiscus'),
         ingredients: [
             '1 colher de sopa de flores de hibisco secas',
@@ -135,6 +141,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Detox e anti-inflamatório',
         prepTime: '10 minutos',
         xp: '+15 XP',
+        intensity: 3,
         image: findImage('tea-ginger'),
         ingredients: [
             '1 pedaço de 2-3 cm de gengibre fresco, fatiado',
@@ -156,6 +163,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Relaxante e melhora a digestão',
         prepTime: '8 minutos',
         xp: '+10 XP',
+        intensity: 1,
         image: findImage('tea-chamomile'),
         ingredients: [
             '1 colher de sopa de flores de camomila secas',
@@ -176,6 +184,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Combate o inchaço e fortalece',
         prepTime: '15 minutos',
         xp: '+15 XP',
+        intensity: 1,
         image: findImage('tea-herbal'),
         ingredients: [
             '1 colher de sopa de talos secos de cavalinha',
@@ -195,6 +204,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Anti-inflamatório e antioxidante',
         prepTime: '10 minutos',
         xp: '+15 XP',
+        intensity: 2,
         image: findImage('tea-turmeric'),
         ingredients: [
             '1 colher de chá de cúrcuma (açafrão-da-terra) em pó',
@@ -216,6 +226,7 @@ export const teaRecipes: Recipe[] = [
         description: 'Foco e energia para o treino',
         prepTime: '5 minutos',
         xp: '+20 XP',
+        intensity: 3,
         image: findImage('tea-mate'),
         ingredients: [
             '1 colher de sopa de erva-mate tostada',
