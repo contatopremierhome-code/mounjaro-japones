@@ -261,11 +261,13 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
           </form>
         </Form>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline" onClick={handlePrev} disabled={currentStep === 0}>
-          <ArrowLeft />
-          Voltar
-        </Button>
+      <CardFooter className={`flex ${currentStep > 0 ? 'justify-between' : 'justify-end'}`}>
+        {currentStep > 0 && (
+            <Button variant="outline" onClick={handlePrev}>
+              <ArrowLeft />
+              Voltar
+            </Button>
+        )}
         <Button onClick={handleNext}>
           {currentStep === steps.length - 1 ? 'Finalizar' : 'Próximo'}
         </Button>
