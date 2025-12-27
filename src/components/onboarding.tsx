@@ -39,12 +39,15 @@ const steps = [
   },
 ];
 
+const requiredNumber = z.coerce.number({ required_error: "Este campo é obrigatório.", invalid_type_error: "Por favor, insira um número válido." });
+
+
 const formSchema = z.object({
   name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres.'),
-  age: z.coerce.number().min(18, 'Você deve ser maior de idade.').max(100),
-  currentWeight: z.coerce.number().min(30, 'Peso inválido.').max(300),
-  weightGoal: z.coerce.number().min(30, 'Meta de peso inválida.').max(300),
-  height: z.coerce.number().min(1, 'Altura inválida.').max(2.3, 'Altura máxima de 2.30m').optional().or(z.literal('')),
+  age: requiredNumber.min(18, 'Você deve ser maior de idade.').max(100, 'Idade inválida.'),
+  currentWeight: requiredNumber.min(30, 'Peso inválido.').max(300, 'Peso inválido.'),
+  weightGoal: requiredNumber.min(30, 'Meta de peso inválida.').max(300, 'Meta de peso inválida.'),
+  height: z.coerce.number({ invalid_type_error: "Altura deve ser um número." }).min(1, 'Altura inválida.').max(2.3, 'Altura máxima de 2.30m').optional().or(z.literal('')),
   takesMedication: z.enum(['yes', 'no']),
   medicationDose: z.string().optional(),
   personalDream: z.string().optional(),
@@ -193,7 +196,7 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
                         <Input type="number" step="0.01" placeholder="Ex: 1.75" {...field} />
                       </FormControl>
                        <FormDescription>
-                        Opcional, para cálculo do IMC. Se não quiser informar, basta clicar em Próximo.
+                        Opcional. Se não quiser informar, basta clicar em Próximo.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
