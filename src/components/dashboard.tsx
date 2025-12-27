@@ -91,6 +91,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
   const [weightChange, setWeightChange] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
+  const [showIncompleteDialog, setShowIncompleteDialog] = useState(false);
   const { toast } = useToast();
 
   const handleActionClick = (id: string, path: string | null) => {
@@ -103,6 +104,16 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     }
   };
   
+  const allCoreTasksDone = progress.ritual >= 100 && progress.nutrition >= 100 && progress.movement >= 100;
+
+  const handleFinishDayAttempt = () => {
+    if (!allCoreTasksDone) {
+      setShowIncompleteDialog(true);
+    }
+    // If tasks are done, the main AlertDialog will open via its own trigger
+  };
+
+
   const handleFinishDay = async () => {
     setIsSubmitting(true);
     try {
@@ -154,7 +165,6 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     locale: ptBR,
   });
   
-  const allCoreTasksDone = progress.ritual >= 100 && progress.nutrition >= 100 && progress.movement >= 100;
   const isTaskCompleted = (id: ActionId) => progress[id] >= 100;
 
   return (
@@ -217,35 +227,52 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button size="lg" disabled={isSubmitting || progress.dayFinished || !allCoreTasksDone}>
+          <Button size="lg" disabled={isSubmitting || progress.dayFinished} onClick={handleFinishDayAttempt}>
              {isSubmitting ? 'Processando...' : (progress.dayFinished ? 'Dia Finalizado' : 'Finalizar o Dia')}
           </Button>
         </AlertDialogTrigger>
+        {allCoreTasksDone && (
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Balanço do Dia</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Para te dar uma motivação personalizada, precisamos saber como foi a balança hoje.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <div className="space-y-2 py-4">
+                <Label htmlFor="weight-change">Variação de peso (kg)</Label>
+                <Input 
+                  id="weight-change"
+                  type="number"
+                  step="0.1"
+                  value={weightChange}
+                  onChange={(e) => setWeightChange(e.target.value)}
+                  placeholder="Ex: -0.5 ou 0.2"
+                />
+                <p className="text-xs text-muted-foreground">Use valor negativo para perda de peso. Ex: -0.5</p>
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction onClick={handleFinishDay} disabled={isSubmitting}>
+                  {isSubmitting ? 'Enviando...' : 'Receber Motivação'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+        )}
+      </AlertDialog>
+
+
+      <AlertDialog open={showIncompleteDialog} onOpenChange={setShowIncompleteDialog}>
         <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Balanço do Dia</AlertDialogTitle>
-            <AlertDialogDescription>
-              Para te dar uma motivação personalizada, precisamos saber como foi a balança hoje.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="space-y-2 py-4">
-            <Label htmlFor="weight-change">Variação de peso (kg)</Label>
-            <Input 
-              id="weight-change"
-              type="number"
-              step="0.1"
-              value={weightChange}
-              onChange={(e) => setWeightChange(e.target.value)}
-              placeholder="Ex: -0.5 ou 0.2"
-            />
-             <p className="text-xs text-muted-foreground">Use valor negativo para perda de peso. Ex: -0.5</p>
-          </div>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleFinishDay} disabled={isSubmitting}>
-              {isSubmitting ? 'Enviando...' : 'Receber Motivação'}
-            </AlertDialogAction>
-          </AlertDialogFooter>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Círculo de Poder Incompleto</AlertDialogTitle>
+                <AlertDialogDescription>
+                Você precisa completar 100% do seu Ritual, Nutrição e Movimento para poder finalizar o dia. Continue, você está quase lá!
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogAction onClick={() => setShowIncompleteDialog(false)}>Entendi</AlertDialogAction>
+            </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
