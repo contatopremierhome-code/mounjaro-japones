@@ -47,7 +47,7 @@ const formSchema = z.object({
   age: requiredNumber.min(18, 'Você deve ser maior de idade.').max(100, 'Idade inválida.'),
   currentWeight: requiredNumber.min(30, 'Peso inválido.').max(300, 'Peso inválido.'),
   weightGoal: requiredNumber.min(30, 'Meta de peso inválida.').max(300, 'Meta de peso inválida.'),
-  height: z.coerce.number({ invalid_type_error: "Altura deve ser um número." }).min(1, 'Altura inválida.').max(2.3, 'Altura máxima de 2.30m').optional().or(z.literal('')),
+  height: z.union([z.coerce.number().min(1, 'Altura inválida.').max(2.3, 'Altura máxima de 2.30m'), z.literal('')]),
   takesMedication: z.enum(['yes', 'no']),
   medicationDose: z.string().optional(),
   personalDream: z.string().optional(),
@@ -72,10 +72,10 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      age: undefined,
-      currentWeight: undefined,
-      weightGoal: undefined,
-      height: undefined,
+      age: '' as any,
+      currentWeight: '' as any,
+      weightGoal: '' as any,
+      height: '',
       takesMedication: 'no',
       medicationDose: '',
       personalDream: '',
@@ -87,7 +87,7 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
   async function processStep(data: z.infer<typeof formSchema>) {
     const finalData = {
       ...data,
-      height: data.height || undefined,
+      height: data.height === '' ? undefined : data.height,
       medicationDose: data.takesMedication === 'yes' ? data.medicationDose || '' : 'N/A',
       personalDream: data.personalDream || 'Conquistar meus objetivos!',
     }
