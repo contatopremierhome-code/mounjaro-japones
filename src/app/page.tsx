@@ -6,18 +6,19 @@ import { Dashboard } from '@/components/dashboard';
 import type { UserData, DailyProgress, ProgressHistory } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
+const initialProgress: DailyProgress = {
+  ritual: false,
+  nutrition: false,
+  movement: false,
+  dayFinished: false,
+};
+
 export default function Home() {
   const [user, setUser] = useState<UserData | null>(null);
-  const [progress, setProgress] = useState<DailyProgress>({
-    ritual: false,
-    nutrition: false,
-    movement: false,
-    dayFinished: false,
-  });
+  const [progress, setProgress] = useState<DailyProgress>(initialProgress);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate fetching user data from Firestore
     const storedUser = localStorage.getItem('mounjaro-user');
     const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
     const today = new Date().toISOString().split('T')[0];
@@ -30,6 +31,9 @@ export default function Home() {
       const history: ProgressHistory = JSON.parse(storedProgressHistory);
       if (history[today]) {
         setProgress(history[today]);
+      } else {
+        // New day, reset progress
+        setProgress(initialProgress);
       }
     }
     setLoading(false);
@@ -53,7 +57,7 @@ export default function Home() {
     localStorage.removeItem('mounjaro-user');
     localStorage.removeItem('mounjaro-progress-history');
     setUser(null);
-    setProgress({ ritual: false, nutrition: false, movement: false, dayFinished: false });
+    setProgress(initialProgress);
     // Also remove from router history
     window.location.replace('/');
   }
