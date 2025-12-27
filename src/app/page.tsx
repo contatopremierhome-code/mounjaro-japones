@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Onboarding } from '@/components/onboarding';
 import { Dashboard } from '@/components/dashboard';
-import type { UserData, DailyProgress } from '@/lib/types';
+import type { UserData, DailyProgress, ProgressHistory } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
@@ -12,26 +12,24 @@ export default function Home() {
     ritual: false,
     nutrition: false,
     movement: false,
+    dayFinished: false,
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Simulate fetching user data from Firestore
     const storedUser = localStorage.getItem('mounjaro-user');
-    const storedProgress = localStorage.getItem('mounjaro-progress');
+    const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
     const today = new Date().toISOString().split('T')[0];
 
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
 
-    if (storedProgress) {
-      const progressData = JSON.parse(storedProgress);
-      if (progressData.date === today) {
-        setProgress(progressData.progress);
-      } else {
-        // Reset progress for a new day
-        localStorage.removeItem('mounjaro-progress');
+    if (storedProgressHistory) {
+      const history: ProgressHistory = JSON.parse(storedProgressHistory);
+      if (history[today]) {
+        setProgress(history[today]);
       }
     }
     setLoading(false);
@@ -45,17 +43,17 @@ export default function Home() {
   const handleProgressUpdate = (newProgress: DailyProgress) => {
     setProgress(newProgress);
     const today = new Date().toISOString().split('T')[0];
-    localStorage.setItem(
-      'mounjaro-progress',
-      JSON.stringify({ date: today, progress: newProgress })
-    );
+    const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
+    const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
+    history[today] = newProgress;
+    localStorage.setItem('mounjaro-progress-history', JSON.stringify(history));
   };
   
   const handleReset = () => {
     localStorage.removeItem('mounjaro-user');
-    localStorage.removeItem('mounjaro-progress');
+    localStorage.removeItem('mounjaro-progress-history');
     setUser(null);
-    setProgress({ ritual: false, nutrition: false, movement: false });
+    setProgress({ ritual: false, nutrition: false, movement: false, dayFinished: false });
     // Also remove from router history
     window.location.replace('/');
   }

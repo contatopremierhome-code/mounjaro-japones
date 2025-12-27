@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getAffirmation } from '@/app/actions';
-import { TeaBowlIcon, BrainCircuit } from '@/components/icons';
-import { Salad, BookOpen, Dumbbell, Check, Repeat } from 'lucide-react';
+import { TeaBowlIcon } from '@/components/icons';
+import { Salad, BookOpen, Dumbbell, Check, Repeat, CalendarDays } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -27,6 +27,7 @@ const actionItems = [
   { id: 'nutrition', title: 'Registrar Comida', icon: Salad, path: '/nutrition' },
   { id: 'recipes', title: 'Receitas de Chás', icon: BookOpen, path: '/recipes' },
   { id: 'movement', title: 'Exercícios Diários', icon: Dumbbell, path: '/movement' },
+  { id: 'progress', title: 'Meu Progresso', icon: CalendarDays, path: '/progress' },
 ] as const;
 
 type ActionId = 'ritual' | 'nutrition' | 'movement';
@@ -44,6 +45,8 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       return;
     }
     
+    if (id === 'progress') return;
+
     const newProgress = { ...progress, [id as ActionId]: !progress[id as ActionId] };
     onProgressUpdate(newProgress);
     setConfirmedAction(id);
@@ -62,6 +65,9 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       };
 
       const result = await getAffirmation(input);
+      
+      const newProgress = { ...progress, dayFinished: true };
+      onProgressUpdate(newProgress);
 
       if (result && result.shouldSendAffirmation) {
         toast({
@@ -88,8 +94,12 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     }
   };
 
-  const completedCount = Object.values(progress).filter(Boolean).length;
-  const overallProgress = (completedCount / 3) * 100;
+  const completedCount = Object.values(progress).filter(val => typeof val === 'boolean' && val).length;
+  const totalTasks = 3; // ritual, nutrition, movement
+  const overallProgress = (Object.entries(progress)
+    .filter(([key, value]) => ['ritual', 'nutrition', 'movement'].includes(key) && value)
+    .length / totalTasks) * 100;
+
 
   const calculateBmi = (weight: number) => {
     // Assuming a default height of 1.7m for BMI calculation
@@ -101,6 +111,8 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
   const formattedDate = format(today, "EEEE, d 'de' MMMM 'de' yyyy", {
     locale: ptBR,
   });
+  
+  const allCoreTasksDone = progress.ritual && progress.nutrition && progress.movement;
 
   return (
     <div className="w-full max-w-md mx-auto flex flex-col gap-8 text-center">
@@ -151,8 +163,8 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button size="lg" disabled={isSubmitting}>
-             {isSubmitting ? 'Processando...' : 'Finalizar o Dia'}
+          <Button size="lg" disabled={isSubmitting || progress.dayFinished || !allCoreTasksDone}>
+             {isSubmitting ? 'Processando...' : (progress.dayFinished ? 'Dia Finalizado' : 'Finalizar o Dia')}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>

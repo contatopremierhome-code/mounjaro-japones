@@ -13,4 +13,9 @@ export interface DailyProgress {
   ritual: boolean;
   nutrition: boolean;
   movement: boolean;
+  dayFinished: boolean;
+}
+
+export interface ProgressHistory {
+  [date: string]: DailyProgress;
 }
