@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, Leaf, Lemon, Sparkles, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Leaf, Citrus as Lemon, Sparkles, Lightbulb } from 'lucide-react';
 import { TeaBowlIcon } from './icons';
 import { BrainCircuit } from 'lucide-react';
 
