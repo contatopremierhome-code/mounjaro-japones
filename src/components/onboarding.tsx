@@ -193,7 +193,7 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
                         <Input type="number" step="0.01" placeholder="Ex: 1.75" {...field} />
                       </FormControl>
                        <FormDescription>
-                        Opcional, para cálculo do IMC.
+                        Opcional, para cálculo do IMC. Se não quiser informar, basta clicar em Próximo.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
