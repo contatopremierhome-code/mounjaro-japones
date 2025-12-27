@@ -14,9 +14,9 @@ import { format } from 'date-fns';
 type Category = 'verde' | 'amarelo' | 'vermelho';
 
 const categories = [
-    { id: 'verde', label: 'Verde', xp: '+30 XP', color: 'bg-green-500', borderColor: 'border-green-500', textColor: 'text-green-500' },
-    { id: 'amarelo', label: 'Amarelo', xp: '+10 XP', color: 'bg-yellow-500', borderColor: 'border-yellow-500', textColor: 'text-yellow-500' },
-    { id: 'vermelho', label: 'Vermelho', xp: '0 XP', color: 'bg-red-500', borderColor: 'border-red-500', textColor: 'text-red-500' },
+    { id: 'verde', label: 'Verde', xp: '+30 XP', color: 'bg-green-500', borderColor: 'border-green-500', textColor: 'text-green-500', progress: 100 },
+    { id: 'amarelo', label: 'Amarelo', xp: '+10 XP', color: 'bg-yellow-500', borderColor: 'border-yellow-500', textColor: 'text-yellow-500', progress: 60 },
+    { id: 'vermelho', label: 'Vermelho', xp: '0 XP', color: 'bg-red-500', borderColor: 'border-red-500', textColor: 'text-red-500', progress: 20 },
 ] as const;
 
 const trafficLightGuide = [
@@ -31,33 +31,40 @@ export function Nutrition() {
     const firestore = useFirestore();
     const [description, setDescription] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleRegisterFood = async () => {
-        if (!user || !firestore) return;
+        if (!user || !firestore || !selectedCategory) return;
+        setIsSubmitting(true);
 
         const today = format(new Date(), 'yyyy-MM-dd');
         const progressDocRef = doc(firestore, 'users', user.uid, 'progress', today);
+        const selectedProgress = categories.find(c => c.id === selectedCategory)?.progress || 0;
 
         try {
             const docSnap = await getDoc(progressDocRef);
             const currentProgress = docSnap.exists() ? docSnap.data() as DailyProgress : { ritual: 0, nutrition: 0, movement: 0, dayFinished: false, date: today };
 
+            // A lógica aqui assume que cada registro sobrescreve o progresso de nutrição do dia.
+            // Se múltiplas refeições puderem ser registradas, a lógica precisaria ser de média ou soma.
             const updatedProgress: DailyProgress = {
                 ...currentProgress,
-                nutrition: 100,
+                nutrition: selectedProgress,
             };
 
             await setDoc(progressDocRef, updatedProgress, { merge: true });
             router.back();
         } catch (error) {
             console.error("Error updating nutrition progress: ", error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-8">
-            <header className="flex items-center justify-between w-full">
-                <Button variant="ghost" onClick={() => router.back()} size="icon">
+            <header className="flex items-center relative w-full justify-center">
+                <Button variant="ghost" onClick={() => router.back()} size="icon" className="absolute left-0">
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
                 <div className='text-center'>
@@ -65,7 +72,6 @@ export function Nutrition() {
                         Registro de Nutrição
                     </h1>
                 </div>
-                <div className="w-10"></div>
             </header>
 
             <Card>
@@ -81,7 +87,7 @@ export function Nutrition() {
                     />
 
                     <div>
-                        <label className="text-sm font-medium text-muted-foreground mb-2 block">Selecione a categoria:</label>
+                        <label className="text-sm font-medium text-muted-foreground mb-2 block">Selecione a categoria da sua refeição principal:</label>
                         <div className="grid grid-cols-3 gap-4">
                             {categories.map((cat) => (
                                 <Card
@@ -96,8 +102,8 @@ export function Nutrition() {
                             ))}
                         </div>
                     </div>
-                    <Button onClick={handleRegisterFood} size="lg" className="w-full" disabled={!description || !selectedCategory}>
-                        Registrar Refeição
+                    <Button onClick={handleRegisterFood} size="lg" className="w-full" disabled={!description || !selectedCategory || isSubmitting}>
+                        {isSubmitting ? 'Registrando...' : 'Registrar Refeição'}
                     </Button>
                 </CardContent>
             </Card>

@@ -104,10 +104,11 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     }
   };
   
-  const allCoreTasksDone = progress.ritual >= 100 && progress.nutrition >= 100 && progress.movement >= 100;
+  const averageProgress = (progress.ritual + progress.nutrition + progress.movement) / 3;
+  const canFinishDay = averageProgress >= 50;
 
   const handleFinishDayAttempt = () => {
-    if (!allCoreTasksDone) {
+    if (!canFinishDay) {
       setShowIncompleteDialog(true);
     }
     // If tasks are done, the main AlertDialog will open via its own trigger
@@ -231,7 +232,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
              {isSubmitting ? 'Processando...' : (progress.dayFinished ? 'Dia Finalizado' : 'Finalizar o Dia')}
           </Button>
         </AlertDialogTrigger>
-        {allCoreTasksDone && (
+        {canFinishDay && (
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Balanço do Dia</AlertDialogTitle>
@@ -267,7 +268,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
             <AlertDialogHeader>
                 <AlertDialogTitle>Círculo de Poder Incompleto</AlertDialogTitle>
                 <AlertDialogDescription>
-                Você precisa completar 100% do seu Ritual, Nutrição e Movimento para poder finalizar o dia. Continue, você está quase lá!
+                Você precisa atingir uma média de 50% no Círculo de Poder para finalizar o dia. Continue, você está quase lá!
                 </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
