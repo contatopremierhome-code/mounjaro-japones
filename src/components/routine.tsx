@@ -166,9 +166,11 @@ export function Routine({ routineId }: RoutineProps) {
     }
 
     const handleFinishRoutine = () => {
-        if (completedExercises.size === 0) {
-            router.push('/');
-            return;
+        const allExercisesDone = completedExercises.size === routine.exercises.length;
+        if (!allExercisesDone) {
+            // Or maybe show a confirmation dialog
+             router.push('/');
+             return;
         }
 
         const today = new Date().toISOString().split('T')[0];
@@ -187,8 +189,9 @@ export function Routine({ routineId }: RoutineProps) {
 
         router.push('/');
     }
+    
+    const allExercisesDone = completedExercises.size === routine.exercises.length;
 
-    const atLeastOneCompleted = completedExercises.size > 0;
     const totalXp = Array.from(completedExercises).reduce((acc, index) => {
         return acc + routine.exercises[index].xp;
     }, 0);
@@ -223,6 +226,11 @@ export function Routine({ routineId }: RoutineProps) {
                                 {isCompleted && <div className="absolute inset-0 bg-primary/30 flex items-center justify-center"><CheckCircle className="w-10 h-10 text-white" /></div>}
                             </div>
                         )}
+                        {!('image' in exercise) && (
+                             <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted flex items-center justify-center">
+                                {isCompleted ? <CheckCircle className="w-10 h-10 text-primary" /> : <Flame className={`w-10 h-10 ${routine.color}`} />}
+                            </div>
+                        )}
                         <div className="flex-1">
                             <h3 className={`font-semibold text-lg ${isCompleted ? 'text-primary' : ''}`}>{exercise.name}</h3>
                             <div className="flex items-center gap-4 text-muted-foreground">
@@ -248,8 +256,9 @@ export function Routine({ routineId }: RoutineProps) {
                     size="lg" 
                     className="w-full" 
                     onClick={handleFinishRoutine}
+                    disabled={!allExercisesDone}
                 >
-                    {atLeastOneCompleted ? `Concluir (+${totalXp} XP)` : 'Concluir Treino'}
+                    {allExercisesDone ? `Concluir (+${totalXp} XP)` : 'Conclua todos os exercícios'}
                 </Button>
             </div>
             
@@ -267,3 +276,4 @@ export function Routine({ routineId }: RoutineProps) {
     
 
     
+
