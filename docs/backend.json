@@ -1,0 +1,142 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user in the Mounjaro Japones application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's name."
+        },
+        "age": {
+          "type": "number",
+          "description": "The user's age in years."
+        },
+        "currentWeight": {
+          "type": "number",
+          "description": "The user's current weight in kilograms."
+        },
+        "weightGoal": {
+          "type": "number",
+          "description": "The user's desired weight goal in kilograms."
+        },
+        "programDuration": {
+          "type": "number",
+          "description": "The duration of the weight loss program in days."
+        },
+        "medicationDose": {
+          "type": "string",
+          "description": "The user's prescribed medication dose."
+        },
+        "personalDream": {
+          "type": "string",
+          "description": "The user's personal dream or motivation for weight loss."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "age",
+        "currentWeight",
+        "weightGoal",
+        "programDuration",
+        "medicationDose",
+        "personalDream"
+      ]
+    },
+    "DailyProgress": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DailyProgress",
+      "type": "object",
+      "description": "Represents a user's daily progress in the Mounjaro Japones application.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the DailyProgress entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User. (Relationship: User 1:N DailyProgress)"
+        },
+        "date": {
+          "type": "string",
+          "description": "The date for which the progress is recorded.",
+          "format": "date-time"
+        },
+        "ritualCompletion": {
+          "type": "number",
+          "description": "The user's Ritual completion percentage for the day (0-100)."
+        },
+        "nutritionCompletion": {
+          "type": "number",
+          "description": "The user's Nutrition completion percentage for the day (0-100)."
+        },
+        "movementCompletion": {
+          "type": "number",
+          "description": "The user's Movement completion percentage for the day (0-100)."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "date",
+        "ritualCompletion",
+        "nutritionCompletion",
+        "movementCompletion"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profile data. Access is restricted to the user identified by {userId}.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user.  Corresponds to request.auth.uid."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/dailyProgress/{dailyProgressId}",
+        "definition": {
+          "entityName": "DailyProgress",
+          "schema": {
+            "$ref": "#/backend/entities/DailyProgress"
+          },
+          "description": "Stores daily progress data for a specific user. Access is restricted to the user identified by {userId}.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user. Corresponds to request.auth.uid."
+            },
+            {
+              "name": "dailyProgressId",
+              "description": "The unique identifier of the daily progress entry."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "This design prioritizes user data isolation and simplifies security rules by leveraging path-based ownership. Each user has their own dedicated space for their User document and DailyProgress documents. This eliminates the need for complex authorization logic or `get()` calls in security rules, enhancing security and performance.\n\nAuthorization Independence:\n*   User data is stored under `/users/{userId}` and `/users/{userId}/dailyProgress/{dailyProgressId}` ensuring only the authenticated user (request.auth.uid == userId) can access their data. No denormalization is required because authorization is implicitly derived from the document's location in the data structure.\n\nQAPs Support:\n*   `list` operations are secure because rules can simply check if `request.auth.uid == userId` when listing dailyProgress documents under `/users/{userId}/dailyProgress`. Segregation ensures that no user can list data from another user."
+  }
+}
