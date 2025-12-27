@@ -186,9 +186,9 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
                   name="programDuration"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Duração do Programa (semanas)</FormLabel>
+                      <FormLabel>Próximo Ciclo (semanas)</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="Ex: 12" {...field} />
+                        <Input type="number" placeholder="Ex: 4" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
