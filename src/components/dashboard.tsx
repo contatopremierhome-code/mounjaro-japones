@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getAffirmation } from '@/app/actions';
-import { TeaBowlIcon } from '@/components/icons';
+import { TeaBowlIcon, BrainCircuit } from '@/components/icons';
 import { Salad, BookOpen, Dumbbell, Check, Repeat } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from './ui/input';
@@ -23,9 +23,9 @@ interface DashboardProps {
 }
 
 const actionItems = [
-  { id: 'ritual', title: 'Ritual do Chá', icon: TeaBowlIcon },
+  { id: 'ritual', title: 'Ritual do Chá', icon: TeaBowlIcon, path: '/ritual' },
   { id: 'nutrition', title: 'Registrar Comida', icon: Salad },
-  { id: 'recipes', title: 'Receitas de Chás', icon: BookOpen },
+  { id: 'recipes', title: 'Receitas de Chás', icon: BookOpen, path: '/recipes' },
   { id: 'movement', title: 'Exercícios Diários', icon: Dumbbell },
 ] as const;
 
@@ -38,9 +38,9 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleActionClick = (id: string) => {
-    if (id === 'recipes') {
-      router.push('/recipes');
+  const handleActionClick = (id: string, path?: string) => {
+    if (path) {
+      router.push(path);
       return;
     }
     
@@ -134,7 +134,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
         {actionItems.map((item) => (
           <Card
             key={item.id}
-            onClick={() => handleActionClick(item.id)}
+            onClick={() => handleActionClick(item.id, item.path)}
             className={`aspect-square flex flex-col items-center justify-center p-4 transition-all duration-300 transform hover:scale-105 hover:bg-primary/10 cursor-pointer ${progress[item.id as ActionId] ? 'border-primary shadow-primary/20' : ''}`}
           >
             {confirmedAction === item.id ? (
