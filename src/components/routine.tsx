@@ -1,9 +1,8 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Sun, Flame, Moon, Clock, Repeat, CheckCircle } from 'lucide-react';
-import { Badge } from './ui/badge';
 import Image from 'next/image';
 
 const routineData = {
@@ -62,7 +61,8 @@ export function Routine({ routineId }: RoutineProps) {
     if (!routine) {
         return (
             <div className="w-full max-w-2xl mx-auto flex flex-col gap-8 text-center">
-                <p>Rotina não encontrada.</p>
+                <h1 className="text-2xl font-bold text-destructive">Rotina não encontrada</h1>
+                <p>A rotina que você está tentando acessar não existe.</p>
                 <Button onClick={() => router.back()}>Voltar</Button>
             </div>
         );
@@ -88,8 +88,8 @@ export function Routine({ routineId }: RoutineProps) {
             <div className="space-y-4">
                 {routine.exercises.map((exercise, index) => (
                     <Card key={index} className="flex items-center p-4 gap-4 bg-card/50">
-                        <div className="relative w-24 h-24 rounded-md overflow-hidden">
-                             <Image src={exercise.image} alt={exercise.name} fill style={{ objectFit: 'cover' }} data-ai-hint={exercise.hint} />
+                        <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted">
+                             <Image src={exercise.image} alt={exercise.name} fill style={{ objectFit: 'cover' }} data-ai-hint={exercise.hint} unoptimized />
                         </div>
                         <div className="flex-1">
                             <h3 className="font-semibold text-lg">{exercise.name}</h3>
