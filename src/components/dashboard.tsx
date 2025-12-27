@@ -128,8 +128,11 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
 
       const result = await getAffirmation(input);
       
-      const newProgress = { ...progress, dayFinished: true };
-      onProgressUpdate(newProgress);
+      if (!progress.dayFinished) {
+        const newProgress = { ...progress, dayFinished: true };
+        onProgressUpdate(newProgress);
+      }
+
 
       if (result && result.shouldSendAffirmation) {
         toast({
@@ -139,7 +142,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
         });
       } else {
         toast({
-          title: "Dia finalizado! 🎉",
+          title: "Balanço registrado! 🎉",
           description: "Ótimo trabalho hoje. Continue assim!",
           duration: 5000,
         });
@@ -228,7 +231,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button size="lg" disabled={isSubmitting || progress.dayFinished} onClick={handleFinishDayAttempt}>
+          <Button size="lg" disabled={isSubmitting} onClick={handleFinishDayAttempt}>
              {isSubmitting ? 'Processando...' : (progress.dayFinished ? 'Dia Finalizado' : 'Finalizar o Dia')}
           </Button>
         </AlertDialogTrigger>
