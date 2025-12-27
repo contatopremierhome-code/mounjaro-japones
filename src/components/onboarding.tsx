@@ -1,0 +1,224 @@
+'use client';
+
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import type { UserData } from '@/lib/types';
+import { ArrowLeft } from 'lucide-react';
+
+const steps = [
+  {
+    title: 'Olá!',
+    description: 'Vamos começar com o básico.',
+    fields: ['name', 'age'],
+  },
+  {
+    title: 'Suas Metas',
+    description: 'Defina seus objetivos de bem-estar.',
+    fields: ['currentWeight', 'weightGoal', 'programDuration'],
+  },
+  {
+    title: 'Detalhes Finais',
+    description: 'Estamos quase lá.',
+    fields: ['medicationDose', 'personalDream'],
+  },
+];
+
+const formSchema = z.object({
+  name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres.'),
+  age: z.coerce.number().min(18, 'Você deve ser maior de idade.').max(100),
+  currentWeight: z.coerce.number().min(30, 'Peso inválido.').max(300),
+  weightGoal: z.coerce.number().min(30, 'Meta de peso inválida.').max(300),
+  programDuration: z.coerce.number().min(1, 'Duração inválida.').max(52),
+  medicationDose: z.string().min(1, 'Dose é obrigatória.'),
+  personalDream: z.string().min(3, 'Sonho deve ter pelo menos 3 caracteres.'),
+});
+
+interface OnboardingProps {
+  onOnboardingComplete: (data: UserData) => void;
+}
+
+export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
+  const [currentStep, setCurrentStep] = useState(0);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      age: undefined,
+      currentWeight: undefined,
+      weightGoal: undefined,
+      programDuration: undefined,
+      medicationDose: '',
+      personalDream: '',
+    },
+  });
+
+  async function processStep(data: z.infer<typeof formSchema>) {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      onOnboardingComplete(data);
+    }
+  }
+
+  const handleNext = async () => {
+    const fieldsToValidate = steps[currentStep].fields;
+    const isValid = await form.trigger(fieldsToValidate as any);
+    if (isValid) {
+      processStep(form.getValues());
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const progressValue = ((currentStep + 1) / steps.length) * 100;
+
+  return (
+    <Card className="w-full max-w-lg border-primary/20 shadow-lg shadow-primary/5">
+      <CardHeader>
+        <div className="space-y-2 mb-4">
+          <Label>Progresso</Label>
+          <Progress value={progressValue} className="w-full h-2" />
+        </div>
+        <CardTitle className="font-headline text-3xl text-primary">{steps[currentStep].title}</CardTitle>
+        <CardDescription>{steps[currentStep].description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form className="space-y-4">
+            {currentStep === 0 && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Seu Nome</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: Maria Silva" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="age"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Idade</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Ex: 35" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+            {currentStep === 1 && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="currentWeight"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Peso Atual (kg)</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Ex: 80" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="weightGoal"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Meta de Peso (kg)</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Ex: 65" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="programDuration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Duração do Programa (semanas)</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="Ex: 12" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+            {currentStep === 2 && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="medicationDose"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Dose da Medicação</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: 10mg" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="personalDream"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Qual seu sonho pessoal?</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: Correr uma maratona" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+          </form>
+        </Form>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button variant="outline" onClick={handlePrev} disabled={currentStep === 0}>
+          <ArrowLeft />
+          Voltar
+        </Button>
+        <Button onClick={handleNext}>
+          {currentStep === steps.length - 1 ? 'Finalizar' : 'Próximo'}
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}
