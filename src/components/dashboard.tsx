@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import type { UserData, DailyProgress } from '@/lib/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getAffirmation } from '@/app/actions';
-import { TeaBowlIcon } from '@/components/icons';
-import { Salad, BookOpen, Dumbbell, Check, Repeat, CalendarDays } from 'lucide-react';
+import { Check, Repeat } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -23,12 +23,13 @@ interface DashboardProps {
 }
 
 const actionItems = [
-  { id: 'ritual', title: 'Ritual do Chá', icon: TeaBowlIcon, path: '/ritual' },
-  { id: 'nutrition', title: 'Registrar Comida', icon: Salad, path: '/nutrition' },
-  { id: 'recipes', title: 'Receitas de Chás', icon: BookOpen, path: '/recipes' },
-  { id: 'movement', title: 'Exercícios Diários', icon: Dumbbell, path: '/movement' },
-  { id: 'progress', title: 'Meu Progresso', icon: CalendarDays, path: '/progress' },
+  { id: 'ritual', title: 'Ritual do Chá', path: '/ritual', image: 'https://i.imgur.com/wMbgBH8.png', hint: 'tea ritual' },
+  { id: 'nutrition', title: 'Registrar Comida', path: '/nutrition', image: 'https://i.imgur.com/j5LbxSg.png', hint: 'healthy food' },
+  { id: 'recipes', title: 'Receitas de Chás', path: '/recipes', image: 'https://i.imgur.com/YrTQpoy.png', hint: 'tea recipes' },
+  { id: 'movement', title: 'Exercícios Diários', path: '/movement', image: 'https://i.imgur.com/U8nvHEd.png', hint: 'daily exercise' },
+  { id: 'progress', title: 'Meu Progresso', path: '/progress', image: 'https://i.imgur.com/BlHfCOr.png', hint: 'progress calendar' },
 ] as const;
+
 
 type ActionId = 'ritual' | 'nutrition' | 'movement';
 
@@ -39,18 +40,11 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleActionClick = (id: string, path?: string) => {
+  const handleActionClick = (id: string, path: string) => {
     if (path) {
       router.push(path);
       return;
     }
-    
-    if (id === 'progress') return;
-
-    const newProgress = { ...progress, [id as ActionId]: !progress[id as ActionId] };
-    onProgressUpdate(newProgress);
-    setConfirmedAction(id);
-    setTimeout(() => setConfirmedAction(null), 2000);
   };
   
   const handleFinishDay = async () => {
@@ -147,16 +141,24 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
           <Card
             key={item.id}
             onClick={() => handleActionClick(item.id, item.path)}
-            className={`aspect-square flex flex-col items-center justify-center p-4 transition-all duration-300 transform hover:scale-105 hover:bg-primary/10 cursor-pointer ${progress[item.id as ActionId] ? 'border-primary shadow-primary/20' : ''}`}
+            className={`group relative aspect-square flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer
+              ${progress[item.id as ActionId] ? 'border-2 border-primary shadow-primary/20' : ''}`}
           >
-            {confirmedAction === item.id ? (
-              <Check className="w-16 h-16 text-primary animate-ping" />
-            ) : (
-              <>
-                <item.icon className={`w-10 h-10 mb-2 ${progress[item.id as ActionId] ? 'text-primary' : 'text-muted-foreground'}`} />
-                <h3 className="text-sm font-semibold text-center">{item.title}</h3>
-              </>
+            <Image 
+              src={item.image}
+              alt={item.title}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-110"
+              data-ai-hint={item.hint}
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+             {progress[item.id as ActionId] && (
+              <div className="absolute inset-0 bg-primary/30 flex items-center justify-center">
+                <Check className="w-16 h-16 text-white" />
+              </div>
             )}
+            <h3 className="relative text-base font-bold text-white text-center z-10">{item.title}</h3>
           </Card>
         ))}
       </div>
@@ -216,3 +218,5 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     </div>
   );
 }
+
+    
