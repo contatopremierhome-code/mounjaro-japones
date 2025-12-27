@@ -24,7 +24,7 @@ export function ProgressCalendar() {
     }, []);
 
     const finishedDays = Object.keys(history)
-        .filter(dateStr => history[dateStr].dayFinished)
+        .filter(dateStr => history[dateStr]?.dayFinished)
         .map(dateStr => parseISO(dateStr));
     
     const selectedDateString = format(selectedDate, 'yyyy-MM-dd');
@@ -33,19 +33,19 @@ export function ProgressCalendar() {
     const DayInfo = ({ progress }: { progress: DailyProgress }) => (
         <div className='space-y-3'>
             <div className="flex items-center gap-3">
-                {progress.ritual ? <CheckCircle className='w-5 h-5 text-primary'/> : <Circle className='w-5 h-5 text-muted-foreground/50' />}
+                {progress.ritual >= 100 ? <CheckCircle className='w-5 h-5 text-primary'/> : <Circle className='w-5 h-5 text-muted-foreground/50' />}
                 <TeaBowlIcon className='w-5 h-5 text-primary' />
-                <span>Ritual do Chá</span>
+                <span>Ritual do Chá ({progress.ritual}%)</span>
             </div>
             <div className="flex items-center gap-3">
-                {progress.nutrition ? <CheckCircle className='w-5 h-5 text-primary'/> : <Circle className='w-5 h-5 text-muted-foreground/50' />}
+                {progress.nutrition >= 100 ? <CheckCircle className='w-5 h-5 text-primary'/> : <Circle className='w-5 h-5 text-muted-foreground/50' />}
                 <Salad className='w-5 h-5 text-primary' />
-                <span>Nutrição</span>
+                <span>Nutrição ({progress.nutrition}%)</span>
             </div>
             <div className="flex items-center gap-3">
-                {progress.movement ? <CheckCircle className='w-5 h-5 text-primary'/> : <Circle className='w-5 h-5 text-muted-foreground/50' />}
+                {progress.movement >= 100 ? <CheckCircle className='w-5 h-5 text-primary'/> : <Circle className='w-5 h-5 text-muted-foreground/50' />}
                 <Flame className='w-5 h-5 text-primary' />
-                <span>Movimento</span>
+                <span>Movimento ({progress.movement}%)</span>
             </div>
              <div className="flex items-center gap-3 pt-3 border-t border-border mt-3">
                 {progress.dayFinished ? <Award className='w-5 h-5 text-accent'/> : <Award className='w-5 h-5 text-muted-foreground/50' />}

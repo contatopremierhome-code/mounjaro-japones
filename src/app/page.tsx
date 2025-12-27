@@ -7,9 +7,9 @@ import type { UserData, DailyProgress, ProgressHistory } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const initialProgress: DailyProgress = {
-  ritual: false,
-  nutrition: false,
-  movement: false,
+  ritual: 0,
+  nutrition: 0,
+  movement: 0,
   dayFinished: false,
 };
 

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Leaf, Citrus as Lemon, Sparkles, Lightbulb } from 'lucide-react';
 import { TeaBowlIcon } from './icons';
@@ -11,33 +11,36 @@ import type { DailyProgress, ProgressHistory } from '@/lib/types';
 
 
 const ritualItems = [
-    { id: 'tea', label: 'Chá Verde', icon: TeaBowlIcon },
-    { id: 'matcha', label: 'Matcha', icon: Leaf },
-    { id: 'ginger', label: 'Gengibre', icon: Sparkles },
-    { id: 'lemon', label: 'Limão', icon: Lemon },
+    { id: 'tea', label: 'Chá Verde', icon: TeaBowlIcon, xp: 20 },
+    { id: 'matcha', label: 'Matcha', icon: Leaf, xp: 20 },
+    { id: 'ginger', label: 'Gengibre', icon: Sparkles, xp: 20 },
+    { id: 'lemon', label: 'Limão', icon: Lemon, xp: 10 },
     { id: 'meditation', label: 'Meditação (5 min)', icon: BrainCircuit, xp: 30 },
 ];
+
+const totalRitualPoints = ritualItems.length;
 
 export function Ritual() {
     const router = useRouter();
     const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
     const [isActive, setIsActive] = useState(false);
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
-    const [dailyProgress, setDailyProgress] = useState<DailyProgress>({
-        ritual: false,
-        nutrition: false,
-        movement: false,
-        dayFinished: false,
-    });
 
     useEffect(() => {
         const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
         const today = new Date().toISOString().split('T')[0];
-
         if (storedProgressHistory) {
             const history: ProgressHistory = JSON.parse(storedProgressHistory);
-            if (history[today]) {
-                setDailyProgress(history[today]);
+            const todayProgress = history[today];
+            if (todayProgress && todayProgress.ritual > 0) {
+                 // For simplicity, we can assume if progress exists, items were checked.
+                 // A more robust solution would save the checked items state.
+                 const itemsChecked = Math.round((todayProgress.ritual / 100) * totalRitualPoints);
+                 const initialChecked: Record<string, boolean> = {};
+                 for(let i=0; i < itemsChecked; i++) {
+                    initialChecked[ritualItems[i].id] = true;
+                 }
+                 setCheckedItems(initialChecked);
             }
         }
     }, []);
@@ -74,16 +77,19 @@ export function Ritual() {
         setCheckedItems(prev => ({...prev, [id]: !prev[id]}));
     }
     
-    const allChecked = ritualItems.every(item => checkedItems[item.id]);
+    const checkedCount = Object.values(checkedItems).filter(Boolean).length;
+    const progressPercentage = Math.round((checkedCount / totalRitualPoints) * 100);
 
     const handleFinishRitual = () => {
         const today = new Date().toISOString().split('T')[0];
         const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
         const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
         
+        const currentProgress = history[today] || { ritual: 0, nutrition: 0, movement: 0, dayFinished: false };
+        
         const updatedProgress: DailyProgress = {
-            ...dailyProgress,
-            ritual: true,
+            ...currentProgress,
+            ritual: progressPercentage,
         };
 
         history[today] = updatedProgress;
@@ -91,6 +97,8 @@ export function Ritual() {
 
         router.back();
     }
+
+    const totalXp = ritualItems.reduce((acc, item) => checkedItems[item.id] ? acc + (item.xp || 0) : acc, 0);
 
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-8 text-center">
@@ -162,8 +170,8 @@ export function Ritual() {
             </Card>
 
             
-            <Button size="lg" onClick={handleFinishRitual} disabled={!allChecked}>
-                Concluir Ritual e Ganhar +{ritualItems.reduce((acc, item) => acc + (item.xp || 0), 0)} XP
+            <Button size="lg" onClick={handleFinishRitual} disabled={checkedCount === 0}>
+                Concluir Ritual e Ganhar +{totalXp} XP ({progressPercentage}%)
             </Button>
             
 

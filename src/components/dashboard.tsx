@@ -102,9 +102,9 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     setIsSubmitting(true);
     try {
       const input = {
-        dailyRitualCompleted: progress.ritual,
-        'nutrition adherence': progress.nutrition ? 100 : 0,
-        movementMinutes: progress.movement ? 30 : 0,
+        dailyRitualCompleted: progress.ritual >= 100,
+        'nutrition adherence': progress.nutrition,
+        movementMinutes: progress.movement > 0 ? 30 : 0, // Simplified for now
         weightChange: parseFloat(weightChange) || 0,
         personalDream: user.personalDream,
       };
@@ -149,7 +149,8 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     locale: ptBR,
   });
   
-  const allCoreTasksDone = progress.ritual && progress.nutrition && progress.movement;
+  const allCoreTasksDone = progress.ritual >= 100 && progress.nutrition >= 100 && progress.movement >= 100;
+  const isTaskCompleted = (id: ActionId) => progress[id] >= 100;
 
   return (
     <div className="w-full max-w-md mx-auto flex flex-col gap-8 text-center">
@@ -168,9 +169,9 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
               <CardDescription>Seu progresso diário nos 3 pilares.</CardDescription>
           </CardHeader>
           <CardContent className="flex justify-around items-center">
-              <CircleProgress progress={progress.ritual ? 100 : 0} icon={TeaBowlIcon} label="Ritual" />
-              <CircleProgress progress={progress.nutrition ? 100 : 0} icon={Salad} label="Nutrição" />
-              <CircleProgress progress={progress.movement ? 100 : 0} icon={Dumbbell} label="Movimento" />
+              <CircleProgress progress={progress.ritual} icon={TeaBowlIcon} label="Ritual" />
+              <CircleProgress progress={progress.nutrition} icon={Salad} label="Nutrição" />
+              <CircleProgress progress={progress.movement} icon={Dumbbell} label="Movimento" />
           </CardContent>
       </Card>
       
@@ -180,7 +181,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
             key={item.id}
             onClick={() => handleActionClick(item.id, item.path)}
             className={`group relative aspect-square flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer
-              ${progress[item.id as ActionId] ? 'border-2 border-primary shadow-primary/20' : ''}`}
+              ${isTaskCompleted(item.id as ActionId) ? 'border-2 border-primary shadow-primary/20' : ''}`}
           >
             <Image 
               src={item.image}
@@ -191,7 +192,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
               unoptimized
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-             {progress[item.id as ActionId] && (
+             {isTaskCompleted(item.id as ActionId) && (
               <div className="absolute inset-0 bg-primary/30 flex items-center justify-center">
                 <Check className="w-16 h-16 text-white" />
               </div>

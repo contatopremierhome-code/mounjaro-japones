@@ -10,9 +10,9 @@ export interface UserData {
 }
 
 export interface DailyProgress {
-  ritual: boolean;
-  nutrition: boolean;
-  movement: boolean;
+  ritual: number; // 0 to 100
+  nutrition: number; // 0 to 100
+  movement: number; // 0 to 100
   dayFinished: boolean;
 }
 

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { ArrowLeft, TrafficCone } from 'lucide-react';
 import type { DailyProgress, ProgressHistory } from '@/lib/types';
@@ -32,11 +32,11 @@ export function Nutrition() {
         const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
         const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
 
-        const currentProgress = history[today] || { ritual: false, nutrition: false, movement: false, dayFinished: false };
+        const currentProgress = history[today] || { ritual: 0, nutrition: 0, movement: 0, dayFinished: false };
 
         const updatedProgress: DailyProgress = {
             ...currentProgress,
-            nutrition: true,
+            nutrition: 100,
         };
 
         history[today] = updatedProgress;

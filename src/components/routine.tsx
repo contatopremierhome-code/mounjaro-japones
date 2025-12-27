@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { ArrowLeft, Sun, Flame, Moon, Clock, Repeat, CheckCircle, Circle, Play, Pause } from 'lucide-react';
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
@@ -134,6 +134,24 @@ export function Routine({ routineId }: RoutineProps) {
     const [completedExercises, setCompletedExercises] = useState<Set<number>>(new Set());
     const [selectedExerciseIndex, setSelectedExerciseIndex] = useState<number | null>(null);
 
+    useEffect(() => {
+        const today = new Date().toISOString().split('T')[0];
+        const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
+        if (storedProgressHistory) {
+            const history: ProgressHistory = JSON.parse(storedProgressHistory);
+            const todayProgress = history[today];
+            if (todayProgress && todayProgress.movement > 0 && routine) {
+                const numCompleted = Math.round((todayProgress.movement / 100) * routine.exercises.length);
+                const initialCompleted = new Set<number>();
+                for (let i = 0; i < numCompleted; i++) {
+                    initialCompleted.add(i);
+                }
+                setCompletedExercises(initialCompleted);
+            }
+        }
+    }, [routineId, routine]);
+
+
     if (!routine) {
         return (
             <div className="w-full max-w-2xl mx-auto flex flex-col gap-8 text-center">
@@ -152,7 +170,9 @@ export function Routine({ routineId }: RoutineProps) {
 
     const handleTimerComplete = () => {
         if (selectedExerciseIndex !== null) {
-            setCompletedExercises(prev => new Set(prev).add(selectedExerciseIndex));
+            const newCompleted = new Set(completedExercises).add(selectedExerciseIndex);
+            setCompletedExercises(newCompleted);
+            updateProgress(newCompleted.size);
             setSelectedExerciseIndex(null);
         }
     };
@@ -163,34 +183,33 @@ export function Routine({ routineId }: RoutineProps) {
 
     const handleReset = () => {
         setCompletedExercises(new Set());
+        updateProgress(0);
     }
 
-    const handleFinishRoutine = () => {
-        const allExercisesDone = completedExercises.size === routine.exercises.length;
-        if (!allExercisesDone) {
-            // Or maybe show a confirmation dialog
-             router.push('/');
-             return;
-        }
-
+    const updateProgress = (numCompleted: number) => {
         const today = new Date().toISOString().split('T')[0];
         const storedProgressHistory = localStorage.getItem('mounjaro-progress-history');
         const history: ProgressHistory = storedProgressHistory ? JSON.parse(storedProgressHistory) : {};
-
-        const currentProgress = history[today] || { ritual: false, nutrition: false, movement: false, dayFinished: false };
+        const currentProgress = history[today] || { ritual: 0, nutrition: 0, movement: 0, dayFinished: false };
+        
+        const progressPercentage = Math.round((numCompleted / routine.exercises.length) * 100);
 
         const updatedProgress: DailyProgress = {
             ...currentProgress,
-            movement: true,
+            movement: progressPercentage,
         };
 
         history[today] = updatedProgress;
         localStorage.setItem('mounjaro-progress-history', JSON.stringify(history));
+    };
 
+
+    const handleFinishRoutine = () => {
+        // We already update progress as exercises are completed, so we just go back.
         router.push('/');
     }
     
-    const allExercisesDone = completedExercises.size === routine.exercises.length;
+    const progressPercentage = Math.round((completedExercises.size / routine.exercises.length) * 100);
 
     const totalXp = Array.from(completedExercises).reduce((acc, index) => {
         return acc + routine.exercises[index].xp;
@@ -226,7 +245,7 @@ export function Routine({ routineId }: RoutineProps) {
                                 {isCompleted && <div className="absolute inset-0 bg-primary/30 flex items-center justify-center"><CheckCircle className="w-10 h-10 text-white" /></div>}
                             </div>
                         )}
-                        {!('image' in exercise) && (
+                        {!exercise.image && (
                              <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted flex items-center justify-center">
                                 {isCompleted ? <CheckCircle className="w-10 h-10 text-primary" /> : <Flame className={`w-10 h-10 ${routine.color}`} />}
                             </div>
@@ -256,9 +275,9 @@ export function Routine({ routineId }: RoutineProps) {
                     size="lg" 
                     className="w-full" 
                     onClick={handleFinishRoutine}
-                    disabled={!allExercisesDone}
+                    disabled={completedExercises.size === 0}
                 >
-                    {allExercisesDone ? `Concluir (+${totalXp} XP)` : 'Conclua todos os exercícios'}
+                    Concluir ({progressPercentage}% | +{totalXp} XP)
                 </Button>
             </div>
             
@@ -272,8 +291,3 @@ export function Routine({ routineId }: RoutineProps) {
         </div>
     );
 }
-
-    
-
-    
-
