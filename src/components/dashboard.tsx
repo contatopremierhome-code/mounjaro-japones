@@ -139,9 +139,8 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
     }
   };
 
-  const calculateBmi = (weight: number) => {
-    // Assuming a default height of 1.7m for BMI calculation
-    const height = 1.7;
+  const calculateBmi = (weight: number, height?: number) => {
+    if (!height) return '--';
     return (weight / (height * height)).toFixed(1);
   };
 
@@ -239,7 +238,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       <footer className="w-full bg-card p-4 rounded-lg flex justify-around items-center">
         <div className="text-center">
           <p className="text-xs text-muted-foreground">IMC</p>
-          <p className="font-bold text-lg">{calculateBmi(user.currentWeight)}</p>
+          <p className="font-bold text-lg">{calculateBmi(user.currentWeight, user.height)}</p>
         </div>
         <div className="text-center">
           <p className="text-xs text-muted-foreground">Peso Atual</p>

@@ -30,7 +30,7 @@ const steps = [
   {
     title: 'Suas Metas',
     description: 'Defina seus objetivos de bem-estar.',
-    fields: ['currentWeight', 'weightGoal'],
+    fields: ['currentWeight', 'weightGoal', 'height'],
   },
   {
     title: 'Detalhes Finais',
@@ -44,6 +44,7 @@ const formSchema = z.object({
   age: z.coerce.number().min(18, 'Você deve ser maior de idade.').max(100),
   currentWeight: z.coerce.number().min(30, 'Peso inválido.').max(300),
   weightGoal: z.coerce.number().min(30, 'Meta de peso inválida.').max(300),
+  height: z.coerce.number().min(1, 'Altura inválida.').max(2.5).optional().or(z.literal('')),
   takesMedication: z.enum(['yes', 'no']),
   medicationDose: z.string().optional(),
   personalDream: z.string().optional(),
@@ -71,6 +72,7 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
       age: undefined,
       currentWeight: undefined,
       weightGoal: undefined,
+      height: undefined,
       takesMedication: 'no',
       medicationDose: '',
       personalDream: '',
@@ -82,6 +84,7 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
   async function processStep(data: z.infer<typeof formSchema>) {
     const finalData = {
       ...data,
+      height: data.height || undefined,
       medicationDose: data.takesMedication === 'yes' ? data.medicationDose || '' : 'N/A',
       personalDream: data.personalDream || 'Conquistar meus objetivos!',
     }
@@ -176,6 +179,22 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
                       <FormControl>
                         <Input type="number" placeholder="Ex: 65" {...field} />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="height"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Altura (m)</FormLabel>
+                      <FormControl>
+                        <Input type="number" step="0.01" placeholder="Ex: 1.75" {...field} />
+                      </FormControl>
+                       <FormDescription>
+                        Opcional, para cálculo do IMC.
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
