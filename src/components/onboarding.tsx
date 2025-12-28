@@ -43,7 +43,7 @@ const requiredNumber = z.coerce.number({ required_error: "Este campo é obrigat�
 
 
 const formSchema = z.object({
-  name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres.'),
+  name: z.string({required_error: "O nome é obrigatório."}).min(2, 'O nome deve ter pelo menos 2 caracteres.'),
   age: requiredNumber.min(18, 'Você deve ser maior de idade.').max(100, 'Idade inválida.'),
   currentWeight: requiredNumber.min(30, 'Peso inválido.').max(300, 'Peso inválido.'),
   weightGoal: requiredNumber.min(30, 'Meta de peso inválida.').max(300, 'Meta de peso inválida.'),
@@ -80,16 +80,21 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
       medicationDose: '',
       personalDream: '',
     },
+    mode: 'onChange',
   });
 
   const takesMedicationValue = form.watch('takesMedication');
 
   async function processStep(data: z.infer<typeof formSchema>) {
-    const finalData = {
-      ...data,
-      height: data.height === '' ? undefined : data.height,
-      medicationDose: data.takesMedication === 'yes' ? data.medicationDose || '' : 'N/A',
-      personalDream: data.personalDream || 'Conquistar meus objetivos!',
+    
+    const finalData: Partial<UserData> = {
+        ...data,
+        medicationDose: data.takesMedication === 'yes' ? data.medicationDose || '' : 'N/A',
+        personalDream: data.personalDream || 'Conquistar meus objetivos!',
+      };
+
+    if (data.height === '') {
+        delete finalData.height;
     }
 
     if (currentStep < steps.length - 1) {
