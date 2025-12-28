@@ -35,7 +35,7 @@ const steps = [
   {
     title: 'Detalhes Finais',
     description: 'Estamos quase lá.',
-    fields: ['takesMedication', 'medicationDose', 'personalDream'],
+    fields: ['takesMedication', 'personalDream'],
   },
 ];
 
@@ -49,16 +49,7 @@ const formSchema = z.object({
   weightGoal: requiredNumber.min(30, 'Meta de peso inválida.').max(300, 'Meta de peso inválida.'),
   height: z.union([z.coerce.number().min(1, 'Altura inválida.').max(2.3, 'Altura máxima de 2.30m'), z.literal('')]),
   takesMedication: z.enum(['yes', 'no']),
-  medicationDose: z.string().optional(),
   personalDream: z.string().optional(),
-}).refine(data => {
-    if (data.takesMedication === 'yes') {
-        return !!data.medicationDose && data.medicationDose.length > 0;
-    }
-    return true;
-}, {
-    message: 'A dose da medicação é obrigatória se você toma alguma.',
-    path: ['medicationDose'],
 });
 
 
@@ -77,7 +68,6 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
       weightGoal: '' as any,
       height: '',
       takesMedication: 'no',
-      medicationDose: '',
       personalDream: '',
     },
     mode: 'onChange',
@@ -89,7 +79,6 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
     
     const finalData: Partial<UserData> = {
         ...data,
-        medicationDose: data.takesMedication === 'yes' ? data.medicationDose || '' : 'N/A',
         personalDream: data.personalDream || 'Conquistar meus objetivos!',
       };
 
@@ -241,21 +230,6 @@ export function Onboarding({ onOnboardingComplete }: OnboardingProps) {
                     </FormItem>
                   )}
                 />
-                {takesMedicationValue === 'yes' && (
-                  <FormField
-                    control={form.control}
-                    name="medicationDose"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Dose da Medicação</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Ex: 10mg" {...field} value={field.value || ''} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                )}
                 <FormField
                   control={form.control}
                   name="personalDream"

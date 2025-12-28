@@ -5,7 +5,6 @@ export interface UserData {
   weightGoal: number;
   height?: number;
   takesMedication: 'yes' | 'no';
-  medicationDose: string;
   personalDream: string;
   onboarded: boolean;
 }

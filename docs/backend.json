@@ -29,10 +29,6 @@
             "type": "string",
             "enum": ["yes", "no"]
         },
-        "medicationDose": {
-          "type": "string",
-          "description": "The user's prescribed medication dose."
-        },
         "personalDream": {
           "type": "string",
           "description": "The user's personal dream or motivation for weight loss."
@@ -48,7 +44,6 @@
         "currentWeight",
         "weightGoal",
         "takesMedication",
-        "medicationDose",
         "personalDream",
         "onboarded"
       ]
