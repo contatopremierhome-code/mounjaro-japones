@@ -20,37 +20,43 @@ const initialProgress: DailyProgress = {
 export default function Home() {
   const { user: authUser, isUserLoading } = useUser();
   const firestore = useFirestore();
+  const todayStr = format(new Date(), 'yyyy-MM-dd');
 
   const userDocRef = useMemo(() => {
     if (!firestore || !authUser?.uid) return null;
     return doc(firestore, 'users', authUser.uid);
   }, [firestore, authUser?.uid]);
 
-  const { data: user, isLoading: isUserDocLoading } = useDoc<UserData>(userDocRef);
-
-  const todayStr = format(new Date(), 'yyyy-MM-dd');
   const progressDocRef = useMemo(() => {
       if (!firestore || !authUser?.uid) return null;
       return doc(firestore, 'users', authUser.uid, 'progress', todayStr);
   }, [firestore, authUser?.uid, todayStr]);
 
+  const { data: user, isLoading: isUserDocLoading } = useDoc<UserData>(userDocRef);
   const { data: progress, isLoading: isProgressLoading } = useDoc<DailyProgress>(progressDocRef);
 
   const [localProgress, setLocalProgress] = useState<DailyProgress | null>(null);
 
   useEffect(() => {
+    // This effect ensures that when we get data from Firestore, we update the local state.
+    // It also handles the case where there's no data for today, setting it to the initial state.
     if (progress) {
       setLocalProgress(progress);
-    } else if (!isProgressLoading) {
+    } else if (!isProgressLoading) { // Only set to initial if not loading and progress is null
       setLocalProgress(initialProgress);
     }
   }, [progress, isProgressLoading]);
 
 
   const handleOnboardingComplete = (data: Omit<UserData, 'onboarded'>) => {
-    if (userDocRef) {
+    if (userDocRef && progressDocRef) {
       const userData: UserData = { ...data, onboarded: true };
+      // Create user document
       setDoc(userDocRef, userData, { merge: true });
+      // Create the first progress document for today, ensuring it's fresh and zeroed out.
+      setDoc(progressDocRef, initialProgress);
+      // Set local state immediately for a smooth UI transition
+      setLocalProgress(initialProgress);
     }
   };
 
@@ -63,6 +69,7 @@ export default function Home() {
   
   const handleReset = async () => {
     if (userDocRef) {
+      // Set onboarded to false to restart the onboarding process.
       await setDoc(userDocRef, { onboarded: false }, { merge: true });
     }
   }
