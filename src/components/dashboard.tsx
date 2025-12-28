@@ -24,9 +24,9 @@ interface DashboardProps {
 }
 
 const actionItems = [
+  { id: 'recipes', title: 'Receitas de Chás', path: '/recipes', image: 'https://i.imgur.com/YrTQpoy.png', hint: 'tea recipes' },
   { id: 'ritual', title: 'Ritual do Chá', path: '/ritual', image: 'https://i.imgur.com/wMbgBH8.png', hint: 'tea ritual' },
   { id: 'nutrition', title: 'Registrar Comida', path: '/nutrition', image: 'https://i.imgur.com/j5LbxSg.png', hint: 'healthy food' },
-  { id: 'recipes', title: 'Receitas de Chás', path: '/recipes', image: 'https://i.imgur.com/YrTQpoy.png', hint: 'tea recipes' },
   { id: 'movement', title: 'Exercícios Diários', path: '/movement', image: 'https://i.imgur.com/U8nvHEd.png', hint: 'daily exercise' },
   { id: 'progress', title: 'Meu Progresso', path: '/progress', image: 'https://i.imgur.com/BlHfCOr.png', hint: 'progress calendar' },
   { id: 'coming-soon', title: 'Em Breve', path: null, image: 'https://i.imgur.com/dxgNxK4.png', hint: 'coming soon', icon: Lock },
