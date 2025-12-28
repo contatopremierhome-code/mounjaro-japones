@@ -14,9 +14,9 @@ import { format } from 'date-fns';
 type Category = 'verde' | 'amarelo' | 'vermelho';
 
 const categories = [
-    { id: 'verde', label: 'Verde', xp: '+30 XP', color: 'bg-green-500', borderColor: 'border-green-500', textColor: 'text-green-500', progress: 100 },
-    { id: 'amarelo', label: 'Amarelo', xp: '+10 XP', color: 'bg-yellow-500', borderColor: 'border-yellow-500', textColor: 'text-yellow-500', progress: 60 },
-    { id: 'vermelho', label: 'Vermelho', xp: '0 XP', color: 'bg-red-500', borderColor: 'border-red-500', textColor: 'text-red-500', progress: 20 },
+    { id: 'verde', label: 'Verde', xp: '+100 XP', color: 'bg-green-500', borderColor: 'border-green-500', textColor: 'text-green-500', progress: 100 },
+    { id: 'amarelo', label: 'Amarelo', xp: '+60 XP', color: 'bg-yellow-500', borderColor: 'border-yellow-500', textColor: 'text-yellow-500', progress: 60 },
+    { id: 'vermelho', label: 'Vermelho', xp: '+20 XP', color: 'bg-red-500', borderColor: 'border-red-500', textColor: 'text-red-500', progress: 20 },
 ] as const;
 
 const trafficLightGuide = [
