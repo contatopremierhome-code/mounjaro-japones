@@ -48,7 +48,7 @@ export function Recipes() {
         </Button>
         <div className="text-center">
           <h1 className="text-3xl font-bold font-headline text-primary">
-            Receitas de Chás
+            Receitas Mounjaro Japonês
           </h1>
           <p className="text-muted-foreground">
             10 variações poderosas para impulsionar seu metabolismo.
