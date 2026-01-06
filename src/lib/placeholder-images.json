@@ -59,6 +59,42 @@
       "description": "Uma cuia tradicional de erva-mate.",
       "imageUrl": "https://i.imgur.com/9F1yib8.png",
       "imageHint": "mate tea"
+    },
+    {
+      "id": "tea-pineapple",
+      "description": "Copo de chá com abacaxi e gengibre.",
+      "imageUrl": "https://i.imgur.com/rLmtPSc.png",
+      "imageHint": "pineapple tea"
+    },
+    {
+      "id": "tea-blackberry",
+      "description": "Xícara de chá com amoras frescas ao lado.",
+      "imageUrl": "https://i.imgur.com/SJf0nI8.png",
+      "imageHint": "blackberry tea"
+    },
+    {
+      "id": "tea-mate-lemon",
+      "description": "Copo de chá mate com limão e gelo.",
+      "imageUrl": "https://i.imgur.com/8xLqT92.png",
+      "imageHint": "mate lemon"
+    },
+    {
+      "id": "tea-artichoke",
+      "description": "Xícara de chá de alcachofra com a planta ao fundo.",
+      "imageUrl": "https://i.imgur.com/o2Yw5gV.png",
+      "imageHint": "artichoke tea"
+    },
+    {
+      "id": "tea-black-orange",
+      "description": "Copo de chá preto com laranja e canela.",
+      "imageUrl": "https://i.imgur.com/J3l4A0h.png",
+      "imageHint": "black tea"
+    },
+    {
+      "id": "tea-dandelion",
+      "description": "Xícara de chá com flores de dente-de-leão.",
+      "imageUrl": "https://i.imgur.com/KqC9rM2.png",
+      "imageHint": "dandelion tea"
     }
   ]
 }
