@@ -51,7 +51,7 @@ export function Recipes() {
             Receitas Mounjaro Japonês
           </h1>
           <p className="text-muted-foreground">
-            10 variações poderosas para impulsionar seu metabolismo.
+            16 variações poderosas para impulsionar seu metabolismo.
           </p>
         </div>
         <div className="w-10"></div>
