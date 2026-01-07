@@ -200,7 +200,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Jantar',
         title: 'Sopa Cremosa de Abóbora com Gengibre',
         description: 'Aconchegante, digestiva e com poucas calorias.',
-        image: findImage('9eUaJ3A', 'vegetable soup'),
+        image: findImage('mSuVqrw', 'vegetable soup'),
         ingredients: ['2 xícaras de abóbora cozida', '1 pedaço pequeno de gengibre ralado', 'Cebola e alho a gosto', 'Caldo de legumes caseiro (ou água)'],
         preparation: [
             'Refogue a cebola e o alho, adicione a abóbora e o gengibre.',
@@ -215,7 +215,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Jantar',
         title: 'Filé de Tilápia com Legumes Assados',
         description: 'Refeição leve, colorida e rica em nutrientes.',
-        image: findImage('m9R1a2b', 'fish vegetables'),
+        image: findImage('g9TvC4f', 'fish vegetables'),
         ingredients: ['1 filé de tilápia', '1/2 abobrinha em rodelas', '1/2 pimentão em tiras', 'Tomate cereja a gosto', 'Ervas finas, sal e azeite'],
         preparation: [
             'Em uma assadeira, disponha o filé de tilápia e os legumes.',
@@ -229,7 +229,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Jantar',
         title: 'Salada Caprese Turbinada',
         description: 'Leve, fresca e com um toque de proteína.',
-        image: findImage('uL3c4C5', 'caprese salad'),
+        image: findImage('lSk4M8y', 'caprese salad'),
         ingredients: ['1 tomate em rodelas', '2 fatias de muçarela de búfala', 'Folhas de manjericão fresco', '4 fatias de peito de peru light ou frango desfiado'],
         preparation: [
             'Intercale as rodelas de tomate, a muçarela e o peito de peru em um prato.',
@@ -243,7 +243,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Jantar',
         title: 'Caldo Verde Funcional',
         description: 'Sopa detox para limpar o organismo.',
-        image: findImage('vN6d7F8', 'green soup'),
+        image: findImage('AgfhfJp', 'green soup'),
         ingredients: ['1 maço de couve picada', '1 chuchu cozido', '1/2 cebola', 'Caldo de legumes (ou água)', 'Sal e azeite'],
         preparation: [
             'Cozinhe o chuchu com a cebola no caldo.',
@@ -257,7 +257,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Jantar',
         title: 'Wrap de Alface com Carne Moída',
         description: 'Low-carb, crocante e cheio de sabor.',
-        image: findImage('wP8g9T0', 'lettuce wrap'),
+        image: findImage('97BKfmn', 'lettuce wrap'),
         ingredients: ['Folhas de alface americana (grandes e firmes)', '100g de carne moída refogada com temperos', 'Cenoura ralada e cebolinha para finalizar'],
         preparation: [
             'Use as folhas de alface como se fossem "pães" ou "tortillas".',
@@ -271,7 +271,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Jantar',
         title: 'Cogumelos Salteados com Quinoa',
         description: 'Nutritivo, saboroso e amigo da digestão.',
-        image: findImage('xQ1a2S3', 'mushroom quinoa'),
+        image: findImage('wE2jDx4', 'mushroom quinoa'),
         ingredients: ['1 xícara de cogumelos fatiados (paris ou shitake)', '1/2 xícara de quinoa cozida', 'Alho picado e shoyu light a gosto'],
         preparation: [
             'Salteie o alho em uma frigideira com um fio de azeite.',
