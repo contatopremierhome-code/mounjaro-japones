@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Sun, Flame, Moon, Clock, Repeat, CheckCircle, Circle, Play, Pause } from 'lucide-react';
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
@@ -18,6 +18,7 @@ const routineData = {
         title: 'Energia Matutina',
         icon: Sun,
         color: 'text-yellow-400',
+        motivationText: 'Comece o dia ativando seu corpo e mente. Esta rotina matinal acelera seu metabolismo desde a primeira hora, preparando você para um dia de queima de calorias. Combinado com as receitas do Mounjaro Japonês, você cria uma poderosa sinergia para alcançar seus objetivos de bem-estar.',
         exercises: [
             { name: 'Rotação de tornozelo', duration: '30s cada lado', seconds: 60, xp: 5, image: 'https://i.imgur.com/yydGpJ9.png', hint: 'ankle rotation' },
             { name: 'Círculos com os braços', duration: '30s', seconds: 30, xp: 5, image: 'https://i.imgur.com/8fe7RyQ.png', hint: 'arm circles' },
@@ -30,6 +31,7 @@ const routineData = {
         title: 'Queima Ativa',
         icon: Flame,
         color: 'text-destructive',
+        motivationText: 'É hora de suar e queimar calorias! Esta rotina intensa foi desenhada para maximizar a queima de gordura e fortalecer seus músculos. Cada movimento é um passo em direção à sua meta. Potencialize os resultados combinando este treino com as receitas termogênicas do Mounjaro Japonês.',
         exercises: [
             { name: 'Corrida no lugar', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/gi3VSxp.gif', hint: 'running in place' },
             { name: 'Agachamentos', duration: '45s', seconds: 45, xp: 15, image: 'https://i.imgur.com/8mH894y.gif', hint: 'squats' },
@@ -46,6 +48,7 @@ const routineData = {
         title: 'Relaxamento Noturno',
         icon: Moon,
         color: 'text-blue-400',
+        motivationText: 'Termine seu dia liberando as tensões e preparando seu corpo para uma noite de recuperação. Este ritual de relaxamento ajuda a reduzir o estresse, um fator chave no controle de peso. Ao combinar com os chás calmantes do Mounjaro Japonês, você garante um sono reparador, essencial para sua jornada.',
         exercises: [
             { name: 'Alongamento pescoço', duration: '30s cada lado', seconds: 60, xp: 5, image: 'https://i.imgur.com/b6PAf0d.png', hint: 'neck stretch' },
             { name: 'Postura da criança', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/eAZ3EcG.png', hint: 'childs pose' },
@@ -226,54 +229,62 @@ export function Routine({ routineId }: RoutineProps) {
 
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-8">
-            <header className="flex items-center justify-between w-full">
-                <Button variant="ghost" onClick={() => router.back()} size="icon">
-                    <ArrowLeft className="h-6 w-6" />
-                </Button>
-                <div className={`text-center flex items-center gap-3 ${routine.color}`}>
-                    <RoutineIcon className="w-8 h-8" />
-                    <h1 className="text-3xl font-bold font-headline">
-                        {routine.title}
-                    </h1>
+            <header className="flex flex-col items-center justify-between w-full text-center gap-4">
+                <div className='w-full flex justify-between items-center'>
+                    <Button variant="ghost" onClick={() => router.back()} size="icon">
+                        <ArrowLeft className="h-6 w-6" />
+                    </Button>
+                    <div className={`flex items-center gap-3 ${routine.color}`}>
+                        <RoutineIcon className="w-8 h-8" />
+                        <h1 className="text-3xl font-bold font-headline">
+                            {routine.title}
+                        </h1>
+                    </div>
+                    <div className="w-10"></div>
                 </div>
-                <div className="w-10"></div>
+                 <p className="text-muted-foreground text-sm max-w-xl">{routine.motivationText}</p>
             </header>
-
-            <div className="space-y-4">
-                {routine.exercises.map((exercise, index) => {
-                    const isCompleted = completedExercises.has(index);
-                    return (
-                    <Card 
-                        key={index} 
-                        className={`flex items-center p-4 gap-4 transition-all duration-300 cursor-pointer hover:border-primary/50 ${isCompleted ? 'bg-primary/10 border-primary/50' : 'bg-card/50'}`}
-                        onClick={() => !isCompleted && handleToggleExercise(index)}
-                    >
-                        {'image' in exercise && exercise.image && (
-                            <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted">
-                                <Image src={exercise.image} alt={exercise.name} fill style={{ objectFit: 'cover' }} data-ai-hint={exercise.hint} unoptimized />
-                                {isCompleted && <div className="absolute inset-0 bg-primary/30 flex items-center justify-center"><CheckCircle className="w-10 h-10 text-white" /></div>}
+            
+            <Card>
+                <CardHeader>
+                    <h2 className='text-xl font-bold text-accent'>Exercícios da Rotina</h2>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    {routine.exercises.map((exercise, index) => {
+                        const isCompleted = completedExercises.has(index);
+                        return (
+                        <Card 
+                            key={index} 
+                            className={`flex items-center p-4 gap-4 transition-all duration-300 cursor-pointer hover:border-primary/50 ${isCompleted ? 'bg-primary/10 border-primary/50' : 'bg-card/50'}`}
+                            onClick={() => !isCompleted && handleToggleExercise(index)}
+                        >
+                            {'image' in exercise && exercise.image && (
+                                <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted">
+                                    <Image src={exercise.image} alt={exercise.name} fill style={{ objectFit: 'cover' }} data-ai-hint={exercise.hint} unoptimized />
+                                    {isCompleted && <div className="absolute inset-0 bg-primary/30 flex items-center justify-center"><CheckCircle className="w-10 h-10 text-white" /></div>}
+                                </div>
+                            )}
+                            {!('image' in exercise && exercise.image) && (
+                                <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted flex items-center justify-center">
+                                    {isCompleted ? <CheckCircle className="w-10 h-10 text-primary" /> : <Flame className={`w-10 h-10 ${routine.color}`} />}
+                                </div>
+                            )}
+                            <div className="flex-1">
+                                <h3 className={`font-semibold text-lg ${isCompleted ? 'text-primary' : ''}`}>{exercise.name}</h3>
+                                <div className="flex items-center gap-4 text-muted-foreground">
+                                    <div className='flex items-center gap-1'><Clock className="w-4 h-4" /><span>{exercise.duration}</span></div>
+                                    <div className={`flex items-center gap-1 font-bold ${routine.color}`}><Flame className="w-4 h-4" /><span>+{exercise.xp} XP</span></div>
+                                </div>
                             </div>
-                        )}
-                        {!('image' in exercise && exercise.image) && (
-                             <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted flex items-center justify-center">
-                                {isCompleted ? <CheckCircle className="w-10 h-10 text-primary" /> : <Flame className={`w-10 h-10 ${routine.color}`} />}
-                            </div>
-                        )}
-                        <div className="flex-1">
-                            <h3 className={`font-semibold text-lg ${isCompleted ? 'text-primary' : ''}`}>{exercise.name}</h3>
-                            <div className="flex items-center gap-4 text-muted-foreground">
-                                <div className='flex items-center gap-1'><Clock className="w-4 h-4" /><span>{exercise.duration}</span></div>
-                                <div className={`flex items-center gap-1 font-bold ${routine.color}`}><Flame className="w-4 h-4" /><span>+{exercise.xp} XP</span></div>
-                            </div>
-                        </div>
-                         {isCompleted ? (
-                            <CheckCircle className="w-8 h-8 text-primary transition-colors"/>
-                        ) : (
-                            <Circle className="w-8 h-8 text-muted-foreground/30 group-hover:text-primary transition-colors"/>
-                        )}
-                    </Card>
-                )})}
-            </div>
+                            {isCompleted ? (
+                                <CheckCircle className="w-8 h-8 text-primary transition-colors"/>
+                            ) : (
+                                <Circle className="w-8 h-8 text-muted-foreground/30 group-hover:text-primary transition-colors"/>
+                            )}
+                        </Card>
+                    )})}
+                </CardContent>
+            </Card>
 
             <div className="flex gap-4">
                 <Button variant="outline" size="lg" className="w-full" onClick={handleReset}>
