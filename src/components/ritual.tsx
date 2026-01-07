@@ -2,34 +2,26 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ArrowLeft, Leaf, Citrus as Lemon, Sparkles, Lightbulb } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { CheckCircle2, ArrowLeft, Lightbulb, BookOpen } from 'lucide-react';
 import { TeaBowlIcon } from './icons';
-import { BrainCircuit } from 'lucide-react';
 import type { DailyProgress } from '@/lib/types';
 import { useUser, useFirestore, useDoc } from '@/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { format } from 'date-fns';
 
-
-const ritualItems = [
-    { id: 'tea', label: 'Chá Verde', icon: TeaBowlIcon, xp: 20 },
-    { id: 'matcha', label: 'Matcha', icon: Leaf, xp: 20 },
-    { id: 'ginger', label: 'Gengibre', icon: Sparkles, xp: 20 },
-    { id: 'lemon', label: 'Limão', icon: Lemon, xp: 10 },
-    { id: 'meditation', label: 'Meditação (5 min)', icon: BrainCircuit, xp: 30 },
+const ritualSteps = [
+    { id: 'boil', label: '1. Ferver a Água', description: 'O primeiro passo para um chá perfeito.' },
+    { id: 'ingredients', label: '2. Adicionar Ingredientes', description: 'O momento de infundir a magia.' },
+    { id: 'infuse', label: '3. Aguardar a Infusão', description: 'A pausa para a alquimia acontecer.' },
+    { id: 'enjoy', label: '4. Agradecer e Desfrutar', description: 'Conecte-se com o momento.' },
 ];
-
-const totalRitualPoints = ritualItems.length;
 
 export function Ritual() {
     const router = useRouter();
     const { user } = useUser();
     const firestore = useFirestore();
-    const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
-    const [isActive, setIsActive] = useState(false);
-    const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+    const [completedSteps, setCompletedSteps] = useState<Set<string>>(new Set());
 
     const todayStr = format(new Date(), 'yyyy-MM-dd');
     const progressDocRef = useMemo(() => {
@@ -41,53 +33,30 @@ export function Ritual() {
 
     useEffect(() => {
         if (progress && progress.ritual > 0) {
-            const itemsChecked = Math.round((progress.ritual / 100) * totalRitualPoints);
-            const initialChecked: Record<string, boolean> = {};
-            for(let i=0; i < itemsChecked; i++) {
-               initialChecked[ritualItems[i].id] = true;
+            const numCompleted = Math.round((progress.ritual / 100) * ritualSteps.length);
+            const initialCompleted = new Set<string>();
+            for (let i = 0; i < numCompleted; i++) {
+                initialCompleted.add(ritualSteps[i].id);
             }
-            setCheckedItems(initialChecked);
+            setCompletedSteps(initialCompleted);
         }
     }, [progress]);
 
-    useEffect(() => {
-        let interval: NodeJS.Timeout | null = null;
-
-        if (isActive && timeLeft > 0) {
-            interval = setInterval(() => {
-                setTimeLeft((prevTime) => prevTime - 1);
-            }, 1000);
-        } else if (timeLeft === 0) {
-            setIsActive(false);
+    const handleStepClick = (stepId: string) => {
+        const newCompleted = new Set(completedSteps);
+        if (newCompleted.has(stepId)) {
+            newCompleted.delete(stepId);
+        } else {
+            newCompleted.add(stepId);
         }
-
-        return () => {
-            if (interval) {
-                clearInterval(interval);
-            }
-        };
-    }, [isActive, timeLeft]);
-
-    const formatTime = (seconds: number) => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        setCompletedSteps(newCompleted);
     };
 
-    const toggleTimer = () => {
-        setIsActive(!isActive);
-    };
-
-    const handleCheckboxChange = (id: string) => {
-        setCheckedItems(prev => ({...prev, [id]: !prev[id]}));
-    }
-    
-    const checkedCount = Object.values(checkedItems).filter(Boolean).length;
-    const progressPercentage = Math.round((checkedCount / totalRitualPoints) * 100);
+    const progressPercentage = Math.round((completedSteps.size / ritualSteps.length) * 100);
 
     const handleFinishRitual = async () => {
         if (!progressDocRef) return;
-        
+
         try {
             const docSnap = await getDoc(progressDocRef);
             const currentProgress = docSnap.exists() ? docSnap.data() as DailyProgress : { ritual: 0, nutrition: 0, movement: 0, dayFinished: false, date: todayStr };
@@ -102,17 +71,18 @@ export function Ritual() {
         } catch (error) {
             console.error("Error updating ritual progress: ", error);
         }
-    }
-
-    const totalXp = ritualItems.reduce((acc, item) => checkedItems[item.id] ? acc + (item.xp || 0) : acc, 0);
+    };
+    
+    const circumference = 2 * Math.PI * 90; // radius = 90
+    const offset = circumference - (progressPercentage / 100) * circumference;
 
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-8 text-center">
-            <header className="flex items-center justify-between w-full mb-4">
-                <Button variant="ghost" onClick={() => router.back()} size="icon" className="absolute left-4">
+            <header className="flex items-center relative w-full justify-center mb-4">
+                <Button variant="ghost" onClick={() => router.back()} size="icon" className="absolute left-0">
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
-                <div className='text-center w-full'>
+                <div className='text-center'>
                     <h1 className="text-3xl font-bold font-headline text-primary">
                         Ritual do Chá
                     </h1>
@@ -120,51 +90,59 @@ export function Ritual() {
                         Este é o seu momento sagrado. Reserve um tempo para preparar seu chá, meditar e se conectar com seus objetivos.
                     </p>
                 </div>
-                <div className="w-10"></div>
             </header>
 
             <div className="relative flex flex-col items-center justify-center gap-6">
                 <div className="relative w-64 h-64 flex items-center justify-center">
-                    <div 
-                        className="absolute inset-0 rounded-full border-[10px] border-primary/20"
-                    ></div>
-                    <div 
-                        className="absolute inset-0 rounded-full"
-                        style={{
-                            background: `conic-gradient(hsl(var(--primary)) ${(timeLeft / 600) * 360}deg, transparent 0deg)`,
-                            transition: 'background 0.5s linear'
-                        }}
-                    ></div>
-                     <div className="relative w-[210px] h-[210px] bg-background rounded-full flex flex-col items-center justify-center shadow-inner">
-                        <span className="text-6xl font-mono font-bold text-primary">
-                            {formatTime(timeLeft)}
-                        </span>
+                     <svg className="w-full h-full" viewBox="0 0 200 200">
+                        <circle
+                            className="text-card-foreground/10"
+                            strokeWidth="10"
+                            stroke="currentColor"
+                            fill="transparent"
+                            r="90"
+                            cx="100"
+                            cy="100"
+                        />
+                        <circle
+                            className="text-primary transition-all duration-500"
+                            strokeWidth="10"
+                            strokeDasharray={circumference}
+                            strokeDashoffset={offset}
+                            strokeLinecap="round"
+                            stroke="currentColor"
+                            fill="transparent"
+                            r="90"
+                            cx="100"
+                            cy="100"
+                            transform="rotate(-90 100 100)"
+                        />
+                    </svg>
+                     <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <TeaBowlIcon className="w-20 h-20 text-primary mb-2" />
+                        <span className="text-4xl font-bold">{progressPercentage}%</span>
                     </div>
                 </div>
-                 <Button onClick={toggleTimer} size="lg" className="w-48">
-                    {isActive ? 'Pausar Ritual' : 'Começar Ritual'}
-                </Button>
             </div>
 
             <Card className="text-left">
                 <CardHeader>
-                    <CardTitle className="text-xl text-accent">Ingredientes do Ritual</CardTitle>
+                    <CardTitle className="text-xl text-accent">Guia de Preparo</CardTitle>
+                    <CardDescription>Marque cada passo para completar seu ritual diário.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    {ritualItems.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between">
-                             <div className="flex items-center gap-3">
-                                <Checkbox 
-                                    id={item.id} 
-                                    onCheckedChange={() => handleCheckboxChange(item.id)}
-                                    checked={!!checkedItems[item.id]}
-                                />
-                                <label htmlFor={item.id} className="flex items-center gap-2 text-lg font-medium cursor-pointer">
-                                    <item.icon className="w-6 h-6 text-primary" />
-                                    {item.label}
-                                </label>
+                    {ritualSteps.map((step) => (
+                        <div key={step.id}
+                             onClick={() => handleStepClick(step.id)}
+                             className={`flex items-center justify-between p-4 rounded-lg cursor-pointer transition-all ${completedSteps.has(step.id) ? 'bg-primary/10 border-primary/50' : 'bg-card/50 hover:bg-card/80'}`}
+                        >
+                             <div className="flex items-center gap-4">
+                                <CheckCircle2 className={`w-8 h-8 transition-colors ${completedSteps.has(step.id) ? 'text-primary' : 'text-muted-foreground/30'}`} />
+                                <div>
+                                    <h3 className="text-lg font-semibold">{step.label}</h3>
+                                    <p className="text-sm text-muted-foreground">{step.description}</p>
+                                </div>
                             </div>
-                            {item.xp && <span className="text-sm font-bold text-accent">+{item.xp} XP</span>}
                         </div>
                     ))}
                 </CardContent>
@@ -180,12 +158,15 @@ export function Ritual() {
                  </CardContent>
             </Card>
 
-            
-            <Button size="lg" onClick={handleFinishRitual} disabled={checkedCount === 0 || isLoading}>
-                Concluir Ritual e Ganhar +{totalXp} XP ({progressPercentage}%)
-            </Button>
-            
-
+            <div className="flex flex-col sm:flex-row gap-4">
+                <Button size="lg" variant="outline" className="w-full" onClick={() => router.push('/recipes')}>
+                    <BookOpen className="mr-2 h-5 w-5" />
+                    Ver Receitas Mounjaro Japonês
+                </Button>
+                <Button size="lg" onClick={handleFinishRitual} disabled={isLoading || completedSteps.size === 0} className="w-full">
+                    Concluir Ritual ({progressPercentage}%)
+                </Button>
+            </div>
         </div>
     );
 }
