@@ -29,7 +29,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Café da Manhã',
         title: 'Ovos Mexidos com Espinafre',
         description: 'Proteína e fibras para começar o dia com saciedade.',
-        image: findImage('q9Q0B4O', 'scrambled eggs'),
+        image: findImage('FORtLtH', 'scrambled eggs'),
         ingredients: ['2 ovos', '1 punhado de espinafre fresco', '1 colher de chá de azeite', 'Sal e pimenta a gosto'],
         preparation: [
             'Aqueça o azeite em uma frigideira em fogo médio.',
@@ -44,7 +44,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Café da Manhã',
         title: 'Iogurte Grego com Frutas Vermelhas',
         description: 'Cremoso, rico em probióticos e antioxidantes.',
-        image: findImage('wR4R32a', 'yogurt berries'),
+        image: findImage('gRBMFeJ', 'yogurt berries'),
         ingredients: ['1 pote de iogurte grego natural (sem açúcar)', '1/2 xícara de frutas vermelhas (morangos, mirtilos)', '1 colher de sopa de sementes de chia'],
         preparation: [
             'Em uma tigela, coloque o iogurte grego.',
@@ -58,7 +58,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Café da Manhã',
         title: 'Vitamina de Abacate com Linhaça',
         description: 'Gorduras boas e fibras para uma manhã cheia de energia.',
-        image: findImage('8xT3J4o', 'avocado smoothie'),
+        image: findImage('DCi47cG', 'avocado smoothie'),
         ingredients: ['1/4 de abacate maduro', '200ml de água ou leite de amêndoas', '1 colher de sopa de farinha de linhaça', 'Adoçante a gosto (opcional)'],
         preparation: [
             'Bata todos os ingredientes no liquidificador até obter uma mistura homogênea.',
@@ -71,7 +71,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Café da Manhã',
         title: 'Crepioca com Queijo Cottage',
         description: 'Versátil, sem glúten e rica em proteína.',
-        image: findImage('PqA3s5F', 'tapioca crepe'),
+        image: findImage('HPL5PlN', 'tapioca crepe'),
         ingredients: ['1 ovo', '2 colheres de sopa de goma de tapioca', '1 colher de sopa de queijo cottage', 'Sal a gosto'],
         preparation: [
             'Misture o ovo e a goma de tapioca com um garfo até ficar homogêneo.',
@@ -86,7 +86,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Café da Manhã',
         title: 'Mingau de Aveia com Canela',
         description: 'Confortável, aquece e regula o açúcar no sangue.',
-        image: findImage('3aZ2Y7p', 'oatmeal cinnamon'),
+        image: findImage('g6Mcw0X', 'oatmeal cinnamon'),
         ingredients: ['3 colheres de sopa de aveia em flocos', '200ml de água ou leite de amêndoas', '1 colher de chá de canela em pó'],
         preparation: [
             'Em uma panela, cozinhe a aveia com a água/leite em fogo baixo, mexendo sempre.',
@@ -100,7 +100,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Café da Manhã',
         title: 'Pão Integral com Pasta de Amendoim',
         description: 'Energia rápida e duradoura para uma manhã agitada.',
-        image: findImage('tJ2sW8d', 'toast peanut'),
+        image: findImage('hiULVp7', 'toast peanut'),
         ingredients: ['1 fatia de pão integral', '1 colher de sopa de pasta de amendoim integral (sem açúcar)'],
         preparation: [
             'Torre levemente a fatia de pão integral.',
