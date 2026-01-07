@@ -108,13 +108,18 @@ export function Ritual() {
 
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-8 text-center">
-            <header className="flex items-center justify-between w-full">
-                <Button variant="ghost" onClick={() => router.back()} size="icon">
+            <header className="flex items-center justify-between w-full mb-4">
+                <Button variant="ghost" onClick={() => router.back()} size="icon" className="absolute left-4">
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
-                <h1 className="text-3xl font-bold font-headline text-primary">
-                    Ritual do Chá
-                </h1>
+                <div className='text-center w-full'>
+                    <h1 className="text-3xl font-bold font-headline text-primary">
+                        Ritual do Chá
+                    </h1>
+                     <p className="text-muted-foreground max-w-md mx-auto mt-2">
+                        Este é o seu momento sagrado. Reserve um tempo para preparar seu chá, meditar e se conectar com seus objetivos.
+                    </p>
+                </div>
                 <div className="w-10"></div>
             </header>
 

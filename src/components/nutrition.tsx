@@ -63,7 +63,7 @@ export function Nutrition() {
 
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-8">
-            <header className="flex items-center relative w-full justify-center">
+            <header className="flex items-center relative w-full justify-center mb-4">
                 <Button variant="ghost" onClick={() => router.back()} size="icon" className="absolute left-0">
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
@@ -71,6 +71,9 @@ export function Nutrition() {
                     <h1 className="text-3xl font-bold font-headline text-primary">
                         Registro de Nutrição
                     </h1>
+                     <p className="text-muted-foreground max-w-md mx-auto mt-2">
+                        Use o sistema de semáforo para classificar suas refeições. Isso nos ajuda a entender seus hábitos e a te guiar para escolhas mais saudáveis.
+                    </p>
                 </div>
             </header>
 
