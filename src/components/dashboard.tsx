@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { getAffirmation } from '@/app/actions';
-import { Check, Repeat, Salad, Dumbbell, Lock } from 'lucide-react';
+import { Check, Repeat, Salad, Dumbbell, Lock, HelpCircle } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -15,6 +15,12 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { useRouter } from 'next/navigation';
 import { TeaBowlIcon } from './icons';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 interface DashboardProps {
   user: UserData;
@@ -228,41 +234,44 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
         })}
       </div>
       
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button size="lg" disabled={isSubmitting} onClick={handleFinishDayAttempt}>
-             {isSubmitting ? 'Processando...' : (progress.dayFinished ? 'Dia Finalizado' : 'Finalizar o Dia')}
-          </Button>
-        </AlertDialogTrigger>
-        {canFinishDay && (
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Balanço do Dia</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Para te dar uma motivação personalizada, precisamos saber como foi a balança hoje.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <div className="space-y-2 py-4">
-                <Label htmlFor="weight-change">Variação de peso (kg)</Label>
-                <Input 
-                  id="weight-change"
-                  type="number"
-                  step="0.1"
-                  value={weightChange}
-                  onChange={(e) => setWeightChange(e.target.value)}
-                  placeholder="Ex: -0.5 ou 0.2"
-                />
-                <p className="text-xs text-muted-foreground">Use valor negativo para perda de peso. Ex: -0.5</p>
-              </div>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction onClick={handleFinishDay} disabled={isSubmitting}>
-                  {isSubmitting ? 'Enviando...' : 'Receber Motivação'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-        )}
-      </AlertDialog>
+      <div className="flex flex-col items-center gap-2">
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button size="lg" disabled={isSubmitting} onClick={handleFinishDayAttempt} className="w-full">
+               {isSubmitting ? 'Processando...' : (progress.dayFinished ? 'Dia Finalizado' : 'Finalizar o Dia')}
+            </Button>
+          </AlertDialogTrigger>
+          {canFinishDay && (
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Balanço do Dia</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Para te dar uma motivação personalizada, precisamos saber como foi a balança hoje.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <div className="space-y-2 py-4">
+                  <Label htmlFor="weight-change">Variação de peso (kg)</Label>
+                  <Input 
+                    id="weight-change"
+                    type="number"
+                    step="0.1"
+                    value={weightChange}
+                    onChange={(e) => setWeightChange(e.target.value)}
+                    placeholder="Ex: -0.5 ou 0.2"
+                  />
+                  <p className="text-xs text-muted-foreground">Use valor negativo para perda de peso. Ex: -0.5</p>
+                </div>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleFinishDay} disabled={isSubmitting}>
+                    {isSubmitting ? 'Enviando...' : 'Receber Motivação'}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+          )}
+        </AlertDialog>
+        <p className="text-xs text-muted-foreground px-4 text-center">Ao finalizar, seu progresso do dia é salvo e você recebe uma mensagem de motivação!</p>
+      </div>
 
 
       <AlertDialog open={showIncompleteDialog} onOpenChange={setShowIncompleteDialog}>
