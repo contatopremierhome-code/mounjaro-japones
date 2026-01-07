@@ -1,28 +1,24 @@
 'use client';
 import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { ArrowLeft, ChefHat, Sparkles, Loader2, Lightbulb } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Sparkles } from 'lucide-react';
 import { useUser, useFirestore, useDoc } from '@/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { getMealSuggestion } from '@/app/actions';
-import type { MealSuggestionOutput } from '@/ai/flows/meal-suggestion-generator';
-import { Separator } from './ui/separator';
-import { DailyProgress } from '@/lib/types';
+import type { DailyProgress } from '@/lib/types';
 import { format } from 'date-fns';
+import { mealExamples, Meal } from '@/lib/meals';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type MealType = 'Café da Manhã' | 'Almoço' | 'Jantar' | 'Lanche';
+type MealType = 'Café da Manhã' | 'Almoço' | 'Jantar';
 
 export function Nutrition() {
     const router = useRouter();
     const { user: authUser } = useUser();
     const firestore = useFirestore();
-    const { data: user } = useDoc(authUser ? doc(firestore, 'users', authUser.uid) : null);
-
-    const [suggestion, setSuggestion] = useState<MealSuggestionOutput | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [selectedMeal, setSelectedMeal] = useState<MealType | null>(null);
+    
     const [isSubmitting, setIsSubmitting] = useState(false);
     
     const todayStr = useMemo(() => format(new Date(), 'yyyy-MM-dd'), []);
@@ -33,28 +29,11 @@ export function Nutrition() {
 
     const { data: progress } = useDoc<DailyProgress>(progressDocRef);
 
-    const handleGetSuggestion = async (mealType: MealType) => {
-        if (!user) return;
-        setIsLoading(true);
-        setSelectedMeal(mealType);
-        setSuggestion(null);
-
-        try {
-            const result = await getMealSuggestion({ mealType, userDream: user.personalDream });
-            setSuggestion(result);
-        } catch (error) {
-            console.error("Error getting meal suggestion:", error);
-            // Here you could show a toast to the user
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const handleMarkAsDone = async () => {
       if (!progressDocRef || isSubmitting) return;
       setIsSubmitting(true);
       try {
-          const newProgressValue = Math.min((progress?.nutrition || 0) + 25, 100);
+          const newProgressValue = Math.min((progress?.nutrition || 0) + 34, 100);
           const updatedProgress: Partial<DailyProgress> = {
               nutrition: newProgressValue,
           };
@@ -67,7 +46,25 @@ export function Nutrition() {
       }
     };
 
-    const mealButtons: MealType[] = ['Café da Manhã', 'Almoço', 'Jantar', 'Lanche'];
+    const MealCard = ({ meal }: { meal: Meal }) => (
+        <Card className="overflow-hidden group">
+            <div className="relative h-40 w-full">
+                <Image 
+                    src={meal.image.imageUrl}
+                    alt={meal.title}
+                    fill
+                    className="object-cover"
+                    data-ai-hint={meal.image.imageHint}
+                    unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            </div>
+            <CardContent className="p-4">
+                <h3 className="font-bold text-lg text-primary">{meal.title}</h3>
+                <p className="text-sm text-muted-foreground">{meal.description}</p>
+            </CardContent>
+        </Card>
+    );
 
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-8">
@@ -77,81 +74,54 @@ export function Nutrition() {
                 </Button>
                 <div className='text-center'>
                     <h1 className="text-3xl font-bold font-headline text-primary flex items-center justify-center gap-2">
-                        <ChefHat /> Mestre Cuca Mounjaro
+                        <Sparkles /> Inspiração Nutricional
                     </h1>
                      <p className="text-muted-foreground max-w-xl mx-auto mt-2">
-                        A nutrição é a base da sua transformação. Peça ao nosso Chef IA uma sugestão de refeição deliciosa e alinhada com seus objetivos para potencializar os resultados do seu chá.
+                        Aqui estão alguns exemplos simples e rápidos de refeições que se alinham à filosofia Mounjaro Japonês para inspirar o seu dia.
                     </p>
                 </div>
             </header>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Precisa de inspiração?</CardTitle>
-                    <CardDescription>Selecione o tipo de refeição e receba uma sugestão instantânea.</CardDescription>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {mealButtons.map((meal) => (
-                        <Button 
-                            key={meal} 
-                            variant={selectedMeal === meal ? 'default' : 'outline'}
-                            onClick={() => handleGetSuggestion(meal)}
-                            disabled={isLoading}
-                        >
-                            {isLoading && selectedMeal === meal ? <Loader2 className="animate-spin" /> : meal}
-                        </Button>
-                    ))}
-                </CardContent>
-            </Card>
+            <Tabs defaultValue="Café da Manhã" className="w-full">
+                <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="Café da Manhã">Café da Manhã</TabsTrigger>
+                    <TabsTrigger value="Almoço">Almoço</TabsTrigger>
+                    <TabsTrigger value="Jantar">Jantar</TabsTrigger>
+                </TabsList>
+                <TabsContent value="Café da Manhã">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        {mealExamples.filter(m => m.mealType === 'Café da Manhã').map(meal => (
+                            <MealCard key={meal.id} meal={meal} />
+                        ))}
+                    </div>
+                </TabsContent>
+                <TabsContent value="Almoço">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        {mealExamples.filter(m => m.mealType === 'Almoço').map(meal => (
+                            <MealCard key={meal.id} meal={meal} />
+                        ))}
+                    </div>
+                </TabsContent>
+                <TabsContent value="Jantar">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        {mealExamples.filter(m => m.mealType === 'Jantar').map(meal => (
+                            <MealCard key={meal.id} meal={meal} />
+                        ))}
+                    </div>
+                </TabsContent>
+            </Tabs>
 
-            {isLoading && (
-                <div className="text-center p-10">
-                    <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-                    <p className="text-muted-foreground">Nosso Chef IA está preparando algo especial para você...</p>
-                </div>
-            )}
-
-            {suggestion && (
-                <Card className="animate-in fade-in-50">
-                    <CardHeader>
-                        <CardTitle className="text-2xl text-accent flex items-center gap-2">
-                            <Sparkles className="w-6 h-6" />
-                            {suggestion.mealName}
-                        </CardTitle>
-                        <CardDescription>{suggestion.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                        <div>
-                            <h3 className="font-semibold text-lg mb-2">Ingredientes:</h3>
-                            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                                {suggestion.ingredients.map((ing, i) => <li key={i}>{ing}</li>)}
-                            </ul>
-                        </div>
-                        <Separator />
-                        <div>
-                            <h3 className="font-semibold text-lg mb-2">Modo de Preparo:</h3>
-                            <ol className="list-decimal list-inside space-y-2">
-                                {suggestion.instructions.map((step, i) => <li key={i}>{step}</li>)}
-                            </ol>
-                        </div>
-                        <Separator />
-                        <Card className="bg-primary/5 border-primary/20 text-left">
-                            <CardContent className="p-4 flex items-start gap-4">
-                                <Lightbulb className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                                <div>
-                                    <h4 className="font-bold text-primary mb-1">Por que funciona?</h4>
-                                    <p className="text-sm text-primary/80">{suggestion.whyItWorks}</p>
-                                </div>
-                            </CardContent>
-                        </Card>
-                        
-                        <Button onClick={handleMarkAsDone} size="lg" className="w-full" disabled={isSubmitting}>
-                            {isSubmitting ? 'Registrando...' : 'Adorei! Registrar +25% de Progresso'}
-                        </Button>
-                        <p className='text-center text-xs text-muted-foreground'>Registrar que você fez uma refeição saudável aumenta seu progresso diário.</p>
-                    </CardContent>
-                </Card>
-            )}
+            <div className="flex flex-col gap-2 items-center">
+                 <Button onClick={handleMarkAsDone} size="lg" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? 'Registrando...' : (
+                        <>
+                            <CheckCircle className="mr-2 h-5 w-5" />
+                            Fiz uma Refeição Saudável (+34%)
+                        </>
+                    )}
+                </Button>
+                <p className='text-center text-xs text-muted-foreground'>Se inspirou? Registre que você fez uma refeição saudável para aumentar seu progresso diário.</p>
+            </div>
         </div>
     );
 }
