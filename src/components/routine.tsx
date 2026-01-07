@@ -47,11 +47,11 @@ const routineData = {
         icon: Moon,
         color: 'text-blue-400',
         exercises: [
-            { name: 'Alongamento pescoço', duration: '30s cada lado', seconds: 60, xp: 5 },
-            { name: 'Postura da criança', duration: '1 min', seconds: 60, xp: 10 },
-            { name: 'Torção de coluna deitado', duration: '1 min cada lado', seconds: 120, xp: 10 },
-            { name: 'Alongamento borboleta', duration: '1 min', seconds: 60, xp: 10 },
-            { name: 'Respiração profunda', duration: '2 mins', seconds: 120, xp: 15 },
+            { name: 'Alongamento pescoço', duration: '30s cada lado', seconds: 60, xp: 5, image: 'https://i.imgur.com/b6PAf0d.png', hint: 'neck stretch' },
+            { name: 'Postura da criança', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/eAZ3EcG.png', hint: 'childs pose' },
+            { name: 'Torção de coluna deitado', duration: '1 min cada lado', seconds: 120, xp: 10, image: 'https://i.imgur.com/11YGTy8.png', hint: 'spine twist' },
+            { name: 'Alongamento borboleta', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/iUtiqN4.png', hint: 'butterfly stretch' },
+            { name: 'Respiração profunda', duration: '2 mins', seconds: 120, xp: 15, image: 'https://i.imgur.com/LmsTuWk.png', hint: 'deep breathing' },
         ]
     }
 };
@@ -254,7 +254,7 @@ export function Routine({ routineId }: RoutineProps) {
                                 {isCompleted && <div className="absolute inset-0 bg-primary/30 flex items-center justify-center"><CheckCircle className="w-10 h-10 text-white" /></div>}
                             </div>
                         )}
-                        {!exercise.image && (
+                        {!('image' in exercise && exercise.image) && (
                              <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted flex items-center justify-center">
                                 {isCompleted ? <CheckCircle className="w-10 h-10 text-primary" /> : <Flame className={`w-10 h-10 ${routine.color}`} />}
                             </div>
