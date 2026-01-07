@@ -287,7 +287,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Lanche',
         title: 'Maçã com Canela',
         description: 'Doce natural que controla a vontade de açúcar.',
-        image: findImage('yA3b4C5', 'apple cinnamon'),
+        image: findImage('rp8Q3jX', 'apple cinnamon'),
         ingredients: ['1 maçã pequena', 'Canela em pó a gosto'],
         preparation: [
             'Fatie a maçã em rodelas finas.',
@@ -301,7 +301,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Lanche',
         title: 'Castanhas e Nozes',
         description: 'Um punhado de energia e gorduras boas.',
-        image: findImage('zB5d6E7', 'nuts mix'),
+        image: findImage('dbo4fXl', 'nuts mix'),
         ingredients: ['1 punhado (aprox. 30g) de mix de castanhas e nozes sem sal'],
         preparation: [
             'Separe um punhado medido para não exagerar na quantidade.',
@@ -314,7 +314,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Lanche',
         title: 'Ovos de Codorna Cozidos',
         description: 'Mini porção de proteína para matar a fome.',
-        image: findImage('aC7f8G9', 'quail eggs'),
+        image: findImage('iOgiOrC', 'quail eggs'),
         ingredients: ['4-5 ovos de codorna cozidos', 'Uma pitada de sal e orégano'],
         preparation: [
             'Cozinhe os ovos de codorna por cerca de 5-7 minutos.',
@@ -327,7 +327,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Lanche',
         title: 'Tomate Cereja com Queijo Cottage',
         description: 'Leve, refrescante e com baixo carboidrato.',
-        image: findImage('bD9h0I1', 'cherry tomatoes'),
+        image: findImage('nIRJKZP', 'cherry tomatoes'),
         ingredients: ['10 tomates cereja', '2 colheres de sopa de queijo cottage', 'Manjericão fresco a gosto'],
         preparation: [
             'Misture o queijo cottage com o manjericão picado.',
@@ -340,7 +340,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Lanche',
         title: 'Palitos de Cenoura e Pepino',
         description: 'Crocante, hidratante e quase zero calorias.',
-        image: findImage('cE2j3K4', 'vegetable sticks'),
+        image: findImage('CpoEIU2', 'vegetable sticks'),
         ingredients: ['1/2 cenoura em palitos', '1/2 pepino em palitos', 'Molho de iogurte (opcional)'],
         preparation: [
             'Corte a cenoura e o pepino em formato de palitos.',
@@ -353,7 +353,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Lanche',
         title: 'Chips de Couve',
         description: 'Um snack "salgadinho" cheio de nutrientes.',
-        image: findImage('dF5l6M7', 'kale chips'),
+        image: findImage('9wWZoGi', 'kale chips'),
         ingredients: ['Folhas de couve', 'Um fio de azeite', 'Sal e páprica a gosto'],
         preparation: [
             'Lave e seque bem as folhas de couve, rasgando-as em pedaços.',
