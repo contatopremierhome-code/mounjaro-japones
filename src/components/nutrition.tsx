@@ -4,26 +4,21 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, TrafficCone } from 'lucide-react';
+import { ArrowLeft, Leaf, UtensilsCrossed, Heart } from 'lucide-react';
 import type { DailyProgress } from '@/lib/types';
 import { useUser, useFirestore } from '@/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { format } from 'date-fns';
 
 
-type Category = 'verde' | 'amarelo' | 'vermelho';
+type Category = 'leve' | 'equilibrada' | 'conforto';
 
 const categories = [
-    { id: 'verde', label: 'Verde', xp: '+100 XP', color: 'bg-green-500', borderColor: 'border-green-500', textColor: 'text-green-500', progress: 100 },
-    { id: 'amarelo', label: 'Amarelo', xp: '+60 XP', color: 'bg-yellow-500', borderColor: 'border-yellow-500', textColor: 'text-yellow-500', progress: 60 },
-    { id: 'vermelho', label: 'Vermelho', xp: '+20 XP', color: 'bg-red-500', borderColor: 'border-red-500', textColor: 'text-red-500', progress: 20 },
+    { id: 'leve', label: 'Leve e Nutritiva', description: 'Pratos que nutrem o corpo e a alma.', icon: Leaf, progress: 100, color: 'text-green-400', borderColor: 'border-green-400/50' },
+    { id: 'equilibrada', label: 'Equilibrada', description: 'Uma refeição completa e balanceada.', icon: UtensilsCrossed, progress: 60, color: 'text-yellow-400', borderColor: 'border-yellow-400/50' },
+    { id: 'conforto', label: 'Conforto', description: 'Para momentos especiais, sem culpa.', icon: Heart, progress: 20, color: 'text-red-400', borderColor: 'border-red-400/50' },
 ] as const;
 
-const trafficLightGuide = [
-    { label: 'Verde', description: 'Proteínas magras, vegetais, frutas', color: 'bg-green-500' },
-    { label: 'Amarelo', description: 'Carboidratos integrais, gorduras saudáveis', color: 'bg-yellow-500' },
-    { label: 'Vermelho', description: 'Processados, açúcares, frituras', color: 'bg-red-500' },
-];
 
 export function Nutrition() {
     const router = useRouter();
@@ -45,8 +40,6 @@ export function Nutrition() {
             const docSnap = await getDoc(progressDocRef);
             const currentProgress = docSnap.exists() ? docSnap.data() as DailyProgress : { ritual: 0, nutrition: 0, movement: 0, dayFinished: false, date: today };
 
-            // A lógica aqui assume que cada registro sobrescreve o progresso de nutrição do dia.
-            // Se múltiplas refeições puderem ser registradas, a lógica precisaria ser de média ou soma.
             const updatedProgress: DailyProgress = {
                 ...currentProgress,
                 nutrition: selectedProgress,
@@ -72,63 +65,45 @@ export function Nutrition() {
                         Registro de Nutrição
                     </h1>
                      <p className="text-muted-foreground max-w-md mx-auto mt-2">
-                        Use o sistema de semáforo para classificar suas refeições. Isso nos ajuda a entender seus hábitos e a te guiar para escolhas mais saudáveis.
+                        A nutrição é um ato de carinho com seu corpo. Registre suas refeições com consciência, reconhecendo cada escolha como parte da sua jornada de bem-estar.
                     </p>
                 </div>
             </header>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Registrar Refeição</CardTitle>
+                    <CardTitle>Como você se nutriu hoje?</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <Textarea
-                        placeholder="Descreva sua refeição... Ex: Salada de quinoa com frango"
+                        placeholder="Descreva sua refeição... Ex: Salmão grelhado com legumes."
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         rows={3}
                     />
 
                     <div>
-                        <label className="text-sm font-medium text-muted-foreground mb-2 block">Selecione a categoria da sua refeição principal:</label>
-                        <div className="grid grid-cols-3 gap-4">
-                            {categories.map((cat) => (
+                        <label className="text-sm font-medium text-muted-foreground mb-4 block">Selecione o tipo de refeição que mais representa seu prato:</label>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            {categories.map((cat) => {
+                                const Icon = cat.icon;
+                                return (
                                 <Card
                                     key={cat.id}
                                     onClick={() => setSelectedCategory(cat.id as Category)}
-                                    className={`flex flex-col items-center justify-center p-4 cursor-pointer transition-all duration-200 ${selectedCategory === cat.id ? `border-2 ${cat.borderColor} shadow-lg ${cat.borderColor}/20 scale-105` : 'border-border'}`}
+                                    className={`flex flex-col items-center justify-start text-center p-4 cursor-pointer transition-all duration-200 ${selectedCategory === cat.id ? `border-2 ${cat.borderColor} shadow-lg ${cat.borderColor}/20 scale-105` : 'border-border'}`}
                                 >
-                                    <div className={`w-4 h-4 rounded-full ${cat.color} mb-2`}></div>
-                                    <span className="font-bold">{cat.label}</span>
-                                    <span className="text-xs text-muted-foreground">{cat.xp}</span>
+                                    <Icon className={`w-10 h-10 mb-3 ${cat.color}`} />
+                                    <h3 className={`font-bold text-lg ${cat.color}`}>{cat.label}</h3>
+                                    <p className="text-xs text-muted-foreground mt-1 h-10">{cat.description}</p>
                                 </Card>
-                            ))}
+                            )})}
                         </div>
                     </div>
                     <Button onClick={handleRegisterFood} size="lg" className="w-full" disabled={!description || !selectedCategory || isSubmitting}>
                         {isSubmitting ? 'Registrando...' : 'Registrar Refeição'}
                     </Button>
                 </CardContent>
-            </Card>
-
-            <Card className="bg-card">
-                 <CardHeader>
-                    <CardTitle className='flex items-center gap-2 text-lg text-accent'>
-                        <TrafficCone className="w-5 h-5" />
-                        Guia do Semáforo
-                    </CardTitle>
-                 </CardHeader>
-                 <CardContent className="space-y-3">
-                    {trafficLightGuide.map((item) => (
-                        <div key={item.label} className="flex items-start gap-3">
-                            <div className={`w-3 h-3 rounded-full ${item.color} mt-1 flex-shrink-0`}></div>
-                            <div>
-                                <h4 className="font-semibold">{item.label}</h4>
-                                <p className="text-sm text-muted-foreground">{item.description}</p>
-                            </div>
-                        </div>
-                    ))}
-                 </CardContent>
             </Card>
         </div>
     );
