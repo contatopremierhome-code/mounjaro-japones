@@ -63,37 +63,37 @@
     {
       "id": "tea-pineapple",
       "description": "Copo de chá com abacaxi e gengibre.",
-      "imageUrl": "https://i.imgur.com/rLmtPSc.png",
+      "imageUrl": "https://i.imgur.com/qidTQdA.png",
       "imageHint": "pineapple tea"
     },
     {
       "id": "tea-blackberry",
       "description": "Xícara de chá com amoras frescas ao lado.",
-      "imageUrl": "https://i.imgur.com/SJf0nI8.png",
+      "imageUrl": "https://i.imgur.com/RSfG223.png",
       "imageHint": "blackberry tea"
     },
     {
       "id": "tea-mate-lemon",
       "description": "Copo de chá mate com limão e gelo.",
-      "imageUrl": "https://i.imgur.com/8xLqT92.png",
+      "imageUrl": "https://i.imgur.com/2rVRKD4.png",
       "imageHint": "mate lemon"
     },
     {
       "id": "tea-artichoke",
       "description": "Xícara de chá de alcachofra com a planta ao fundo.",
-      "imageUrl": "https://i.imgur.com/o2Yw5gV.png",
+      "imageUrl": "https://i.imgur.com/0Vlaapb.png",
       "imageHint": "artichoke tea"
     },
     {
       "id": "tea-black-orange",
       "description": "Copo de chá preto com laranja e canela.",
-      "imageUrl": "https://i.imgur.com/J3l4A0h.png",
+      "imageUrl": "https://i.imgur.com/n7hTYpa.png",
       "imageHint": "black tea"
     },
     {
       "id": "tea-dandelion",
       "description": "Xícara de chá com flores de dente-de-leão.",
-      "imageUrl": "https://i.imgur.com/KqC9rM2.png",
+      "imageUrl": "https://i.imgur.com/PuktXQT.png",
       "imageHint": "dandelion tea"
     }
   ]
