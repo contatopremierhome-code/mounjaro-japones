@@ -34,7 +34,6 @@ const actionItems = [
   { id: 'ritual', title: 'Ritual do Chá', path: '/ritual', image: 'https://i.imgur.com/wMbgBH8.png', hint: 'tea ritual' },
   { id: 'nutrition', title: 'Registrar Comida', path: '/nutrition', image: 'https://i.imgur.com/j5LbxSg.png', hint: 'healthy food' },
   { id: 'movement', title: 'Exercícios Diários', path: '/movement', image: 'https://i.imgur.com/U8nvHEd.png', hint: 'daily exercise' },
-  { id: 'coming-soon', title: 'Em Breve', path: null, image: 'https://i.imgur.com/dxgNxK4.png', hint: 'coming soon', icon: Lock },
 ] as const;
 
 
@@ -201,7 +200,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       
       <div className="grid grid-cols-2 gap-4">
         {actionItems.map((item) => {
-            const ItemIcon = item.id === 'coming-soon' ? item.icon : null;
+            const ItemIcon = null;
             return (
           <Card
             key={item.id}
@@ -318,7 +317,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       </footer>
       <Button variant="ghost" size="sm" onClick={onReset} className="text-muted-foreground hover:text-primary">
           <Repeat className="mr-2 h-4 w-4" />
-          Recomeçar Onboarding
+          Editar Meus Dados
       </Button>
     </div>
   );
