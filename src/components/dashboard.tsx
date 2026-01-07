@@ -184,7 +184,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       <Card className='bg-card/50'>
           <CardHeader>
               <CardTitle className="text-xl text-accent">O Círculo de Poder</CardTitle>
-              <CardDescription>Seu progresso diário nos 3 pilares.</CardDescription>
+              <CardDescription>O Círculo representa o equilíbrio entre os 3 pilares da sua jornada: Ritual, Nutrição e Movimento. Complete as atividades para preencher cada pilar.</CardDescription>
           </CardHeader>
           <CardContent className="flex justify-around items-center">
               <CircleProgress progress={progress.ritual} icon={TeaBowlIcon} label="Ritual" />
