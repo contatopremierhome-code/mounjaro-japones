@@ -114,7 +114,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Almoço',
         title: 'Salada de Frango Desfiado',
         description: 'Leve, proteica e cheia de frescor.',
-        image: findImage('CSpwMks', 'chicken salad'),
+        image: findImage('hx5TodG', 'chicken salad'),
         ingredients: ['100g de frango cozido e desfiado', 'Mix de folhas verdes à vontade', '1/2 tomate picado', '1/4 de pepino em rodelas', 'Molho: limão, azeite e sal'],
         preparation: [
             'Em um prato, faça uma "cama" com as folhas verdes.',
@@ -128,7 +128,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Almoço',
         title: 'Salmão Grelhado com Brócolis',
         description: 'Ômega-3 e fibras para a saúde do cérebro e do corpo.',
-        image: findImage('Oaqx4D6', 'salmon broccoli'),
+        image: findImage('Pp0sCM0', 'salmon broccoli'),
         ingredients: ['1 posta de salmão (aprox. 120g)', '1 xícara de brócolis cozido no vapor', 'Suco de 1/2 limão', 'Sal e pimenta a gosto'],
         preparation: [
             'Tempere o salmão com sal, pimenta e suco de limão.',
@@ -142,7 +142,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Almoço',
         title: 'Omelete de Legumes',
         description: 'Rápido, prático e cheio de nutrientes.',
-        image: findImage('0SjA2pU', 'mushroom omelette'),
+        image: findImage('ulsOFpr', 'vegetable omelette'),
         ingredients: ['2 ovos', '1/4 de xícara de legumes picados (pimentão, cebola, cogumelos)', '1 fatia de queijo magro (opcional)', 'Sal e pimenta'],
         preparation: [
             'Refogue os legumes em uma frigideira antiaderente.',
@@ -157,7 +157,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Almoço',
         title: 'Frango com Batata Doce e Salada',
         description: 'A combinação clássica para energia e massa magra.',
-        image: findImage('sK3A4zY', 'chicken sweet-potato'),
+        image: findImage('Eo86dTo', 'chicken sweet-potato'),
         ingredients: ['100g de filé de frango grelhado', '100g de batata doce cozida ou assada', 'Salada verde à vontade'],
         preparation: [
             'Grelhe o filé de frango temperado a gosto.',
@@ -171,7 +171,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Almoço',
         title: 'Escondidinho de Mandioquinha com Carne Moída',
         description: 'Sabor de comida caseira em uma versão saudável.',
-        image: findImage('eO2zQ3E', 'shepherds pie'),
+        image: findImage('jnnM245', 'shepherds pie'),
         ingredients: ['150g de mandioquinha cozida e amassada', '100g de carne moída (patinho) refogada', '1 colher de sopa de requeijão light'],
         preparation: [
             'Misture a mandioquinha amassada com o requeijão para fazer um purê.',
@@ -185,7 +185,7 @@ export const mealExamples: Meal[] = [
         mealType: 'Almoço',
         title: 'Quibe de Quinoa com Salada',
         description: 'Opção vegetariana rica em proteína e fibras.',
-        image: findImage('kG4v3jD', 'quinoa kibe'),
+        image: findImage('ZdlhCVN', 'quinoa kibe'),
         ingredients: ['1 xícara de quinoa cozida', '1/2 xícara de trigo para quibe hidratado', 'Hortelã, cebola e temperos a gosto', 'Salada de pepino e tomate para acompanhar'],
         preparation: [
             'Misture a quinoa, o trigo, a hortelã picada e os temperos.',
@@ -363,3 +363,5 @@ export const mealExamples: Meal[] = [
         whyItWorks: 'Satisfaz a vontade de comer algo salgado e crocante. A couve é um superalimento, rica em cálcio, ferro e vitaminas, e assada se torna um snack delicioso e sem culpa.'
     }
 ];
+
+    
