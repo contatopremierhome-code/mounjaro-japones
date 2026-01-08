@@ -29,8 +29,9 @@ interface DashboardProps {
   onReset: () => void;
 }
 
-const actionItems = [
-  { id: 'recipes', title: 'Receitas Mounjaro Japonês', path: '/recipes', image: 'https://i.imgur.com/YrTQpoy.png', hint: 'tea recipes' },
+const mainAction = { id: 'recipes', title: 'Receitas Mounjaro Japonês', path: '/recipes', image: 'https://i.imgur.com/YrTQpoy.png', hint: 'tea recipes' };
+
+const bonusItems = [
   { id: 'ritual', title: 'Ritual do Chá', path: '/ritual', image: 'https://i.imgur.com/wMbgBH8.png', hint: 'tea ritual' },
   { id: 'nutrition', title: 'Inspiração Nutricional', path: '/nutrition', image: 'https://i.imgur.com/j5LbxSg.png', hint: 'healthy food' },
   { id: 'movement', title: 'Exercícios Diários', path: '/movement', image: 'https://i.imgur.com/U8nvHEd.png', hint: 'daily exercise' },
@@ -197,19 +198,36 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
               <CircleProgress progress={progress.movement} icon={Dumbbell} label="Movimento" />
           </CardContent>
       </Card>
+
+      <div className="space-y-4">
+        <Card
+            key={mainAction.id}
+            onClick={() => handleActionClick(mainAction.id, mainAction.path)}
+            className="group relative h-40 flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer"
+        >
+            <Image 
+            src={mainAction.image}
+            alt={mainAction.title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            data-ai-hint={mainAction.hint}
+            unoptimized
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+            <h2 className="relative text-2xl font-bold text-white text-center z-10">{mainAction.title}</h2>
+        </Card>
+      </div>
       
       <div className="space-y-4">
         <h2 className="text-2xl font-bold uppercase tracking-wider text-accent">
             Bônus Exclusivos
         </h2>
-        <div className="grid grid-cols-2 gap-4">
-            {actionItems.map((item) => {
-                const ItemIcon = null;
-                return (
+        <div className="grid grid-cols-3 gap-4">
+            {bonusItems.map((item) => (
             <Card
                 key={item.id}
                 onClick={() => handleActionClick(item.id, item.path)}
-                className={`group relative aspect-square flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer
+                className={`group relative aspect-square flex flex-col items-center justify-end p-2 text-center transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer
                 ${isTaskCompleted(item.id as ActionId) ? 'border-2 border-primary shadow-primary/20' : ''}`}
             >
                 <Image 
@@ -220,21 +238,16 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
                 data-ai-hint={item.hint}
                 unoptimized
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                 {isTaskCompleted(item.id as ActionId) && (
                 <div className="absolute inset-0 bg-primary/30 flex items-center justify-center">
-                    <Check className="w-16 h-16 text-white" />
+                    <Check className="w-12 h-12 text-white" />
                 </div>
                 )}
-                {ItemIcon && (
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                        <ItemIcon className="w-16 h-16 text-white/70" />
-                    </div>
-                )}
-                <h3 className="relative text-base font-bold text-white text-center z-10">{item.title}</h3>
+                <h3 className="relative text-sm font-bold text-white z-10 leading-tight">{item.title}</h3>
             </Card>
                 )
-            })}
+            )}
         </div>
       </div>
       
