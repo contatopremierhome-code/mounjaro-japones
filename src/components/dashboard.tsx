@@ -32,9 +32,9 @@ interface DashboardProps {
 const mainAction = { id: 'recipes', title: 'Receitas Mounjaro Japonês', path: '/recipes', image: 'https://i.imgur.com/YrTQpoy.png', hint: 'tea recipes' };
 
 const bonusItems = [
-  { id: 'ritual', title: 'Ritual do Chá', path: '/ritual', image: 'https://i.imgur.com/wMbgBH8.png', hint: 'tea ritual' },
   { id: 'nutrition', title: 'Inspiração Nutricional', path: '/nutrition', image: 'https://i.imgur.com/j5LbxSg.png', hint: 'healthy food' },
   { id: 'movement', title: 'Exercícios Diários', path: '/movement', image: 'https://i.imgur.com/U8nvHEd.png', hint: 'daily exercise' },
+  { id: 'ritual', title: 'Ritual do Chá', path: '/ritual', image: 'https://i.imgur.com/wMbgBH8.png', hint: 'tea ritual' },
 ] as const;
 
 
