@@ -200,10 +200,13 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       </Card>
 
       <div className="space-y-4">
+        <h2 className="text-2xl font-bold uppercase tracking-wider text-accent">
+            Produto Principal
+        </h2>
         <Card
             key={mainAction.id}
             onClick={() => handleActionClick(mainAction.id, mainAction.path)}
-            className="group relative h-40 flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer"
+            className="group relative aspect-video flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer"
         >
             <Image 
             src={mainAction.image}
@@ -254,7 +257,7 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
       <div className="flex flex-col items-center gap-2">
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button size="lg" disabled={isSubmitting} onClick={handleFinishDayAttempt} className="w-full">
+            <Button size="lg" disabled={progress.dayFinished} onClick={handleFinishDayAttempt} className="w-full">
                {isSubmitting ? 'Processando...' : (progress.dayFinished ? 'Dia Finalizado' : 'Finalizar o Dia')}
             </Button>
           </AlertDialogTrigger>
