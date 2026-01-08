@@ -198,39 +198,44 @@ export function Dashboard({ user, progress, onProgressUpdate, onReset }: Dashboa
           </CardContent>
       </Card>
       
-      <div className="grid grid-cols-2 gap-4">
-        {actionItems.map((item) => {
-            const ItemIcon = null;
-            return (
-          <Card
-            key={item.id}
-            onClick={() => handleActionClick(item.id, item.path)}
-            className={`group relative aspect-square flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer
-              ${isTaskCompleted(item.id as ActionId) ? 'border-2 border-primary shadow-primary/20' : ''}`}
-          >
-            <Image 
-              src={item.image}
-              alt={item.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-110"
-              data-ai-hint={item.hint}
-              unoptimized
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-             {isTaskCompleted(item.id as ActionId) && (
-              <div className="absolute inset-0 bg-primary/30 flex items-center justify-center">
-                <Check className="w-16 h-16 text-white" />
-              </div>
-            )}
-            {ItemIcon && (
-                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                    <ItemIcon className="w-16 h-16 text-white/70" />
-                 </div>
-            )}
-            <h3 className="relative text-base font-bold text-white text-center z-10">{item.title}</h3>
-          </Card>
-            )
-        })}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-bold uppercase tracking-wider text-accent">
+            Bônus Exclusivos
+        </h2>
+        <div className="grid grid-cols-2 gap-4">
+            {actionItems.map((item) => {
+                const ItemIcon = null;
+                return (
+            <Card
+                key={item.id}
+                onClick={() => handleActionClick(item.id, item.path)}
+                className={`group relative aspect-square flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer
+                ${isTaskCompleted(item.id as ActionId) ? 'border-2 border-primary shadow-primary/20' : ''}`}
+            >
+                <Image 
+                src={item.image}
+                alt={item.title}
+                fill
+                className="object-cover transition-transform duration-300 group-hover:scale-110"
+                data-ai-hint={item.hint}
+                unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                {isTaskCompleted(item.id as ActionId) && (
+                <div className="absolute inset-0 bg-primary/30 flex items-center justify-center">
+                    <Check className="w-16 h-16 text-white" />
+                </div>
+                )}
+                {ItemIcon && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <ItemIcon className="w-16 h-16 text-white/70" />
+                    </div>
+                )}
+                <h3 className="relative text-base font-bold text-white text-center z-10">{item.title}</h3>
+            </Card>
+                )
+            })}
+        </div>
       </div>
       
       <div className="flex flex-col items-center gap-2">
