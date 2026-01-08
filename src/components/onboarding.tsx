@@ -23,7 +23,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const steps = [
   {
-    title: 'Olá!',
+    title: 'Acesse seu Produto',
     description: 'Vamos começar com o básico.',
     fields: ['name', 'age'],
   },
