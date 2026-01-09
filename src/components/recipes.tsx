@@ -88,10 +88,6 @@ export function Recipes() {
                   <Clock className="h-4 w-4" />
                   <span>{recipe.prepTime}</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Flame className="h-4 w-4" />
-                  <span>{recipe.xp}</span>
-                </div>
               </div>
               <Button variant="link" className="p-0 mt-2 h-auto text-primary">Ver Receita Completa</Button>
             </CardContent>

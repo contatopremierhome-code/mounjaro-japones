@@ -7,7 +7,6 @@ export interface Recipe {
   title: string;
   description: string;
   prepTime: string;
-  xp: string;
   intensity: 1 | 2 | 3;
   image: ImagePlaceholder;
   ingredients: string[];
@@ -29,7 +28,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá Verde Matcha Cremoso',
         description: 'Queima gordura 3x mais rápido',
         prepTime: '5 minutos',
-        xp: '+20 XP',
         intensity: 3,
         image: findImage('tea-matcha'),
         ingredients: [
@@ -54,7 +52,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá Verde Gelado de Verão',
         description: 'Hidratação + queima contínua em dias quentes',
         prepTime: '5 minutos',
-        xp: '+15 XP',
         intensity: 2,
         image: findImage('tea-ice-summer'),
         ingredients: [
@@ -76,7 +73,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá Chai Especiado Metabólico',
         description: 'Termogênese extrema + controle de glicose',
         prepTime: '10 minutos',
-        xp: '+20 XP',
         intensity: 3,
         image: findImage('tea-chai'),
         ingredients: [
@@ -99,7 +95,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá Oolong Queima-Noite',
         description: 'Queima gordura enquanto dorme + digestão noturna',
         prepTime: '5 minutos',
-        xp: '+15 XP',
         intensity: 2,
         image: findImage('tea-oolong'),
         ingredients: [
@@ -119,7 +114,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá de Hibisco com Canela',
         description: 'Diurético e acelerador de metabolismo',
         prepTime: '7 minutos',
-        xp: '+15 XP',
         intensity: 2,
         image: findImage('tea-hibiscus'),
         ingredients: [
@@ -141,7 +135,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá de Gengibre e Limão',
         description: 'Detox e anti-inflamatório',
         prepTime: '10 minutos',
-        xp: '+20 XP',
         intensity: 3,
         image: findImage('tea-ginger'),
         ingredients: [
@@ -163,7 +156,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá de Camomila Digestivo',
         description: 'Relaxante e melhora a digestão',
         prepTime: '8 minutos',
-        xp: '+10 XP',
         intensity: 1,
         image: findImage('tea-chamomile'),
         ingredients: [
@@ -184,7 +176,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá de Cavalinha',
         description: 'Combate o inchaço e fortalece',
         prepTime: '15 minutos',
-        xp: '+10 XP',
         intensity: 1,
         image: findImage('tea-herbal'),
         ingredients: [
@@ -204,7 +195,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá de Cúrcuma e Laranja',
         description: 'Anti-inflamatório e antioxidante',
         prepTime: '10 minutos',
-        xp: '+15 XP',
         intensity: 2,
         image: findImage('tea-turmeric'),
         ingredients: [
@@ -226,7 +216,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá Mate Energizante',
         description: 'Foco e energia para o treino',
         prepTime: '5 minutos',
-        xp: '+20 XP',
         intensity: 3,
         image: findImage('tea-mate'),
         ingredients: [
@@ -247,7 +236,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá de Gengibre com Abacaxi',
         description: 'Acelera o metabolismo e promove a saciedade',
         prepTime: '15 minutos',
-        xp: '+25 XP',
         intensity: 3,
         image: findImage('tea-pineapple'),
         ingredients: [
@@ -270,7 +258,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá Verde com Amora',
         description: 'Diurético e termogênico para desinchar',
         prepTime: '10 minutos',
-        xp: '+15 XP',
         intensity: 2,
         image: findImage('tea-blackberry'),
         ingredients: [
@@ -290,7 +277,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá Mate com Limão',
         description: 'Aumenta a saciedade e queima gordura',
         prepTime: '10 minutos',
-        xp: '+20 XP',
         intensity: 3,
         image: findImage('tea-mate-lemon'),
         ingredients: [
@@ -310,7 +296,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá de Feno Grego e Alcachofra',
         description: 'Aumenta a saciedade e a queima de gordura',
         prepTime: '15 minutos',
-        xp: '+15 XP',
         intensity: 2,
         image: findImage('tea-artichoke'),
         ingredients: [
@@ -330,7 +315,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá Preto com Laranja e Canela',
         description: 'Ajuda a afinar a cintura',
         prepTime: '15 minutos',
-        xp: '+20 XP',
         intensity: 2,
         image: findImage('tea-black-orange'),
         ingredients: [
@@ -351,7 +335,6 @@ export const teaRecipes: Recipe[] = [
         title: 'Chá de Dente de Leão',
         description: 'Promove a perda de peso',
         prepTime: '10 minutos',
-        xp: '+10 XP',
         intensity: 1,
         image: findImage('tea-dandelion'),
         ingredients: [

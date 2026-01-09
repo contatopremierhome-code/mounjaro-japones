@@ -13,7 +13,6 @@ const routines = [
         icon: Sun,
         duration: '5 minutos',
         exercises: '5 exercícios',
-        xp: '+30 XP',
         color: 'text-yellow-400',
         borderColor: 'border-yellow-400/30'
     },
@@ -24,7 +23,6 @@ const routines = [
         icon: Flame,
         duration: '10 minutos',
         exercises: '9 exercícios',
-        xp: '+50 XP',
         color: 'text-destructive',
         borderColor: 'border-destructive/30'
     },
@@ -35,7 +33,6 @@ const routines = [
         icon: Moon,
         duration: '7 minutos',
         exercises: '5 exercícios',
-        xp: '+35 XP',
         color: 'text-blue-400',
         borderColor: 'border-blue-400/30'
     },
@@ -79,11 +76,6 @@ export function Movement() {
                                 <span>{routine.duration}</span>
                                </div>
                                 <Badge variant='outline'>{routine.exercises}</Badge>
-                           </div>
-                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <Target className='w-4 h-4' />
-                                <span>Objetivo</span>
-                                <span className={`font-bold ml-auto ${routine.color}`}>{routine.xp}</span>
                            </div>
                         </CardContent>
                         <CardFooter>

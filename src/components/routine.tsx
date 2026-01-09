@@ -20,11 +20,11 @@ const routineData = {
         color: 'text-yellow-400',
         motivationText: 'Comece o dia ativando seu corpo e mente. Esta rotina matinal acelera seu metabolismo desde a primeira hora, preparando você para um dia de queima de calorias. Combinado com as receitas do Mounjaro Japonês, você cria uma poderosa sinergia para alcançar seus objetivos de bem-estar.',
         exercises: [
-            { name: 'Rotação de tornozelo', duration: '30s cada lado', seconds: 60, xp: 5, image: 'https://i.imgur.com/yydGpJ9.png', hint: 'ankle rotation' },
-            { name: 'Círculos com os braços', duration: '30s', seconds: 30, xp: 5, image: 'https://i.imgur.com/8fe7RyQ.png', hint: 'arm circles' },
-            { name: 'Alongamento gato-vaca', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/D9Ki8Kj.png', hint: 'cat cow stretch' },
-            { name: 'Agachamento isométrico', duration: '30s', seconds: 30, xp: 10, image: 'https://i.imgur.com/sOifsAC.png', hint: 'isometric squat' },
-            { name: 'Polichinelos', duration: '45s', seconds: 45, xp: 15, image: 'https://i.imgur.com/FNb9pwK.png', hint: 'jumping jacks' },
+            { name: 'Rotação de tornozelo', duration: '30s cada lado', seconds: 60, image: 'https://i.imgur.com/yydGpJ9.png', hint: 'ankle rotation' },
+            { name: 'Círculos com os braços', duration: '30s', seconds: 30, image: 'https://i.imgur.com/8fe7RyQ.png', hint: 'arm circles' },
+            { name: 'Alongamento gato-vaca', duration: '1 min', seconds: 60, image: 'https://i.imgur.com/D9Ki8Kj.png', hint: 'cat cow stretch' },
+            { name: 'Agachamento isométrico', duration: '30s', seconds: 30, image: 'https://i.imgur.com/sOifsAC.png', hint: 'isometric squat' },
+            { name: 'Polichinelos', duration: '45s', seconds: 45, image: 'https://i.imgur.com/FNb9pwK.png', hint: 'jumping jacks' },
         ]
     },
     active: {
@@ -33,15 +33,15 @@ const routineData = {
         color: 'text-destructive',
         motivationText: 'É hora de suar e queimar calorias! Esta rotina intensa foi desenhada para maximizar a queima de gordura e fortalecer seus músculos. Cada movimento é um passo em direção à sua meta. Potencialize os resultados combinando este treino com as receitas termogênicas do Mounjaro Japonês.',
         exercises: [
-            { name: 'Corrida no lugar', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/gi3VSxp.gif', hint: 'running in place' },
-            { name: 'Agachamentos', duration: '45s', seconds: 45, xp: 15, image: 'https://i.imgur.com/8mH894y.gif', hint: 'squats' },
-            { name: 'Flexões', duration: '45s', seconds: 45, xp: 15, image: 'https://i.imgur.com/uNGHk9i.gif', hint: 'push ups' },
-            { name: 'Prancha', duration: '45s', seconds: 45, xp: 15, image: 'https://i.imgur.com/hUQr3Zr.gif', hint: 'plank' },
-            { name: 'Burpees', duration: '45s', seconds: 45, xp: 20, image: 'https://i.imgur.com/5YZVi9b.gif', hint: 'burpees' },
-            { name: 'Abdominais', duration: '45s', seconds: 45, xp: 10, image: 'https://i.imgur.com/79fVYrp.gif', hint: 'crunches' },
-            { name: 'Afundos', duration: '45s cada perna', seconds: 90, xp: 15, image: 'https://i.imgur.com/q2gkoLJ.gif', hint: 'lunges' },
-            { name: 'Elevação de quadril', duration: '45s', seconds: 45, xp: 10, image: 'https://i.imgur.com/HvRmuXG.gif', hint: 'hip raise' },
-            { name: 'Escalador', duration: '45s', seconds: 45, xp: 15, image: 'https://i.imgur.com/WbuGSmT.gif', hint: 'mountain climber' },
+            { name: 'Corrida no lugar', duration: '1 min', seconds: 60, image: 'https://i.imgur.com/gi3VSxp.gif', hint: 'running in place' },
+            { name: 'Agachamentos', duration: '45s', seconds: 45, image: 'https://i.imgur.com/8mH894y.gif', hint: 'squats' },
+            { name: 'Flexões', duration: '45s', seconds: 45, image: 'https://i.imgur.com/uNGHk9i.gif', hint: 'push ups' },
+            { name: 'Prancha', duration: '45s', seconds: 45, image: 'https://i.imgur.com/hUQr3Zr.gif', hint: 'plank' },
+            { name: 'Burpees', duration: '45s', seconds: 45, image: 'https://i.imgur.com/5YZVi9b.gif', hint: 'burpees' },
+            { name: 'Abdominais', duration: '45s', seconds: 45, image: 'https://i.imgur.com/79fVYrp.gif', hint: 'crunches' },
+            { name: 'Afundos', duration: '45s cada perna', seconds: 90, image: 'https://i.imgur.com/q2gkoLJ.gif', hint: 'lunges' },
+            { name: 'Elevação de quadril', duration: '45s', seconds: 45, image: 'https://i.imgur.com/HvRmuXG.gif', hint: 'hip raise' },
+            { name: 'Escalador', duration: '45s', seconds: 45, image: 'https://i.imgur.com/WbuGSmT.gif', hint: 'mountain climber' },
         ]
     },
     night: {
@@ -50,11 +50,11 @@ const routineData = {
         color: 'text-blue-400',
         motivationText: 'Termine seu dia liberando as tensões e preparando seu corpo para uma noite de recuperação. Este ritual de relaxamento ajuda a reduzir o estresse, um fator chave no controle de peso. Ao combinar com os chás calmantes do Mounjaro Japonês, você garante um sono reparador, essencial para sua jornada.',
         exercises: [
-            { name: 'Alongamento pescoço', duration: '30s cada lado', seconds: 60, xp: 5, image: 'https://i.imgur.com/b6PAf0d.png', hint: 'neck stretch' },
-            { name: 'Postura da criança', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/eAZ3EcG.png', hint: 'childs pose' },
-            { name: 'Torção de coluna deitado', duration: '1 min cada lado', seconds: 120, xp: 10, image: 'https://i.imgur.com/11YGTy8.png', hint: 'spine twist' },
-            { name: 'Alongamento borboleta', duration: '1 min', seconds: 60, xp: 10, image: 'https://i.imgur.com/iUtiqN4.png', hint: 'butterfly stretch' },
-            { name: 'Respiração profunda', duration: '2 mins', seconds: 120, xp: 15, image: 'https://i.imgur.com/LmsTuWk.png', hint: 'deep breathing' },
+            { name: 'Alongamento pescoço', duration: '30s cada lado', seconds: 60, image: 'https://i.imgur.com/b6PAf0d.png', hint: 'neck stretch' },
+            { name: 'Postura da criança', duration: '1 min', seconds: 60, image: 'https://i.imgur.com/eAZ3EcG.png', hint: 'childs pose' },
+            { name: 'Torção de coluna deitado', duration: '1 min cada lado', seconds: 120, image: 'https://i.imgur.com/11YGTy8.png', hint: 'spine twist' },
+            { name: 'Alongamento borboleta', duration: '1 min', seconds: 60, image: 'https://i.imgur.com/iUtiqN4.png', hint: 'butterfly stretch' },
+            { name: 'Respiração profunda', duration: '2 mins', seconds: 120, image: 'https://i.imgur.com/LmsTuWk.png', hint: 'deep breathing' },
         ]
     }
 };
@@ -113,7 +113,6 @@ const TimerDialog = ({ exercise, onComplete, onClose }: { exercise: Exercise, on
                         <span className="text-5xl font-mono font-bold text-primary">
                             {formatTime(timeLeft)}
                         </span>
-                        <span className='text-muted-foreground'>+{exercise.xp} XP</span>
                     </div>
                 </div>
 
@@ -223,9 +222,6 @@ export function Routine({ routineId }: RoutineProps) {
     
     const progressPercentage = Math.round((completedExercises.size / routine.exercises.length) * 100);
 
-    const totalXp = Array.from(completedExercises).reduce((acc, index) => {
-        return acc + routine.exercises[index].xp;
-    }, 0);
 
     return (
         <div className="w-full max-w-2xl mx-auto flex flex-col gap-8">
@@ -273,7 +269,6 @@ export function Routine({ routineId }: RoutineProps) {
                                 <h3 className={`font-semibold text-lg ${isCompleted ? 'text-primary' : ''}`}>{exercise.name}</h3>
                                 <div className="flex items-center gap-4 text-muted-foreground">
                                     <div className='flex items-center gap-1'><Clock className="w-4 h-4" /><span>{exercise.duration}</span></div>
-                                    <div className={`flex items-center gap-1 font-bold ${routine.color}`}><Flame className="w-4 h-4" /><span>+{exercise.xp} XP</span></div>
                                 </div>
                             </div>
                             {isCompleted ? (
@@ -297,7 +292,7 @@ export function Routine({ routineId }: RoutineProps) {
                     onClick={handleFinishRoutine}
                     disabled={completedExercises.size === 0}
                 >
-                    Concluir ({progressPercentage}% | +{totalXp} XP)
+                    Concluir ({progressPercentage}%)
                 </Button>
             </div>
             
