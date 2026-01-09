@@ -84,7 +84,7 @@ export function Ritual() {
                 </Button>
                 <div className='text-center'>
                     <h1 className="text-3xl font-bold font-headline text-primary">
-                        Ritual do Chá
+                        Ritual do Chá Japonês
                     </h1>
                      <p className="text-muted-foreground max-w-md mx-auto mt-2">
                         Este é o seu momento sagrado. Reserve um tempo para preparar seu chá, meditar e se conectar com seus objetivos.
