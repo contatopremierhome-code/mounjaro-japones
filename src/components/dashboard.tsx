@@ -67,14 +67,14 @@ export function Dashboard({ user, progress, onReset }: DashboardProps) {
         </p>
       </header>
 
-      <div className="space-y-4">
+      <div className="space-y-4 flex flex-col items-center">
         <h2 className="text-2xl font-bold uppercase tracking-wider text-primary">
             Produto Principal
         </h2>
         <Card
             key={mainAction.id}
             onClick={() => handleActionClick(mainAction.id, mainAction.path)}
-            className="group relative aspect-video flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer"
+            className="group relative aspect-video w-full flex flex-col items-center justify-end p-4 transition-all duration-300 transform hover:scale-105 overflow-hidden cursor-pointer"
         >
             <Image 
             src={mainAction.image}
