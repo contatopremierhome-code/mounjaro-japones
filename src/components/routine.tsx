@@ -256,7 +256,7 @@ export function Routine({ routineId }: RoutineProps) {
                         >
                             {'image' in exercise && exercise.image && (
                                 <div className="relative w-24 h-24 rounded-md overflow-hidden bg-muted">
-                                    <Image src={exercise.image} alt={exercise.name} fill style={{ objectFit: 'cover' }} data-ai-hint={exercise.hint} unoptimized />
+                                    <Image src={exercise.image} alt={exercise.name} fill style={{ objectFit: 'cover' }} data-ai-hint={exercise.hint}  />
                                     {isCompleted && <div className="absolute inset-0 bg-primary/30 flex items-center justify-center"><CheckCircle className="w-10 h-10 text-white" /></div>}
                                 </div>
                             )}

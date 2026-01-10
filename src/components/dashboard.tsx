@@ -82,7 +82,7 @@ export function Dashboard({ user, progress, onReset }: DashboardProps) {
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-110"
             data-ai-hint={mainAction.hint}
-            unoptimized
+            
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
             <h2 className="relative text-2xl font-bold text-white text-center z-10">{mainAction.title}</h2>
@@ -107,7 +107,7 @@ export function Dashboard({ user, progress, onReset }: DashboardProps) {
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-110"
                 data-ai-hint={item.hint}
-                unoptimized
+                
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                 {isTaskCompleted(item.id as ActionId) && (

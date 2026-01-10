@@ -60,7 +60,7 @@ export function Nutrition() {
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-110"
                     data-ai-hint={meal.image.imageHint}
-                    unoptimized
+                    
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                  <div className="absolute bottom-0 p-4">
@@ -90,7 +90,7 @@ export function Nutrition() {
                                 style={{ objectFit: 'cover' }}
                                 className="rounded-t-lg"
                                 data-ai-hint={selectedMeal.image.imageHint}
-                                unoptimized
+                                
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                             <DialogClose className="absolute top-4 right-4 bg-black/50 text-white rounded-full p-1">
