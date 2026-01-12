@@ -107,6 +107,18 @@
       "description": "Xícara de chá com flores de dente-de-leão.",
       "imageUrl": "https://i.imgur.com/PuktXQT.png",
       "imageHint": "dandelion tea"
+    },
+    {
+      "id": "water-cucumber-mint",
+      "description": "Jarra de água com pepino e hortelã.",
+      "imageUrl": "https://i.imgur.com/A6OLsAN.png",
+      "imageHint": "cucumber water"
+    },
+    {
+      "id": "lemonade-cayenne",
+      "description": "Copo de limonada com uma pitada de pimenta caiena.",
+      "imageUrl": "https://i.imgur.com/tYp2mU7.png",
+      "imageHint": "spicy lemonade"
     }
   ]
 }
