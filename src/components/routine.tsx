@@ -18,7 +18,7 @@ const routineData = {
         title: 'Energia Matutina',
         icon: Sun,
         color: 'text-yellow-400',
-        motivationText: 'Comece o dia ativando seu corpo e mente. Esta rotina matinal acelera seu metabolismo desde a primeira hora, preparando você para um dia de queima de calorias. Combinado com as receitas do Mounjaro Japonês, você cria uma poderosa sinergia para alcançar seus objetivos de bem-estar.',
+        motivationText: 'Comece o dia ativando seu corpo e mente. Esta rotina matinal acelera seu metabolismo desde a primeira hora, preparando você para um dia de queima de calorias. Combinado com as receitas do Mounjaro de Pobre, você cria uma poderosa sinergia para alcançar seus objetivos de bem-estar.',
         exercises: [
             { name: 'Rotação de tornozelo', duration: '30s cada lado', seconds: 60, image: 'https://i.imgur.com/yydGpJ9.png', hint: 'ankle rotation' },
             { name: 'Círculos com os braços', duration: '30s', seconds: 30, image: 'https://i.imgur.com/8fe7RyQ.png', hint: 'arm circles' },
@@ -31,7 +31,7 @@ const routineData = {
         title: 'Queima Ativa',
         icon: Flame,
         color: 'text-destructive',
-        motivationText: 'É hora de suar e queimar calorias! Esta rotina intensa foi desenhada para maximizar a queima de gordura e fortalecer seus músculos. Cada movimento é um passo em direção à sua meta. Potencialize os resultados combinando este treino com as receitas termogênicas do Mounjaro Japonês.',
+        motivationText: 'É hora de suar e queimar calorias! Esta rotina intensa foi desenhada para maximizar a queima de gordura e fortalecer seus músculos. Cada movimento é um passo em direção à sua meta. Potencialize os resultados combinando este treino com as receitas termogênicas do Mounjaro de Pobre.',
         exercises: [
             { name: 'Corrida no lugar', duration: '1 min', seconds: 60, image: 'https://i.imgur.com/gi3VSxp.gif', hint: 'running in place' },
             { name: 'Agachamentos', duration: '45s', seconds: 45, image: 'https://i.imgur.com/8mH894y.gif', hint: 'squats' },
@@ -48,7 +48,7 @@ const routineData = {
         title: 'Relaxamento Noturno',
         icon: Moon,
         color: 'text-blue-400',
-        motivationText: 'Termine seu dia liberando as tensões e preparando seu corpo para uma noite de recuperação. Este ritual de relaxamento ajuda a reduzir o estresse, um fator chave no controle de peso. Ao combinar com os chás calmantes do Mounjaro Japonês, você garante um sono reparador, essencial para sua jornada.',
+        motivationText: 'Termine seu dia liberando as tensões e preparando seu corpo para uma noite de recuperação. Este ritual de relaxamento ajuda a reduzir o estresse, um fator chave no controle de peso. Ao combinar com os chás calmantes do Mounjaro de Pobre, você garante um sono reparador, essencial para sua jornada.',
         exercises: [
             { name: 'Alongamento pescoço', duration: '30s cada lado', seconds: 60, image: 'https://i.imgur.com/b6PAf0d.png', hint: 'neck stretch' },
             { name: 'Postura da criança', duration: '1 min', seconds: 60, image: 'https://i.imgur.com/eAZ3EcG.png', hint: 'childs pose' },

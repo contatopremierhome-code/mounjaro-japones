@@ -3,7 +3,7 @@
     "User": {
       "title": "User",
       "type": "object",
-      "description": "Represents a user in the Mounjaro Japones application.",
+      "description": "Represents a user in the Mounjaro de Pobre application.",
       "properties": {
         "name": {
           "type": "string",
@@ -51,7 +51,7 @@
     "DailyProgress": {
       "title": "DailyProgress",
       "type": "object",
-      "description": "Represents a user's daily progress in the Mounjaro Japones application.",
+      "description": "Represents a user's daily progress in the Mounjaro de Pobre application.",
       "properties": {
         "date": {
           "type": "string",

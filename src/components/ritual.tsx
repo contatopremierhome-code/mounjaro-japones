@@ -161,7 +161,7 @@ export function Ritual() {
             <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" variant="outline" className="w-full" onClick={() => router.push('/recipes')}>
                     <BookOpen className="mr-2 h-5 w-5" />
-                    Ver Receitas Mounjaro Japonês
+                    Ver Receitas Mounjaro de Pobre
                 </Button>
                 <Button size="lg" onClick={handleFinishRitual} disabled={isLoading || completedSteps.size === 0} className="w-full">
                     Concluir Ritual ({progressPercentage}%)

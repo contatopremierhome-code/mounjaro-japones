@@ -153,7 +153,7 @@ export function Nutrition() {
                         <Sparkles /> Inspiração Nutricional
                     </h1>
                      <p className="text-muted-foreground max-w-xl mx-auto mt-2">
-                        A chave para potencializar os efeitos do Mounjaro Japonês é uma alimentação inteligente. Aqui estão algumas sugestões rápidas e deliciosas para inspirar seu dia e manter seu metabolismo ativo.
+                        A chave para potencializar os efeitos do Mounjaro de Pobre é uma alimentação inteligente. Aqui estão algumas sugestões rápidas e deliciosas para inspirar seu dia e manter seu metabolismo ativo.
                     </p>
                 </div>
             </header>
