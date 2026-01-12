@@ -24,6 +24,47 @@ const findImage = (id: string): ImagePlaceholder => {
 
 export const teaRecipes: Recipe[] = [
     {
+        id: 'cha-de-banana',
+        title: 'Chá de Casca de Banana',
+        description: 'Relaxante e combate a insônia',
+        prepTime: '15 minutos',
+        intensity: 1,
+        image: findImage('tea-banana'),
+        ingredients: [
+            'A casca de 1 banana',
+            '250ml de água',
+            'Uma pitada de canela (opcional)',
+        ],
+        preparation: [
+            'Lave bem a casca da banana.',
+            'Ferva a água em uma panela pequena.',
+            'Adicione a casca de banana à água fervente.',
+            'Deixe ferver por cerca de 10 minutos.',
+            'Coe o chá, adicione canela se desejar e beba antes de dormir.',
+        ],
+        whyItWorks: 'A casca de banana é rica em triptofano, um precursor da serotonina e melatonina, hormônios que regulam o humor e o sono. É um chá perfeito para relaxar e ter uma noite de sono reparadora.',
+    },
+    {
+        id: 'cha-de-maca',
+        title: 'Chá de Maçã com Canela',
+        description: 'Reconfortante e termogênico',
+        prepTime: '15 minutos',
+        intensity: 2,
+        image: findImage('tea-apple'),
+        ingredients: [
+            'As cascas de 1 maçã',
+            '1 pau de canela',
+            '300ml de água',
+        ],
+        preparation: [
+            'Lave bem a maçã e descasque-a, reservando as cascas.',
+            'Em uma panela, coloque a água, as cascas da maçã e o pau de canela.',
+            'Leve ao fogo e deixe ferver por cerca de 10 a 15 minutos.',
+            'Desligue o fogo, coe e sirva quente.',
+        ],
+        whyItWorks: 'A maçã é rica em fibras e antioxidantes, enquanto a canela tem um efeito termogênico que ajuda a acelerar o metabolismo. Uma combinação deliciosa e funcional.',
+    },
+    {
         id: 'matcha-cremoso',
         title: 'Chá Verde Matcha Cremoso',
         description: 'Queima gordura 3x mais rápido',
