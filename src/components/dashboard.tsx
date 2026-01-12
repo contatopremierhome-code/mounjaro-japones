@@ -18,7 +18,7 @@ interface DashboardProps {
   onReset: () => void;
 }
 
-const mainAction = { id: 'recipes', title: 'Receitas Mounjaro Japonês', path: '/recipes', image: 'https://i.imgur.com/YrTQpoy.png', hint: 'tea recipes' };
+const mainAction = { id: 'recipes', title: 'Mounjaro de Pobre', path: '/recipes', image: 'https://i.imgur.com/YrTQpoy.png', hint: 'tea recipes' };
 
 const bonusItems = [
   { id: 'nutrition', title: 'Inspiração Nutricional', path: '/nutrition', image: 'https://i.imgur.com/j5LbxSg.png', hint: 'healthy food' },
