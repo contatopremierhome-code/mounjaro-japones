@@ -23,8 +23,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const steps = [
   {
-    title: 'Acesse seu Produto',
-    description: 'Vamos começar com o básico.',
+    title: 'Bem-vindo(a) ao Mounjaro de Pobre!',
+    description: 'Para começar, acesse seu produto preenchendo alguns dados básicos.',
     fields: ['name', 'age'],
   },
   {
