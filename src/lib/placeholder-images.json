@@ -1,6 +1,18 @@
 {
   "placeholderImages": [
     {
+      "id": "tea-banana",
+      "description": "Uma xícara de chá de banana com uma banana ao lado.",
+      "imageUrl": "https://placehold.co/600x400/FFF8DC/333333?text=Ch%C3%A1+de+Banana",
+      "imageHint": "banana tea"
+    },
+    {
+      "id": "tea-apple",
+      "description": "Uma xícara de chá de maçã com canela.",
+      "imageUrl": "https://placehold.co/600x400/FFDAB9/333333?text=Ch%C3%A1+de+Ma%C3%A7%C3%A3",
+      "imageHint": "apple tea"
+    },
+    {
       "id": "tea-matcha",
       "description": "Uma pessoa de roupão preparando um chá matcha.",
       "imageUrl": "https://images.unsplash.com/photo-1575487426366-079595af2247?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYXRjaGElMjB0ZWF8ZW58MHx8fHwxNzY2ODY2MTU2fDA&ixlib=rb-4.1.0&q=80&w=1080",
