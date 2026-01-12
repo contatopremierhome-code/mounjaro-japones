@@ -51,7 +51,7 @@ export function Recipes() {
             Receitas Mounjaro de Pobre
           </h1>
           <p className="text-muted-foreground">
-            22 variações poderosas para impulsionar seu metabolismo.
+            20 variações poderosas para impulsionar seu metabolismo.
           </p>
         </div>
         <div className="w-10"></div>

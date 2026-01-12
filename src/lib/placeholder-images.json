@@ -3,13 +3,13 @@
     {
       "id": "tea-banana",
       "description": "Uma xícara de chá de banana com uma banana ao lado.",
-      "imageUrl": "https://placehold.co/600x400/FFF8DC/333333?text=Ch%C3%A1+de+Banana",
+      "imageUrl": "https://imgur.com/vTnabVu.png",
       "imageHint": "banana tea"
     },
     {
       "id": "tea-apple",
       "description": "Uma xícara de chá de maçã com canela.",
-      "imageUrl": "https://placehold.co/600x400/FFDAB9/333333?text=Ch%C3%A1+de+Ma%C3%A7%C3%A3",
+      "imageUrl": "https://imgur.com/hgXzJF6.png",
       "imageHint": "apple tea"
     },
     {
@@ -111,7 +111,7 @@
     {
       "id": "water-cucumber-mint",
       "description": "Jarra de água com pepino e hortelã.",
-      "imageUrl": "https://i.imgur.com/A6OLsAN.png",
+      "imageUrl": "https://imgur.com/DU4jm91.png",
       "imageHint": "cucumber water"
     },
     {
